@@ -6,7 +6,7 @@
   <title>Why Switch — Primer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
       /* Primer Brand Tokens — from Figma Brand Assets (verify hex values in file) */
@@ -65,7 +65,7 @@
     }
 
     .headline {
-      font-family: 'IBM Plex Serif', Georgia, serif;
+      font-family: 'IBM Plex Sans', sans-serif;
       font-size: clamp(2.25rem, 4vw, 3.25rem);
       font-weight: 600;
       line-height: 1.1;
@@ -235,9 +235,16 @@
       font-family: 'IBM Plex Sans', sans-serif;
       font-size: 1.125rem;
       font-weight: 600;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+    }
+    .primer-tagline {
+      font-size: 0.6875rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
       color: rgba(255,255,255,0.3);
+      margin-top: 4px;
     }
     .footer-note { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.04em; }
 
@@ -416,7 +423,10 @@
   </div>
 
   <footer class="slide-footer">
-    <span class="primer-wordmark">Primer</span>
+    <div>
+      <div class="primer-wordmark">Primer</div>
+      <div class="primer-tagline">Brand Strategy &amp; Web Development</div>
+    </div>
     <span class="footer-note">primerinc.com &nbsp;·&nbsp; Lambertville, NJ</span>
   </footer>
 

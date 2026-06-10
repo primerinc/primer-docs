@@ -6,7 +6,7 @@
 <title>The Primer Build System</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   /* ---------------------------------------------------------------
      Design tokens — this document is itself token-themed, the same
@@ -30,8 +30,8 @@
     --int-accent: #6fb1c9;
     --int-rule:   #38424d;
 
-    --font-display: "Fraunces", Georgia, serif;
-    --font-body:    "Hanken Grotesk", -apple-system, system-ui, sans-serif;
+    --font-display: "IBM Plex Sans", system-ui, sans-serif;
+    --font-body:    "IBM Plex Sans", system-ui, sans-serif;
     --font-mono:    "IBM Plex Mono", ui-monospace, monospace;
 
     --measure: 720px;
@@ -62,12 +62,22 @@
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--rule);
   }
-  .bar__brand {
-    font-family: var(--font-mono);
-    font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--ink-faint);
+  .bar__brand { display: flex; flex-direction: column; }
+  .bar__wordmark {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink);
   }
-  .bar__brand b { color: var(--accent); font-weight: 500; }
+  .bar__sub {
+    font-size: 0.6875rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    margin-top: 2px;
+  }
   .toggle {
     display: inline-flex; padding: 3px;
     background: var(--paper-2); border: 1px solid var(--rule);
@@ -93,7 +103,6 @@
     font-family: var(--font-display); font-weight: 600;
     font-size: clamp(2.6rem, 8vw, 4.6rem); line-height: 1.02;
     letter-spacing: -0.02em; margin: 0 0 1.2rem;
-    font-optical-sizing: auto;
   }
   .hero .lede { font-size: clamp(1.1rem, 2.5vw, 1.35rem); color: var(--ink-soft); max-width: 38ch; }
 
@@ -215,7 +224,10 @@
 <body>
 
 <div class="bar">
-  <span class="bar__brand"><b>Primer</b> · Build System</span>
+  <div class="bar__brand">
+    <span class="bar__wordmark">Primer</span>
+    <span class="bar__sub">Brand Strategy &amp; Web Development</span>
+  </div>
   <div class="toggle" role="group" aria-label="Audience view">
     <button id="btn-client" class="is-active" onclick="setView('client')">Client View</button>
     <button id="btn-internal" onclick="setView('internal')">Internal View</button>
