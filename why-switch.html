@@ -6,19 +6,31 @@
   <title>Why Switch — Primer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:            #1F2023;
-      --surface:       #181818;
-      --border:        rgba(255,255,255,0.07);
-      --border-item:   rgba(255,255,255,0.04);
-      --text:          #F0EDE8;
-      --text-muted:    #7A7671;
-      --text-secondary:#A8A49F;
-      --amber:         #BF8B3C;
-      --wp-color:      #D95A2B;
-      --wp-subtle:     rgba(217,90,43,0.10);
+      /* Primer Brand Tokens — from Figma Brand Assets (verify hex values in file) */
+      --primer-dark:   #1F2023;
+      --primer-gray:   #72728A;   /* secondary gray     */
+      --primer-cream:  #F0EDD8;   /* warm off-white     */
+      --primer-crimson:#B83030;   /* accent — crimson   */
+      --primer-orange: #CC5A1A;   /* accent — orange    */
+      --primer-gold:   #C8A020;   /* accent — gold      */
+      --primer-olive:  #849020;   /* accent — olive     */
+      --primer-teal:   #1A9090;   /* accent — teal      */
+      --primer-purple: #7040B0;   /* accent — purple    */
+
+      /* Slide UI tokens */
+      --bg:            #1E1F2C;
+      --surface:       #272838;
+      --border:        rgba(255,255,255,0.08);
+      --border-item:   rgba(255,255,255,0.05);
+      --text:          #F0EDD8;
+      --text-muted:    #72728A;
+      --text-secondary:#A8A6BC;
+      --amber:         var(--primer-gold);
+      --wp-color:      var(--primer-crimson);
+      --wp-subtle:     rgba(184,48,48,0.10);
       --sb-color:      #3DAA6A;
       --sb-subtle:     rgba(61,170,106,0.10);
     }
@@ -28,7 +40,7 @@
     html, body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Jost', system-ui, sans-serif;
+      font-family: 'IBM Plex Sans', system-ui, sans-serif;
       font-weight: 300;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
@@ -53,7 +65,7 @@
     }
 
     .headline {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: 'IBM Plex Serif', Georgia, serif;
       font-size: clamp(2.25rem, 4vw, 3.25rem);
       font-weight: 600;
       line-height: 1.1;
@@ -92,7 +104,7 @@
       pointer-events: none;
       z-index: 0;
     }
-    .card-shell.card-wp::before { background: linear-gradient(160deg, rgba(217,90,43,0.07) 0%, transparent 40%); }
+    .card-shell.card-wp::before { background: linear-gradient(160deg, rgba(184,48,48,0.08) 0%, transparent 40%); }
     .card-shell.card-sb::before { background: linear-gradient(160deg, rgba(61,170,106,0.07) 0%, transparent 40%); }
 
     .card-inner {
@@ -190,7 +202,7 @@
       align-items: flex-start;
       gap: 0.625rem;
     }
-    .cost-callout.cost-wp  { background: rgba(217,90,43,0.04); border-color: rgba(217,90,43,0.15); }
+    .cost-callout.cost-wp  { background: rgba(184,48,48,0.04); border-color: rgba(184,48,48,0.15); }
     .cost-callout.cost-sb  { background: rgba(61,170,106,0.04); border-color: rgba(61,170,106,0.15); }
     .cost-label {
       font-size: 0.625rem;
@@ -220,7 +232,7 @@
       border-top: 1px solid var(--border);
     }
     .primer-wordmark {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'IBM Plex Sans', sans-serif;
       font-size: 1.125rem;
       font-weight: 600;
       letter-spacing: 0.2em;
@@ -230,7 +242,7 @@
     .footer-note { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.04em; }
 
     @media print {
-      html, body { background: #1F2023 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      html, body { background: #101010 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .slide { padding: 2rem; }
     }
 
