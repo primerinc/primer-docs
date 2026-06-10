@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why Switch — Primer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:            #101010;
+      --surface:       #181818;
+      --border:        rgba(255,255,255,0.07);
+      --border-item:   rgba(255,255,255,0.04);
+      --text:          #F0EDE8;
+      --text-muted:    #7A7671;
+      --text-secondary:#A8A49F;
+      --amber:         #BF8B3C;
+      --wp-color:      #D95A2B;
+      --wp-subtle:     rgba(217,90,43,0.10);
+      --sb-color:      #3DAA6A;
+      --sb-subtle:     rgba(61,170,106,0.10);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Jost', system-ui, sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .slide {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 4rem 3.5rem 3.5rem;
+    }
+
+    /* ── Header ── */
+    .slide-header { margin-bottom: 2.75rem; }
+
+    .eyebrow {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.625rem;
+    }
+
+    .headline {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.25rem, 4vw, 3.25rem);
+      font-weight: 600;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 0.875rem;
+    }
+
+    .subhead {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+      max-width: 680px;
+      line-height: 1.65;
+    }
+
+    /* ── Grid ── */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    /* ── Card ── */
+    .card-shell {
+      border-radius: 16px;
+      padding: 2px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .card-shell::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .card-shell.card-wp::before { background: linear-gradient(160deg, rgba(217,90,43,0.07) 0%, transparent 40%); }
+    .card-shell.card-sb::before { background: linear-gradient(160deg, rgba(61,170,106,0.07) 0%, transparent 40%); }
+
+    .card-inner {
+      background: var(--surface);
+      border-radius: 14px;
+      padding: 1.75rem 1.875rem 2rem;
+      position: relative;
+      z-index: 1;
+      height: 100%;
+    }
+
+    /* ── Card header ── */
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.625rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .badge {
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+    .badge-wp { background: var(--wp-subtle);  color: var(--wp-color); }
+    .badge-sb { background: var(--sb-subtle);  color: var(--sb-color); }
+    .card-title { font-size: 1.0625rem; font-weight: 500; color: var(--text); line-height: 1.3; }
+
+    /* ── List ── */
+    .item-list { list-style: none; }
+
+    .item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.6875rem 0;
+      border-bottom: 1px solid var(--border-item);
+    }
+    .item:last-child { border-bottom: none; }
+
+    /* Category label row */
+    .item.cat {
+      padding: 1.125rem 0 0.3125rem;
+      border-bottom: none;
+      gap: 0;
+      align-items: center;
+    }
+    .item.cat:first-child { padding-top: 0; }
+    .cat-label {
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ── Icon circle ── */
+    .ico {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .ico svg { display: block; }
+    .ico-x   { background: var(--wp-subtle); }
+    .ico-x   svg path { stroke: var(--wp-color); }
+    .ico-chk { background: var(--sb-subtle); }
+    .ico-chk svg path { stroke: var(--sb-color); }
+
+    /* ── Item text ── */
+    .txt {
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+    .txt strong { color: var(--text); font-weight: 500; }
+
+    /* ── Cost callout at bottom of each card ── */
+    .cost-callout {
+      margin-top: 1.5rem;
+      padding: 0.875rem 1rem;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.625rem;
+    }
+    .cost-callout.cost-wp  { background: rgba(217,90,43,0.04); border-color: rgba(217,90,43,0.15); }
+    .cost-callout.cost-sb  { background: rgba(61,170,106,0.04); border-color: rgba(61,170,106,0.15); }
+    .cost-label {
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .cost-wp .cost-label  { color: var(--wp-color); }
+    .cost-sb .cost-label  { color: var(--sb-color); }
+    .cost-text {
+      font-size: 0.8125rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .cost-text strong { color: var(--text); font-weight: 500; }
+
+    /* ── Footer ── */
+    .slide-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 2.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+    .primer-wordmark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.125rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+    .footer-note { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.04em; }
+
+    @media print {
+      html, body { background: #101010 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .slide { padding: 2rem; }
+    }
+
+    @media (max-width: 860px) {
+      .compare-grid { grid-template-columns: 1fr; }
+      .slide { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="slide">
+
+  <header class="slide-header">
+    <p class="eyebrow">The case for change</p>
+    <h1 class="headline">Why we're moving to a new build process</h1>
+    <p class="subhead">Every item on the left is something we've encountered on real client sites. Every item on the right is how the new platform resolves it — through architecture, not workarounds.</p>
+  </header>
+
+  <div class="compare-grid">
+
+    <!-- ══ WordPress ══ -->
+    <div class="card-shell card-wp">
+      <div class="card-inner">
+        <div class="card-header">
+          <span class="badge badge-wp">Current</span>
+          <span class="card-title">WordPress + Bricks Builder</span>
+        </div>
+
+        <ul class="item-list">
+
+          <li class="item cat"><span class="cat-label">Security &amp; maintenance</span></li>
+
+          <li class="item">
+            <span class="ico ico-x"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="txt"><strong>Plugin updates have taken entire sites offline</strong> — a white screen mid-campaign with no instant recovery; tracing the conflict can take hours</span>
+          </li>
+
+          <li class="item">
+            <span class="ico ico-x"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="txt"><strong>Monthly security patches are a permanent line item</strong> — every update is a risk, every missed patch is an open vulnerability</span>
+          </li>
+
+          <li class="item cat"><span class="cat-label">Performance</span></li>
+
+          <li class="item">
+            <span class="ico ico-x"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="txt"><strong>HubSpot, GTM, and tracking scripts slow the site</strong> — each integration competes at render time and scores drop after every new tool added</span>
+          </li>
+
+          <li class="item">
+            <span class="ico ico-x"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="txt"><strong>Lighthouse scores require constant re-optimization</strong> — a plugin update, new form integration, or hosting change can silently tank performance</span>
+          </li>
+
+          <li class="item cat"><span class="cat-label">Content &amp; editing</span></li>
+
+          <li class="item">
+            <span class="ico ico-x"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="txt"><strong>Clients editing in Bricks after launch regularly break the site</strong> — misaligned sections, overridden breakpoints, and off-brand design decisions made without agency involvement</span>
+          </li>
+
+          <li class="item">
+            <span class="ico ico-x"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="txt"><strong>Full builder access means full liability</strong> — once a client can edit layout, the polished design we delivered is one bad session away from looking completely different</span>
+          </li>
+
+          <li class="item cat"><span class="cat-label">Delivery speed</span></li>
+
+          <li class="item">
+            <span class="ico ico-x"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="txt"><strong>Bricks templates reduce build time but don't eliminate layout work</strong> — each new page still requires builder configuration, field setup, and breakpoint testing before it's ready</span>
+          </li>
+
+          <li class="item cat"><span class="cat-label">Stack complexity</span></li>
+
+          <li class="item">
+            <span class="ico ico-x"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="txt"><strong>6+ separate paid tools to reach baseline</strong> — WP Engine, NitroPack, security plugin, image optimization, SEO plugin, and caching layer all billed and managed independently</span>
+          </li>
+
+          <li class="item">
+            <span class="ico ico-x"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="txt"><strong>Hours of engineering just to reach a starting point</strong> — deferred script loading, manual font subsetting, ACF workarounds, and custom caching logic before any client-facing work begins</span>
+          </li>
+
+        </ul>
+
+        <div class="cost-callout cost-wp">
+          <span class="cost-label">Cost</span>
+          <span class="cost-text"><strong>WP Engine + Bricks Builder + ACF Pro + image optimization + SEO plugin</strong> — five separate paid tools on every build, each with its own license, renewal date, and update cycle to manage</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ Storyblok + Astro ══ -->
+    <div class="card-shell card-sb">
+      <div class="card-inner">
+        <div class="card-header">
+          <span class="badge badge-sb">New platform</span>
+          <span class="card-title">Storyblok + Astro</span>
+        </div>
+
+        <ul class="item-list">
+
+          <li class="item cat"><span class="cat-label">Security &amp; maintenance</span></li>
+
+          <li class="item">
+            <span class="ico ico-chk"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="txt"><strong>No plugins means no update-caused outages</strong> — there is nothing to conflict, nothing to patch, and no emergency call when something breaks overnight</span>
+          </li>
+
+          <li class="item">
+            <span class="ico ico-chk"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="txt"><strong>Static HTML — no PHP or database to exploit</strong> — the attack surface that requires monthly patching simply does not exist in this architecture</span>
+          </li>
+
+          <li class="item cat"><span class="cat-label">Performance</span></li>
+
+          <li class="item">
+            <span class="ico ico-chk"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="txt"><strong>Third-party scripts load in isolation</strong> — Astro's island architecture contains each integration so HubSpot and analytics can't block render or fight for bandwidth</span>
+          </li>
+
+          <li class="item">
+            <span class="ico ico-chk"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="txt"><strong>90+ Lighthouse scores by default</strong> — performance is structural, not a number we re-earn after every change or guard against new integrations breaking</span>
+          </li>
+
+          <li class="item cat"><span class="cat-label">Content &amp; editing</span></li>
+
+          <li class="item">
+            <span class="ico ico-chk"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="txt"><strong>Clients edit content, not structure</strong> — every word, image, and CTA is fully editable, but layouts are locked inside components; the design we built stays intact</span>
+          </li>
+
+          <li class="item">
+            <span class="ico ico-chk"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="txt"><strong>Brand integrity enforced by the system</strong> — no amount of editing in Storyblok can override the design system; the visual identity is protected by architecture</span>
+          </li>
+
+          <li class="item cat"><span class="cat-label">Delivery speed</span></li>
+
+          <li class="item">
+            <span class="ico ico-chk"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="txt"><strong>New pages assembled from pre-built components — layout decisions are already made</strong> — adding a page means filling in content, not configuring layouts or testing breakpoints</span>
+          </li>
+
+          <li class="item cat"><span class="cat-label">Stack simplicity</span></li>
+
+          <li class="item">
+            <span class="ico ico-chk"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="txt"><strong>Two tools replace six</strong> — Storyblok includes image optimization, SEO metadata, scheduling, and CDN delivery; Netlify handles performance and deployment; no separate subscriptions needed</span>
+          </li>
+
+          <li class="item">
+            <span class="ico ico-chk"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="txt"><strong>Zero engineering overhead before client work begins</strong> — no deferred loading hacks, no caching layer configuration, no plugin conflict debugging; the architecture handles it</span>
+          </li>
+
+        </ul>
+
+        <div class="cost-callout cost-sb">
+          <span class="cost-label">Cost</span>
+          <span class="cost-text"><strong>Storyblok Growth (~$99/mo) + Netlify free tier</strong> — comparable monthly spend to a WordPress stack, but as a single unified platform with no surprise add-ons, no license renewals, and no maintenance overhead</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="slide-footer">
+    <span class="primer-wordmark">Primer</span>
+    <span class="footer-note">primerinc.com &nbsp;·&nbsp; Doylestown, PA</span>
+  </footer>
+
+</div>
+</body>
+</html>

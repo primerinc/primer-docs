@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platform Transition Proposal — Primer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+
+    /* ===================================================================
+       PRIMER BRAND TOKENS
+       Update these variables once final brand is confirmed.
+       =================================================================== */
+    :root {
+      /* Primer Brand Tokens — from Figma Brand Assets (verify hex values in file) */
+      --primer-dark:   #222232;
+      --primer-gray:   #72728A;
+      --primer-cream:  #F0EDD8;
+      --primer-crimson:#B83030;
+      --primer-orange: #CC5A1A;
+      --primer-gold:   #C8A020;
+      --primer-olive:  #849020;
+      --primer-teal:   #1A9090;
+      --primer-purple: #7040B0;
+
+      /* Proposal doc UI tokens */
+      --ink:           var(--primer-dark);
+      --bg:            var(--primer-cream);
+      --white:         #FFFFFF;
+      --accent:        var(--primer-gold);
+      --accent-subtle: #FBF6E0;
+      --text:          #1A1A28;
+      --muted:         var(--primer-gray);
+      --border:        #DDD9C8;
+      --success:       #1A6644;
+      --success-bg:    #EBF5EE;
+      --warn:          #8A5A0E;
+      --warn-bg:       #FDF0D8;
+      --danger-bg:     #F5ECEC;
+      --danger:        var(--primer-crimson);
+      --notes-bg:      var(--primer-dark);
+    }
+
+    /* === RESET === */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* === TYPOGRAPHY === */
+    h1, h2, h3 {
+      font-family: 'IBM Plex Serif', Georgia, serif;
+      font-weight: 600;
+      line-height: 1.15;
+      color: var(--text);
+    }
+    h1 { font-size: clamp(2rem, 5vw, 3.125rem); }
+    h2 { font-size: clamp(1.5rem, 3vw, 1.9375rem); }
+    h3 { font-size: 1.1875rem; }
+    p  { font-size: 0.9375rem; line-height: 1.78; color: var(--text); }
+
+    .eyebrow {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    /* === LAYOUT === */
+    .container { max-width: 880px; margin: 0 auto; padding: 0 2.25rem; }
+
+    section { padding: 3.75rem 0; }
+    section + section { border-top: 1px solid var(--border); }
+
+    /* === DOCUMENT HEADER === */
+    .doc-header {
+      background: var(--ink);
+      padding: 2.25rem 0 1.75rem;
+    }
+    .header-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    .primer-wordmark {
+      font-family: 'IBM Plex Serif', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+    .primer-tagline {
+      font-size: 0.625rem;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+      margin-top: 5px;
+    }
+    .doc-meta { text-align: right; }
+    .doc-type {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .doc-date {
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,0.42);
+      margin-top: 5px;
+    }
+    .header-rule {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.09);
+      margin: 1.375rem 0 1.125rem;
+    }
+    .doc-client-row {
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,0.42);
+    }
+    .doc-client-row strong {
+      color: rgba(255,255,255,0.78);
+      font-weight: 400;
+    }
+
+    /* === HERO SECTION === */
+    .hero {
+      padding: 4.5rem 0 3.5rem;
+      border-top: none !important;
+    }
+    .hero-inner { max-width: 680px; margin-bottom: 3rem; }
+    .hero h1 { margin: 0.625rem 0 1.375rem; }
+    .hero .lead {
+      font-size: 1.0625rem;
+      color: var(--muted);
+      max-width: 600px;
+      font-weight: 300;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 1.125rem 1.25rem;
+    }
+    .stat-val {
+      font-family: 'IBM Plex Serif', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    /* === SECTION HEADING STYLE === */
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      gap: 1.125rem;
+      margin-bottom: 2rem;
+    }
+    .section-num {
+      font-family: 'IBM Plex Serif', serif;
+      font-size: 3.25rem;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--border);
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: -4px;
+    }
+
+    /* === CALLOUT === */
+    .callout {
+      background: var(--accent-subtle);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 7px 7px 0;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .callout-title {
+      font-family: 'IBM Plex Serif', serif;
+      font-size: 1.1875rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.375rem;
+    }
+    .callout p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* === COMPARE COLUMNS === */
+    .compare-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .compare-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 1.5rem 1.625rem;
+    }
+    .compare-card.is-new {
+      border-color: var(--success);
+      border-width: 2px;
+    }
+    .compare-card-head {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      margin-bottom: 1.25rem;
+    }
+    .badge {
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+    .badge-current { background: var(--bg); color: var(--muted); }
+    .badge-new     { background: var(--success-bg); color: var(--success); }
+    .compare-card-title { font-size: 0.9375rem; font-weight: 500; }
+
+    /* === CHECK LISTS === */
+    .check-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5625rem;
+    }
+    .check-list + .check-list { margin-top: 0.75rem; }
+    .check-list li {
+      font-size: 0.875rem;
+      color: var(--text);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5625rem;
+      line-height: 1.5;
+    }
+    .check-list li::before {
+      content: '';
+      display: block;
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      border-radius: 50%;
+      background-size: 10px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .check-yes li::before {
+      background-color: var(--success-bg);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='%231A6644' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    }
+    .check-warn li::before {
+      background-color: var(--warn-bg);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 3.5v4' stroke='%238A5A0E' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='6' cy='9' r='0.75' fill='%238A5A0E'/%3E%3C/svg%3E");
+    }
+    .check-no li::before {
+      background-color: var(--danger-bg);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 3l6 6M9 3l-6 6' stroke='%23A83838' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    }
+
+    /* === PERFORMANCE BARS === */
+    .perf-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .perf-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 1.375rem 1.5rem;
+    }
+    .perf-card-title {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.125rem;
+    }
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      margin-bottom: 0.625rem;
+    }
+    .bar-label { font-size: 0.8125rem; color: var(--muted); width: 100px; flex-shrink: 0; }
+    .bar-track { flex: 1; height: 5px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 3px; }
+    .bar-old  { background: #C5C0BA; }
+    .bar-new  { background: var(--success); }
+    .bar-warn { background: #D4A039; }
+    .bar-val  { font-size: 0.8125rem; font-weight: 500; color: var(--text); min-width: 72px; text-align: right; }
+    .perf-note {
+      font-size: 0.8125rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 0.75rem;
+      margin-top: 0.875rem;
+      line-height: 1.6;
+    }
+
+    /* === FEATURE TABLE === */
+    .table-wrap {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      overflow: hidden;
+    }
+    .feature-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    .feature-table thead tr { border-bottom: 1px solid var(--border); background: var(--bg); }
+    .feature-table thead th {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .feature-table thead th:nth-child(2),
+    .feature-table thead th:nth-child(3) { text-align: center; width: 148px; }
+    .feature-table thead th:nth-child(3) { color: var(--success); }
+    .feature-table tbody tr { border-bottom: 1px solid var(--border); }
+    .feature-table tbody tr:last-child { border-bottom: none; }
+    .feature-table td { padding: 0.6875rem 1rem; vertical-align: middle; }
+    .feature-table td:nth-child(2),
+    .feature-table td:nth-child(3) { text-align: center; }
+    .feature-table td:nth-child(3) { background: rgba(26,102,68,0.025); }
+    .feature-table .group-row td {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 1.125rem 1rem 0.4375rem;
+      background: var(--bg);
+      border-bottom: none;
+    }
+    .pill {
+      display: inline-block;
+      border-radius: 20px;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      padding: 2px 10px;
+      white-space: nowrap;
+    }
+    .pill-yes    { background: var(--success-bg); color: var(--success); }
+    .pill-no     { background: var(--bg); color: var(--muted); }
+    .pill-warn   { background: var(--warn-bg); color: var(--warn); }
+    .pill-better { background: var(--success); color: #ffffff; }
+
+    /* === TRANSITION PHASES === */
+    .phases {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.125rem;
+      margin-top: 1.25rem;
+      position: relative;
+    }
+    .phases::before {
+      content: '';
+      position: absolute;
+      top: 1.875rem;
+      left: calc(25% - 0.5rem);
+      right: calc(25% - 0.5rem);
+      height: 1px;
+      background: var(--border);
+      z-index: 0;
+    }
+    .phase-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 1.375rem 1.25rem;
+      position: relative;
+      z-index: 1;
+    }
+    .phase-num {
+      font-family: 'IBM Plex Serif', serif;
+      font-size: 2.25rem;
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.625rem;
+    }
+    .phase-title { font-size: 0.9375rem; font-weight: 500; margin-bottom: 0.4375rem; }
+    .phase-desc  { font-size: 0.8125rem; color: var(--muted); line-height: 1.58; }
+
+    /* === ROI / BUSINESS CASE === */
+    .roi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+    .roi-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 1.625rem 1.5rem;
+    }
+    .roi-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--success-bg);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .roi-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--success);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .roi-title { font-size: 1rem; font-weight: 500; margin-bottom: 0.5625rem; }
+    .roi-desc  { font-size: 0.8125rem; color: var(--muted); line-height: 1.65; }
+
+    /* === FOOTER === */
+    .doc-footer {
+      background: var(--ink);
+      padding: 2.75rem 0 2.25rem;
+      margin-top: 1rem;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .footer-contact {
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.85;
+      text-align: right;
+    }
+    .footer-contact a { color: var(--accent); text-decoration: none; }
+    .footer-disclaimer {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.25);
+      margin-top: 1.75rem;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding-top: 1.125rem;
+    }
+
+    /* ===================================================================
+       INTERNAL NOTES — screen only, hidden on print
+       =================================================================== */
+    .notes-wrapper { margin-top: 0; }
+    .notes-toggle {
+      background: #1B2B3D;
+      padding: 1rem 2.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .notes-toggle-label {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #E8A84C;
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+    .notes-caret {
+      font-size: 0.6875rem;
+      color: rgba(255,255,255,0.3);
+      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+    .notes-toggle.is-open .notes-caret { transform: rotate(180deg); }
+
+    .notes-panel {
+      background: var(--notes-bg);
+      display: none;
+      padding: 2.5rem 2.25rem 3rem;
+    }
+    .notes-panel.is-visible { display: block; }
+
+    .notes-inner {
+      max-width: 880px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem 3rem;
+    }
+    .notes-section { }
+    .notes-section-title {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #E8A84C;
+      padding-bottom: 0.625rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 1rem;
+    }
+    .notes-panel p,
+    .notes-panel li {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.62);
+      line-height: 1.68;
+    }
+    .notes-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5625rem; }
+    .notes-list li { padding-left: 1.125rem; position: relative; }
+    .notes-list li::before { content: '–'; position: absolute; left: 0; color: rgba(255,255,255,0.22); }
+    .notes-list li strong { color: rgba(255,255,255,0.82); font-weight: 500; }
+
+    .objection { margin-bottom: 1rem; }
+    .objection:last-child { margin-bottom: 0; }
+    .objection-q { font-size: 0.875rem; font-weight: 500; color: rgba(255,255,255,0.82); margin-bottom: 0.25rem; }
+    .objection-a { font-size: 0.8125rem; color: rgba(255,255,255,0.5); line-height: 1.65; }
+
+    /* ===================================================================
+       PRINT STYLES
+       =================================================================== */
+    @media print {
+      .notes-wrapper { display: none !important; }
+      body { background: white; }
+      section { padding: 2.25rem 0; }
+      .hero { padding: 3rem 0 2.25rem; }
+      .doc-header, .doc-footer {
+        background: #111111 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .compare-card.is-new {
+        border-color: #1A6644 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .pill-better {
+        background: #1A6644 !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .success-bg {
+        background-color: #EBF5EE !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      a { color: inherit; text-decoration: none; }
+      .perf-card, .stat-card, .compare-card, .roi-card, .phase-card { break-inside: avoid; }
+      section { break-inside: avoid; }
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 700px) {
+      .hero-stats       { grid-template-columns: repeat(2, 1fr); }
+      .compare-cols     { grid-template-columns: 1fr; }
+      .perf-grid        { grid-template-columns: 1fr; }
+      .phases           { grid-template-columns: 1fr 1fr; }
+      .phases::before   { display: none; }
+      .roi-grid         { grid-template-columns: 1fr; }
+      .notes-inner      { grid-template-columns: 1fr; }
+      .header-top       { flex-direction: column; gap: 1.125rem; }
+      .doc-meta         { text-align: left; }
+      .footer-inner     { flex-direction: column; gap: 1.5rem; }
+      .footer-contact   { text-align: left; }
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     DOCUMENT HEADER
+     ============================================================ -->
+<header class="doc-header">
+  <div class="container">
+    <div class="header-top">
+      <div>
+        <div class="primer-wordmark">Primer</div>
+        <div class="primer-tagline">Brand Strategy &amp; Web Development</div>
+      </div>
+      <div class="doc-meta">
+        <div class="doc-type">Platform Transition Proposal</div>
+        <div class="doc-date" id="doc-date"></div>
+      </div>
+    </div>
+    <hr class="header-rule">
+    <div class="doc-client-row">
+      Prepared for <strong id="client-name">[Client Name]</strong>
+      &nbsp;·&nbsp; Confidential
+    </div>
+  </div>
+</header>
+
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <p class="eyebrow">Why we're recommending this change</p>
+      <h1>A better website.<br>A better process going forward.</h1>
+      <p class="lead">We're recommending a shift in how we build and maintain your website — not because something is broken, but because a meaningfully better approach now exists. This document explains exactly what changes, what improves, and what stays the same for you as a client and as an editor.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card">
+        <div class="stat-val">3–10×</div>
+        <div class="stat-label">Faster page loads than WordPress</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">90+</div>
+        <div class="stat-label">Google performance score, consistently</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">Visual</div>
+        <div class="stat-label">Editor with live site preview — same as today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">Zero</div>
+        <div class="stat-label">Ongoing risk from plugin or security updates</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     01 — CONTENT EDITING QUESTION
+     ============================================================ -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">01</div>
+      <div>
+        <p class="eyebrow">The question we hear most often</p>
+        <h2>Can I still edit my own website?</h2>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p class="callout-title">Yes — and you'll have more tools than before.</p>
+      <p>The new platform includes a full visual editor. You see your live site on screen while you edit. Click any section to open its fields and update your content. Most clients are comfortable editing independently within an hour of onboarding.</p>
+    </div>
+
+    <div class="compare-cols">
+      <div class="compare-card">
+        <div class="compare-card-head">
+          <span class="badge badge-current">Current</span>
+          <span class="compare-card-title">WordPress + Bricks Builder</span>
+        </div>
+        <ul class="check-list check-yes">
+          <li>Visual drag-and-drop editor</li>
+          <li>Live preview while editing</li>
+          <li>Inline text editing</li>
+          <li>Image uploads and media library</li>
+        </ul>
+        <ul class="check-list check-warn">
+          <li>Freeform layout editing can accidentally break your design</li>
+          <li>Plugin or WordPress updates can cause unexpected site issues</li>
+        </ul>
+        <ul class="check-list check-no">
+          <li>No version history or content rollback</li>
+          <li>No draft / review / approval workflow</li>
+          <li>No native scheduled publishing</li>
+        </ul>
+      </div>
+
+      <div class="compare-card is-new">
+        <div class="compare-card-head">
+          <span class="badge badge-new">New platform</span>
+          <span class="compare-card-title">Storyblok + Astro</span>
+        </div>
+        <ul class="check-list check-yes">
+          <li>Visual editor with your live site in view</li>
+          <li>Click any section or component to open and edit its fields</li>
+          <li>Drag to reorder sections and content blocks on any page</li>
+          <li>Add new sections from an approved, pre-designed component library</li>
+          <li>Image uploads, media library, and automatic image optimization</li>
+          <li>Preview across desktop, tablet, and mobile before publishing</li>
+          <li>Full version history — restore any prior version in one click</li>
+          <li>Draft → Review → Publish content approval workflow</li>
+          <li>Schedule content to go live at a specific date and time</li>
+          <li>Layouts are structurally protected — your design cannot be accidentally broken</li>
+        </ul>
+      </div>
+    </div>
+
+    <p style="font-size:0.875rem; color:var(--muted); max-width:720px; margin-top:-0.25rem;">
+      One meaningful difference worth understanding: in the new system, page layouts live inside developer-built components. You edit the content inside those components freely — text, images, CTAs, entire sections — but the underlying design structure stays intact. This means no accidental layout breaks, and no late-night support calls when a section gets pushed out of alignment.
+    </p>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     02 — PERFORMANCE
+     ============================================================ -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">02</div>
+      <div>
+        <p class="eyebrow">Speed &amp; search performance</p>
+        <h2>A dramatically faster website, by default.</h2>
+      </div>
+    </div>
+
+    <p style="color:var(--muted); font-size:0.9375rem; max-width:660px; margin-bottom:2rem; font-weight:300;">
+      WordPress generates pages dynamically — every visitor triggers a PHP request, a database query, and an assembly process on the server. The new platform pre-builds every page as clean HTML before anyone visits, then serves it from a global CDN. The result is a consistently fast experience, for every visitor, everywhere in the world.
+    </p>
+
+    <div class="perf-grid">
+      <div class="perf-card">
+        <p class="perf-card-title">Page load time</p>
+        <div class="bar-row">
+          <span class="bar-label">WordPress</span>
+          <div class="bar-track"><div class="bar-fill bar-old" style="width:88%"></div></div>
+          <span class="bar-val">2.0 – 4.0s</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">New platform</span>
+          <div class="bar-track"><div class="bar-fill bar-new" style="width:18%"></div></div>
+          <span class="bar-val">0.3 – 0.8s</span>
+        </div>
+        <p class="perf-note">Studies consistently show that each additional second of load time reduces conversions by 7–12%. Visitors spend less time waiting and more time engaging.</p>
+      </div>
+
+      <div class="perf-card">
+        <p class="perf-card-title">Google Lighthouse score (mobile)</p>
+        <div class="bar-row">
+          <span class="bar-label">WordPress</span>
+          <div class="bar-track"><div class="bar-fill bar-warn" style="width:62%"></div></div>
+          <span class="bar-val">55 – 75</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">New platform</span>
+          <div class="bar-track"><div class="bar-fill bar-new" style="width:94%"></div></div>
+          <span class="bar-val">90 – 100</span>
+        </div>
+        <p class="perf-note">Google uses Core Web Vitals as a direct ranking signal. A 90+ score is difficult to maintain on WordPress but is the natural baseline for a statically-generated site.</p>
+      </div>
+
+      <div class="perf-card">
+        <p class="perf-card-title">Server response time (TTFB)</p>
+        <div class="bar-row">
+          <span class="bar-label">WordPress</span>
+          <div class="bar-track"><div class="bar-fill bar-old" style="width:80%"></div></div>
+          <span class="bar-val">300 – 800ms</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">New platform</span>
+          <div class="bar-track"><div class="bar-fill bar-new" style="width:8%"></div></div>
+          <span class="bar-val">&lt; 50ms</span>
+        </div>
+        <p class="perf-note">Pages are served from whichever CDN edge node is closest to your visitor — not from a single origin server in one datacenter. Distance to server is eliminated as a variable.</p>
+      </div>
+
+      <div class="perf-card">
+        <p class="perf-card-title">Largest Contentful Paint (LCP)</p>
+        <div class="bar-row">
+          <span class="bar-label">WordPress</span>
+          <div class="bar-track"><div class="bar-fill bar-warn" style="width:76%"></div></div>
+          <span class="bar-val">2.5 – 4.0s</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">New platform</span>
+          <div class="bar-track"><div class="bar-fill bar-new" style="width:26%"></div></div>
+          <span class="bar-val">&lt; 1.2s</span>
+        </div>
+        <p class="perf-note">LCP measures when the main content of a page becomes visible to users. Google's "Good" threshold is under 2.5s. The new platform reaches this comfortably on every page.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     03 — FEATURE COMPARISON TABLE
+     ============================================================ -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">03</div>
+      <div>
+        <p class="eyebrow">Side-by-side</p>
+        <h2>Every capability, compared.</h2>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="feature-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>WordPress + Bricks</th>
+            <th>Storyblok + Astro</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr class="group-row"><td colspan="3">Content editing</td></tr>
+          <tr><td>Visual page editor</td><td><span class="pill pill-yes">Yes</span></td><td><span class="pill pill-yes">Yes</span></td></tr>
+          <tr><td>Live site preview while editing</td><td><span class="pill pill-yes">Yes</span></td><td><span class="pill pill-yes">Yes</span></td></tr>
+          <tr><td>Add, remove, and reorder sections</td><td><span class="pill pill-yes">Yes</span></td><td><span class="pill pill-yes">Yes</span></td></tr>
+          <tr><td>Version history and rollback</td><td><span class="pill pill-no">Not available</span></td><td><span class="pill pill-better">Included</span></td></tr>
+          <tr><td>Content approval workflow</td><td><span class="pill pill-warn">Basic only</span></td><td><span class="pill pill-better">Full workflow</span></td></tr>
+          <tr><td>Scheduled publishing</td><td><span class="pill pill-warn">Plugin required</span></td><td><span class="pill pill-better">Built in</span></td></tr>
+          <tr><td>Multi-device preview</td><td><span class="pill pill-warn">Approximate</span></td><td><span class="pill pill-better">Pixel-accurate</span></td></tr>
+          <tr><td>Multi-user collaboration</td><td><span class="pill pill-warn">Basic</span></td><td><span class="pill pill-better">Real-time</span></td></tr>
+          <tr><td>Layout break protection</td><td><span class="pill pill-no">Not available</span></td><td><span class="pill pill-better">Built in</span></td></tr>
+
+          <tr class="group-row"><td colspan="3">Media &amp; assets</td></tr>
+          <tr><td>Image and file uploads</td><td><span class="pill pill-yes">Yes</span></td><td><span class="pill pill-yes">Yes</span></td></tr>
+          <tr><td>Automatic image optimization</td><td><span class="pill pill-warn">Plugin required</span></td><td><span class="pill pill-better">Automatic</span></td></tr>
+          <tr><td>Video embeds</td><td><span class="pill pill-yes">Yes</span></td><td><span class="pill pill-yes">Yes</span></td></tr>
+
+          <tr class="group-row"><td colspan="3">Performance &amp; reliability</td></tr>
+          <tr><td>Page load speed</td><td><span class="pill pill-warn">Good with optimization</span></td><td><span class="pill pill-better">Excellent by default</span></td></tr>
+          <tr><td>Google Core Web Vitals</td><td><span class="pill pill-warn">Requires ongoing work</span></td><td><span class="pill pill-better">Strong baseline</span></td></tr>
+          <tr><td>Global CDN delivery</td><td><span class="pill pill-warn">Add-on required</span></td><td><span class="pill pill-better">Included</span></td></tr>
+          <tr><td>Uptime reliability</td><td><span class="pill pill-yes">Good</span></td><td><span class="pill pill-better">Excellent</span></td></tr>
+
+          <tr class="group-row"><td colspan="3">Security &amp; maintenance</td></tr>
+          <tr><td>Security patch management</td><td><span class="pill pill-warn">Ongoing — monthly</span></td><td><span class="pill pill-better">Not required</span></td></tr>
+          <tr><td>Plugin update risk</td><td><span class="pill pill-warn">Present</span></td><td><span class="pill pill-better">No plugins</span></td></tr>
+          <tr><td>Hack / malware attack surface</td><td><span class="pill pill-warn">Moderate (PHP + DB)</span></td><td><span class="pill pill-better">Very low (static)</span></td></tr>
+          <tr><td>SSL / HTTPS</td><td><span class="pill pill-yes">Yes</span></td><td><span class="pill pill-yes">Yes</span></td></tr>
+
+          <tr class="group-row"><td colspan="3">SEO</td></tr>
+          <tr><td>Custom meta titles and descriptions</td><td><span class="pill pill-yes">Yes</span></td><td><span class="pill pill-yes">Yes</span></td></tr>
+          <tr><td>XML sitemap generation</td><td><span class="pill pill-warn">Plugin required</span></td><td><span class="pill pill-better">Automatic</span></td></tr>
+          <tr><td>Structured data / schema markup</td><td><span class="pill pill-warn">Plugin required</span></td><td><span class="pill pill-better">Built into components</span></td></tr>
+          <tr><td>Core Web Vitals (Google ranking factor)</td><td><span class="pill pill-warn">Requires optimization</span></td><td><span class="pill pill-better">Strong by default</span></td></tr>
+
+          <tr class="group-row"><td colspan="3">Development &amp; ongoing work</td></tr>
+          <tr><td>New page delivery time</td><td><span class="pill pill-warn">2–5 days</span></td><td><span class="pill pill-better">Hours</span></td></tr>
+          <tr><td>Global design changes</td><td><span class="pill pill-yes">Supported</span></td><td><span class="pill pill-better">Faster and lower-risk</span></td></tr>
+          <tr><td>Risk of update breaking the site</td><td><span class="pill pill-warn">Moderate</span></td><td><span class="pill pill-better">Very low</span></td></tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     04 — TRANSITION PROCESS
+     ============================================================ -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">04</div>
+      <div>
+        <p class="eyebrow">What the change looks like for you</p>
+        <h2>A clear, managed transition.</h2>
+      </div>
+    </div>
+
+    <p style="color:var(--muted); font-size:0.9375rem; max-width:640px; font-weight:300; margin-bottom:0.25rem;">
+      We own the entire process. Your existing site stays live throughout. At the end, you have a better website on a better platform — and we walk your team through the editing tools before we hand anything over.
+    </p>
+
+    <div class="phases">
+      <div class="phase-card">
+        <div class="phase-num">1</div>
+        <div class="phase-title">Strategy &amp; structure</div>
+        <div class="phase-desc">We align on goals, define the pages you need, and map out every content component that will power the new site.</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">2</div>
+        <div class="phase-title">Design &amp; build</div>
+        <div class="phase-desc">We design and build the component library — every section type, crafted once and reusable across every page of your site.</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">3</div>
+        <div class="phase-title">Migrate &amp; review</div>
+        <div class="phase-desc">All existing content is migrated and assembled. You review and approve on a staging environment before anything goes live.</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">4</div>
+        <div class="phase-title">Launch &amp; onboard</div>
+        <div class="phase-desc">We launch the new site and walk your team through the editor. Most clients are editing confidently and independently within an hour.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     05 — BUSINESS CASE
+     ============================================================ -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">05</div>
+      <div>
+        <p class="eyebrow">The business case</p>
+        <h2>Why this investment pays for itself.</h2>
+      </div>
+    </div>
+    <div class="roi-grid">
+      <div class="roi-card">
+        <div class="roi-icon">
+          <svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        </div>
+        <div class="roi-title">Performance drives real revenue</div>
+        <div class="roi-desc">Google ranks faster sites higher in search results. Faster load times directly reduce bounce rates and increase conversions. These performance gains are structural and permanent — not the result of ongoing optimization work.</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="roi-title">Faster turnaround on every update</div>
+        <div class="roi-desc">New pages are assembled from pre-built components. Adding a campaign landing page or a new service page takes hours instead of days. Lower development time means every change request costs less going forward.</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="roi-title">Less maintenance, less exposure</div>
+        <div class="roi-desc">No WordPress core updates. No plugin version conflicts. No monthly security patches. The static architecture removes an entire category of ongoing maintenance and the risk that comes with it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="doc-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="primer-wordmark">Primer</div>
+        <div class="primer-tagline" style="margin-top:6px;">Brand Strategy &amp; Web Development</div>
+      </div>
+      <div class="footer-contact">
+        <div>5937 Carversville Rd, Doylestown, PA 18902</div>
+        <div>484-994-3576 &nbsp;·&nbsp; <a href="mailto:hello@primerinc.com">hello@primerinc.com</a></div>
+        <div><a href="https://primerinc.com">primerinc.com</a></div>
+      </div>
+    </div>
+    <div class="footer-disclaimer">
+      This document is confidential and prepared exclusively for the recipient named above.
+      &nbsp;©&nbsp;<span id="footer-year"></span> Primer. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+
+<!-- ============================================================
+     INTERNAL NOTES — screen only, never prints
+     ============================================================ -->
+<div class="notes-wrapper">
+  <div class="notes-toggle" id="notesToggle" onclick="toggleNotes()" role="button" aria-expanded="false">
+    <span class="notes-toggle-label">
+      <span class="pulse-dot" aria-hidden="true"></span>
+      Internal use only — not for client distribution
+    </span>
+    <span class="notes-caret" id="notesCaret" aria-hidden="true">▼</span>
+  </div>
+  <div class="notes-panel" id="notesPanel" aria-hidden="true">
+    <div class="notes-inner">
+
+      <div>
+        <div class="notes-section">
+          <div class="notes-section-title">Platform &amp; plan requirements</div>
+          <ul class="notes-list">
+            <li><strong>Storyblok Free</strong> works for demos and dev — limited to 1 user and no approval workflow</li>
+            <li><strong>Storyblok Team (~$100/mo)</strong> is the minimum for a live client site — includes version history, full workflow, multiple users, and scheduling</li>
+            <li><strong>Netlify Free</strong> tier is sufficient for most small–medium sites; Pro (~$19/mo/member) adds password protection, analytics, and build concurrency</li>
+            <li>Compare total stack cost to WP Engine Business + security plugins + retainer time for patches — usually comparable or lower at Team tier</li>
+          </ul>
+        </div>
+
+        <div class="notes-section" style="margin-top:1.75rem">
+          <div class="notes-section-title">Self-serve vs. dev request: honest breakdown</div>
+          <ul class="notes-list">
+            <li><strong>Self-serve:</strong> all text, images, CTAs, links, adding/removing/reordering blocks within a page, publishing, scheduling, rollback</li>
+            <li><strong>Dev request:</strong> new component types, layout changes, new page templates, animation or interaction changes, structural redesigns</li>
+            <li>This scope is effectively identical to WP — clients could always edit content but not build new layouts anyway</li>
+            <li>Key differentiator: Storyblok makes self-serve less scary because editors literally cannot break the structure</li>
+          </ul>
+        </div>
+
+        <div class="notes-section" style="margin-top:1.75rem">
+          <div class="notes-section-title">Realistic timeline estimates</div>
+          <ul class="notes-list">
+            <li><strong>Component library build:</strong> 2–3 weeks (one-time investment, reusable across all future client builds)</li>
+            <li><strong>Content migration:</strong> 1–3 days depending on page count and content complexity</li>
+            <li><strong>Typical full project:</strong> 4–8 weeks for a 10–20 page site</li>
+            <li><strong>Subsequent clients</strong> using the same component system: significantly faster — estimate 1–2 weeks for build + migration</li>
+            <li>Frame the upfront cost as an investment in the system, not in a single site</li>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <div class="notes-section">
+          <div class="notes-section-title">Anticipated objections + responses</div>
+          <div class="objection">
+            <div class="objection-q">"What if Storyblok goes away?"</div>
+            <div class="objection-a">Content is stored as structured JSON delivered via API — it's portable. Astro can connect to any headless CMS. Content isn't locked in the way a WordPress database is.</div>
+          </div>
+          <div class="objection">
+            <div class="objection-q">"We're used to WordPress."</div>
+            <div class="objection-a">Storyblok's visual editor is genuinely intuitive. One onboarding session is typically enough. Most editors actually prefer it because they can't accidentally break anything.</div>
+          </div>
+          <div class="objection">
+            <div class="objection-q">"This sounds more expensive upfront."</div>
+            <div class="objection-a">Initial build is comparable. Ongoing is typically lower — no security retainer, faster change requests, no emergency plugin-break recovery. Frame it as front-loaded with reduced long-term cost.</div>
+          </div>
+          <div class="objection">
+            <div class="objection-q">"What happens to our existing SEO rankings?"</div>
+            <div class="objection-a">URL structure is preserved. Sitemaps, canonical tags, and redirects are all handled during migration. Performance improvements typically lift rankings — not hurt them.</div>
+          </div>
+          <div class="objection">
+            <div class="objection-q">"We can't add a completely new layout section ourselves?"</div>
+            <div class="objection-a">Correct — that's a dev request, same as it always has been. They couldn't build new layout types in WordPress either. Reframe: the component library is designed upfront to cover every section type they'll need.</div>
+          </div>
+        </div>
+
+        <div class="notes-section" style="margin-top:1.75rem">
+          <div class="notes-section-title">Strongest talking points by audience</div>
+          <ul class="notes-list">
+            <li><strong>Business owner / decision-maker:</strong> performance = more conversions, lower ongoing maintenance cost, better Google rankings</li>
+            <li><strong>Marketing team:</strong> version history, scheduling, approval workflow, faster turnaround on campaign pages</li>
+            <li><strong>Technical stakeholder:</strong> no PHP vulnerabilities, CDN delivery, 90+ Lighthouse, CI/CD quality gates on every deploy</li>
+            <li><strong>Cautious or reluctant editor:</strong> "you literally cannot break the layout" removes the anxiety of self-editing entirely — lead with this</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // Auto-populate dates
+  (function() {
+    const now = new Date();
+    const month = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    document.getElementById('doc-date').textContent = month;
+    document.getElementById('footer-year').textContent = now.getFullYear();
+  })();
+
+  // Internal notes toggle
+  function toggleNotes() {
+    const panel  = document.getElementById('notesPanel');
+    const toggle = document.getElementById('notesToggle');
+    const isOpen = panel.classList.contains('is-visible');
+    panel.classList.toggle('is-visible');
+    toggle.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+    panel.setAttribute('aria-hidden', String(isOpen));
+  }
+</script>
+
+</body>
+</html>
