@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Primer Build System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ---------------------------------------------------------------
+     Design tokens — this document is itself token-themed, the same
+     way every client site will be. Reskin it by editing these vars.
+  ---------------------------------------------------------------- */
+  :root {
+    --paper:      #f5f1e8;
+    --paper-2:    #efe9db;
+    --ink:        #1c1a16;
+    --ink-soft:   #4a463d;
+    --ink-faint:  #8a8475;
+    --accent:     #b5482b;   /* clay */
+    --accent-2:   #8f3a22;
+    --rule:       #d8d0bf;
+
+    /* internal-layer palette (cool, to read as "the technical layer") */
+    --int-bg:     #1e2329;
+    --int-bg-2:   #262d35;
+    --int-text:   #d6dee6;
+    --int-faint:  #8b96a3;
+    --int-accent: #6fb1c9;
+    --int-rule:   #38424d;
+
+    --font-display: "Fraunces", Georgia, serif;
+    --font-body:    "Hanken Grotesk", -apple-system, system-ui, sans-serif;
+    --font-mono:    "IBM Plex Mono", ui-monospace, monospace;
+
+    --measure: 720px;
+    --space:   clamp(1rem, 2.5vw, 1.75rem);
+    --radius:  4px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ---- sticky control bar ---- */
+  .bar {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem;
+    padding: 0.7rem clamp(1rem, 4vw, 3rem);
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .bar__brand {
+    font-family: var(--font-mono);
+    font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .bar__brand b { color: var(--accent); font-weight: 500; }
+  .toggle {
+    display: inline-flex; padding: 3px;
+    background: var(--paper-2); border: 1px solid var(--rule);
+    border-radius: 100px;
+  }
+  .toggle button {
+    font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 0; background: transparent; color: var(--ink-soft);
+    padding: 0.45rem 0.9rem; border-radius: 100px; cursor: pointer;
+    transition: background .2s, color .2s;
+  }
+  .toggle button.is-active { background: var(--ink); color: var(--paper); }
+
+  /* ---- layout ---- */
+  main { max-width: var(--measure); margin: 0 auto; padding: 0 clamp(1.2rem, 5vw, 2rem); }
+  .hero { padding: clamp(3.5rem, 9vw, 7rem) 0 clamp(2rem, 5vw, 3.5rem); }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 1.4rem;
+  }
+  h1 {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(2.6rem, 8vw, 4.6rem); line-height: 1.02;
+    letter-spacing: -0.02em; margin: 0 0 1.2rem;
+    font-optical-sizing: auto;
+  }
+  .hero .lede { font-size: clamp(1.1rem, 2.5vw, 1.35rem); color: var(--ink-soft); max-width: 38ch; }
+
+  section { padding: clamp(2.5rem, 6vw, 4rem) 0; border-top: 1px solid var(--rule); }
+  .sec-num {
+    font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.16em;
+    color: var(--ink-faint); display: block; margin-bottom: 0.6rem;
+  }
+  h2 {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(1.8rem, 4.5vw, 2.6rem); line-height: 1.08;
+    letter-spacing: -0.015em; margin: 0 0 1.1rem;
+  }
+  h3 {
+    font-family: var(--font-body); font-weight: 700; font-size: 1.08rem;
+    letter-spacing: 0.01em; margin: 1.8rem 0 0.5rem;
+  }
+  p { margin: 0 0 1.1rem; }
+  strong { font-weight: 600; }
+  a { color: var(--accent); text-underline-offset: 3px; }
+
+  /* phase cards */
+  .phase {
+    position: relative; padding: 1.6rem 0 1.6rem 3.4rem;
+    border-top: 1px dashed var(--rule);
+  }
+  .phase:first-of-type { border-top: 0; }
+  .phase__n {
+    position: absolute; left: 0; top: 1.5rem;
+    font-family: var(--font-display); font-weight: 600; font-size: 1.6rem;
+    color: var(--accent); line-height: 1;
+  }
+  .phase h3 { margin-top: 0; }
+  .who {
+    font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-faint);
+    display: inline-block; margin-bottom: 0.5rem;
+    padding: 0.2rem 0.55rem; border: 1px solid var(--rule); border-radius: 100px;
+  }
+  ul.clean { margin: 0.4rem 0 1.1rem; padding-left: 1.1rem; }
+  ul.clean li { margin: 0.35rem 0; }
+
+  /* boundary table */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule);
+           border: 1px solid var(--rule); border-radius: var(--radius); overflow: hidden; margin: 1.4rem 0; }
+  .split > div { background: var(--paper); padding: 1.2rem 1.3rem; }
+  .split h4 { margin: 0 0 0.8rem; font-family: var(--font-mono); font-size: 0.7rem;
+              letter-spacing: 0.12em; text-transform: uppercase; }
+  .split .client h4 { color: var(--accent); }
+  .split .primer h4 { color: var(--ink); }
+  .split ul { margin: 0; padding-left: 1.1rem; font-size: 0.95rem; }
+  .split li { margin: 0.4rem 0; }
+  @media (max-width: 560px){ .split { grid-template-columns: 1fr; } }
+
+  /* pill list of stack */
+  .stack-row { display: flex; gap: 0.9rem; padding: 0.9rem 0; border-bottom: 1px solid var(--rule); }
+  .stack-row:last-child { border-bottom: 0; }
+  .stack-row .tool { font-weight: 700; min-width: 130px; }
+  .stack-row .does { color: var(--ink-soft); }
+
+  /* ---- internal layer ---- */
+  .internal { display: none; }
+  body.show-internal .internal { display: block; }
+  /* dark technical notes are internal-only by definition */
+  .note { display: none; }
+  body.show-internal .note { display: block; }
+  .note {
+    background: var(--int-bg); color: var(--int-text);
+    border-radius: var(--radius); padding: 1.2rem 1.4rem; margin: 1.2rem 0;
+    border-left: 3px solid var(--int-accent);
+    font-size: 0.93rem; line-height: 1.6;
+  }
+  .note .tag {
+    font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--int-accent); display: block; margin-bottom: 0.6rem;
+  }
+  .note p { margin: 0 0 0.7rem; }
+  .note p:last-child { margin-bottom: 0; }
+  .note strong { color: #fff; }
+  .note a { color: var(--int-accent); text-decoration: underline; text-underline-offset: 2px; }
+  .note a:hover { color: #fff; }
+  .doclinks { margin: 0.4rem 0 0; padding-left: 1.1rem; }
+  .doclinks li { margin: 0.45rem 0; }
+  .doclinks .meta { color: var(--int-faint); display: block; font-size: 0.86em; }
+  .note code, code {
+    font-family: var(--font-mono); font-size: 0.86em;
+    background: var(--int-bg-2); color: var(--int-accent);
+    padding: 0.1em 0.4em; border-radius: 3px;
+  }
+  body:not(.show-internal) code { background: var(--paper-2); color: var(--accent-2); }
+  .note ul { margin: 0.3rem 0 0.6rem; padding-left: 1.1rem; }
+  .note li { margin: 0.3rem 0; }
+  pre {
+    font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.5;
+    background: var(--int-bg-2); color: var(--int-text);
+    padding: 1rem 1.1rem; border-radius: var(--radius); overflow-x: auto; margin: 0.7rem 0 0;
+  }
+
+  /* callouts */
+  .flag {
+    border: 1px solid var(--accent); border-radius: var(--radius);
+    padding: 1rem 1.2rem; margin: 1.2rem 0; background: color-mix(in srgb, var(--accent) 7%, var(--paper));
+  }
+  .flag .tag { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.18em;
+               text-transform: uppercase; color: var(--accent-2); display:block; margin-bottom: 0.5rem; }
+  .flag p:last-child { margin-bottom: 0; }
+
+  footer { border-top: 1px solid var(--rule); padding: 2.5rem 0 4rem; color: var(--ink-faint);
+           font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.05em; }
+
+  @media print {
+    .bar { position: static; backdrop-filter: none; }
+    .toggle { display: none; }
+    .note { border: 1px solid #999; color: #111; background: #f2f2f2; }
+    .note .tag, .note strong, code { color: #111; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="bar__brand"><b>Primer</b> · Build System</span>
+  <div class="toggle" role="group" aria-label="Audience view">
+    <button id="btn-client" class="is-active" onclick="setView('client')">Client View</button>
+    <button id="btn-internal" onclick="setView('internal')">Internal View</button>
+  </div>
+</div>
+
+<main>
+
+  <header class="hero">
+    <p class="eyebrow">Design → Build → Deploy</p>
+    <h1>The Primer<br>Build System</h1>
+    <p class="lede">A faster, more consistent way to design, build, and launch client websites — without losing control of the brand after handover.</p>
+    <div class="note">
+      <span class="tag">Internal · how to read this doc</span>
+      <p>Toggle <strong>Internal View</strong> (top right) to reveal the dark technical notes throughout. Client View hides them entirely, so this single file works both as the explainer we send prospects and the spec Brian and I build from.</p>
+      <p>Meta note: this document is itself themed with CSS custom properties at the top of the file — the exact pattern every client site uses. Reskinning it for a client deck is a token swap.</p>
+    </div>
+    <div class="note">
+      <span class="tag">Internal · further reading (Notion)</span>
+      <p>This page is the overview. The full technical specs live in Notion:</p>
+      <ul class="doclinks">
+        <li>
+          <a href="https://www.notion.so/3242dff7262481808b0afb0b6eb34e46" target="_blank" rel="noopener">End-to-End Component Setup: Figma → Claude Code → Astro + Storyblok</a>
+          <span class="meta">The build bible — tooling, CLAUDE.md, tokens.css, Storyblok schemas, components, SEO (6A) &amp; tag governance (6B), deployment.</span>
+        </li>
+        <li>
+          <a href="https://www.notion.so/3232dff72624810ea5d4d7ee12546c78" target="_blank" rel="noopener">AI-Powered Client Site Build Process — Research &amp; Strategy</a>
+          <span class="meta">The why: stack evaluation and strategy behind the move off WordPress/Bricks.</span>
+        </li>
+        <li>
+          <a href="https://www.notion.so/3232dff7262481bfa31ee55fa07716ce" target="_blank" rel="noopener">Figma Component Library Structure for AI Consumption</a>
+          <span class="meta">How the Figma library is organised so Claude Code can generate from it reliably.</span>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <section>
+    <span class="sec-num">01 — THE MODEL</span>
+    <h2>Separate the content from the design</h2>
+    <p>Every site we build is two layers that we keep deliberately apart. The <strong>design layer</strong> — layout, components, typography, brand — is owned and controlled by Primer. The <strong>content layer</strong> — the words, images, pages, and resources — is editable by the client.</p>
+    <p>This single decision is what makes the whole system work. Clients get to keep their site current without waiting on us, but they can't accidentally break the layout, drift off-brand, or undo the design work they paid for. The brand stays intact long after launch.</p>
+    <p>And because the design layer is built from a shared, reusable kit, each new site is mostly assembly and re-styling rather than building from scratch. That's where the time — and the cost — comes down.</p>
+    <div class="note">
+      <span class="tag">Internal · why this replaces Bricks</span>
+      <p>Bricks/ACF gave clients a visual builder, which is exactly the problem: full layout control in client hands = brand drift + unused custom work + support burden. The new model enforces the boundary at the architecture level — content lives in a headless CMS, design lives in code the client never touches. The CMS only ever exposes <em>content fields inside components we defined</em>, never raw layout.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="sec-num">02 — THE STACK</span>
+    <h2>What we build with</h2>
+    <p>Four pieces, each doing one job:</p>
+    <div class="stack-row"><span class="tool">Figma + Tokens</span><span class="does">Where Brian designs the brand and defines the colors, fonts, and spacing as reusable design tokens.</span></div>
+    <div class="stack-row"><span class="tool">Component Library</span><span class="does">Our shared kit of pre-built pieces — hero, cards, logo scroller, FAQ, buttons — restyled per client.</span></div>
+    <div class="stack-row"><span class="tool">Astro (the site)</span><span class="does">The fast, modern foundation the site is built on. Loads quickly, scores well, easy to maintain.</span></div>
+    <div class="stack-row"><span class="tool">Headless CMS</span><span class="does">Where the client edits content — pages, posts, resources — safely, without touching design.</span></div>
+    <div class="note">
+      <span class="tag">Internal · stack specifics</span>
+      <p><strong>Astro</strong> — component-based, ships zero JS by default, so performance is high out of the box (this is the structural fix for the PageSpeed problems we fought on carrot.io). Components can be plain <code>.astro</code> (HTML + scoped CSS + vanilla JS) — no React required, which keeps us in our existing skillset. Add islands only where interactivity is genuinely needed.</p>
+      <p><strong>CMS — recommendation: Storyblok</strong> (confirm before we lock it). Its content model is component-mapped ("bloks") which maps 1:1 onto our component library, and its Visual Editor lets clients edit content in-context without exposing layout. Alternative: <strong>Sanity</strong> for stricter, more developer-centric lockdown (form-based editing, no visual editor). Keeping <strong>WordPress headless</strong> (ACF + WPGraphQL) is the low-learning-curve fallback but drags the WP maintenance burden we're trying to drop.</p>
+      <p><strong>Tokens Studio → code</strong> — export tokens as JSON, transform to CSS custom properties via a small build step (Style Dictionary or a simple script). Components only ever reference semantic tokens.</p>
+      <p><strong>Netlify</strong> — git-based deploys, deploy previews per branch, and a build hook the CMS calls on publish so content changes rebuild the site automatically. Vercel is an equivalent alternative.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="sec-num">03 — WHO DOES WHAT</span>
+    <h2>Roles</h2>
+    <p>Three clear lanes, no overlap:</p>
+    <ul class="clean">
+      <li><strong>Brian (Design &amp; Brand)</strong> — brand direction, the Figma design, and the design tokens that define how each client's site looks.</li>
+      <li><strong>James (Build &amp; Deploy)</strong> — turning the design into the live site using the component library, wiring up the CMS, and managing launch and hosting.</li>
+      <li><strong>The Client (Content)</strong> — editing their own content after launch, within the structure we set up. Anything structural or design-related comes back to us.</li>
+    </ul>
+    <div class="note">
+      <span class="tag">Internal · the revenue logic</span>
+      <p>The role split is also the business model. Routine content = self-serve in the CMS (keeps clients happy, no nickel-and-diming over typos). Anything structural, new component, design change, or bug = Primer, and ideally on a retainer. Headless naturally creates this dependency without it feeling artificial. Define the retainer tiers (content support / maintenance / bug SLA) as a separate decision — flagged in section 09.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="sec-num">04 — THE WORKFLOW</span>
+    <h2>How a project runs, start to finish</h2>
+
+    <div class="phase">
+      <span class="phase__n">1</span>
+      <span class="who">Brian · Design</span>
+      <h3>Design &amp; brand</h3>
+      <p>Brian sets the brand direction and designs the site in Figma — but designs <em>with</em> the component library, treating it as the kit of parts. Instead of designing every page from a blank canvas, he's choosing and arranging known components and defining how they should look for this client.</p>
+      <p>The output isn't just screens: it's a set of <strong>design tokens</strong> — the client's colors, fonts, spacing, and corner styles — that the build will read directly.</p>
+      <div class="note">
+        <span class="tag">Internal · design phase</span>
+        <p>Maintain a Figma library that mirrors the code component library (same names). Brian assembles pages from those, so what he hands over is already mapped to real components — minimal "translation" loss. Tokens defined in <strong>Tokens Studio</strong> using a layered model: primitives (raw values) → semantic tokens (<code>color/surface</code>, <code>color/ink</code>, <code>color/accent</code>, <code>font/display</code>, <code>space/*</code>, <code>radius/*</code>). Components reference semantic only. Export → JSON → our token build step.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <span class="phase__n">2</span>
+      <span class="who">James · Build</span>
+      <h3>Build the site</h3>
+      <p>I pull in the shared component library, apply this client's tokens (which instantly restyle every component to their brand), assemble the pages, and build any client-specific pieces that don't already exist. Then I connect each component to the CMS so the right text and images become editable.</p>
+      <p>Most of a build is now assembly and theming, not building from zero — which is the entire point.</p>
+      <div class="note">
+        <span class="tag">Internal · build phase</span>
+        <p><strong>Repo structure:</strong> a shared <code>primer-ui</code> component package (private npm package or git submodule) consumed by each per-client Astro app. The client app holds only: its <code>tokens.css</code> theme file, its content/CMS config, and any bespoke components.</p>
+        <pre>primer-ui/            # shared, versioned component library
+  components/         # Hero, Cards, LogoScroller, FAQ, Button...
+  styles/base.css     # references semantic tokens only
+
+client-acme/          # one app per client
+  src/
+    tokens.css        # brand overrides — the only "design" file here
+    pages/
+    cms/              # blok ↔ component mapping
+  astro.config.mjs</pre>
+        <p><strong>Bug fix once → version bump → propagates to every client.</strong> Keep bespoke components minimal; if a one-off turns out reusable, promote it back into <code>primer-ui</code>.</p>
+        <p><strong>CMS modeling:</strong> define bloks that mirror components; a page is an ordered list of bloks; the client edits fields inside bloks but can't introduce arbitrary layout. This is where brand lockdown actually lives — model it deliberately.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <span class="phase__n">3</span>
+      <span class="who">James + Brian · Launch</span>
+      <h3>Review, train &amp; go live</h3>
+      <p>The site goes up on a private staging link first. Brian does a brand/design check, the client reviews content, we do a short training session so they're comfortable editing, and then we launch to the live domain.</p>
+      <div class="note">
+        <span class="tag">Internal · launch checklist</span>
+        <ul>
+          <li>Deploy preview on Netlify → Brian brand QA → client content review.</li>
+          <li>Performance, accessibility, meta/OG, sitemap, robots, analytics in place.</li>
+          <li><strong>Migration redirects</strong> from old WP URLs (carry over for SEO — Mike's input on carrot-type projects).</li>
+          <li>CMS publish → build hook → rebuild verified.</li>
+          <li>Record a 10-min Loom of the editing workflow; hand over a one-page "what you can edit" guide.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <span class="phase__n">4</span>
+      <span class="who">Primer · Ongoing</span>
+      <h3>After launch</h3>
+      <p>The client edits their own content day to day. We stay on for design changes, new sections, fixes, and maintenance — ideally on a simple monthly retainer so the relationship (and the brand) is looked after rather than left to drift.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="sec-num">05 — THE COMPONENT LIBRARY</span>
+    <h2>The engine that makes it fast</h2>
+    <p>The library is a set of pre-built, polished components we use on every project — and re-style per client through their tokens. Build it once, reuse it forever. A starting set:</p>
+    <ul class="clean">
+      <li>Header / navigation &amp; footer</li>
+      <li>Hero sections (a few variants)</li>
+      <li>Cards (services, team, resources)</li>
+      <li>Logo scroller / client marquee</li>
+      <li>FAQ accordion</li>
+      <li>Buttons &amp; CTAs</li>
+      <li>Testimonials / quotes</li>
+      <li>Stats / metrics row</li>
+      <li>Rich-text / content blocks</li>
+      <li>Contact / form block</li>
+    </ul>
+    <p>For a new client, the work becomes: drop in their tokens → assemble these → add one or two bespoke pieces → connect content. That's the cost reduction, made concrete.</p>
+    <div class="note">
+      <span class="tag">Internal · library principles</span>
+      <p>Every component is styled <strong>only</strong> through CSS custom properties — zero hard-coded colors, fonts, or radii. Re-theming = swapping <code>tokens.css</code>, nothing else. Version the library (semver); client apps pin a version and upgrade deliberately. Each component ships with: an Astro component, a CMS blok schema, and sensible defaults. Claude Code can scaffold new components against this contract quickly, and the Figma library stays name-matched so design↔code stays tight. Full conventions and a component traced end-to-end: <a href="https://www.notion.so/3242dff7262481808b0afb0b6eb34e46" target="_blank" rel="noopener">End-to-End Setup doc</a>.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="sec-num">06 — THE BOUNDARY</span>
+    <h2>Who controls what after launch</h2>
+    <div class="split">
+      <div class="client">
+        <h4>Client can edit</h4>
+        <ul>
+          <li>Page text &amp; headings</li>
+          <li>Images within set slots</li>
+          <li>Blog posts &amp; resources</li>
+          <li>Add/remove allowed sections</li>
+          <li>Links &amp; button labels</li>
+          <li>SEO: page titles, meta &amp; social/OG</li>
+          <li>Add HubSpot forms (paste form ID)</li>
+          <li>Their own tags &amp; scripts via GTM</li>
+        </ul>
+      </div>
+      <div class="primer">
+        <h4>Primer controls</h4>
+        <ul>
+          <li>Layout &amp; structure</li>
+          <li>Brand: colors, fonts, spacing</li>
+          <li>Components &amp; new features</li>
+          <li>Design changes</li>
+          <li>Hosting, performance, fixes</li>
+          <li>GTM install, anti-flicker, code</li>
+        </ul>
+      </div>
+    </div>
+    <p>This is the clearest thing to show a prospect: they're never locked out of their own content, and they can never break what they paid us to build.</p>
+    <div class="note">
+      <span class="tag">Internal · integrations &amp; script governance</span>
+      <p><strong>SEO</strong> — client-editable per page (title, meta, OG/social) plus site-wide defaults, all in the CMS. We own the technical layer: rendering, sitemap, canonical/robots, structured data.</p>
+      <p><strong>Forms</strong> — HubSpot via the form component (client pastes a form ID; styling stays on-brand via the <code>css</code>/<code>cssRequired</code> strip). No more WP plugin.</p>
+      <p><strong>Third-party scripts</strong> — we install the GTM container <em>once</em>; the client/marketing team adds and manages their own tags (GA4, pixels, Heap, Clarity, conversions) inside the GTM UI — autonomy without touching code. Anti-flicker / consent scripts stay Primer-controlled in the head, and GTM runs offloaded for performance. Full setup with code: <a href="https://www.notion.so/3242dff7262481808b0afb0b6eb34e46" target="_blank" rel="noopener">Parts 6A (SEO) &amp; 6B (Tag Governance)</a> in the Notion build doc.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="sec-num">07 — THE CLIENT PITCH</span>
+    <h2>How we describe this to clients</h2>
+    <p>A short version for proposals and calls:</p>
+    <p><em>"We design and build your site on a modern, component-based system. That means it's faster to build and far faster to load, it stays perfectly on-brand, and you can update your own content — pages, posts, images — any time, without the risk of breaking the design. We handle the technical side and stay on to keep everything running, so your site keeps performing long after launch."</em></p>
+    <p>The selling points, in their language: <strong>faster &amp; better value</strong> to build, <strong>fast and high-scoring</strong> sites, <strong>stays on-brand</strong>, <strong>easy content editing</strong>, and <strong>ongoing support</strong> instead of being left on their own.</p>
+  </section>
+
+  <section>
+    <span class="sec-num">08 — PROOF OF CONCEPT</span>
+    <h2>primerinc.com</h2>
+    <p>Our own site is the test. It's currently on WordPress; we'll rebuild it as a small, light version on the new system — a handful of pages plus the ability to add posts/resources. Keeping it deliberately small lets us prove the full design → build → deploy → edit loop end to end before we put a paying client through it.</p>
+    <div class="note">
+      <span class="tag">Internal · POC phases</span>
+      <ul>
+        <li><strong>Phase 0 — Decide &amp; define.</strong> Confirm CMS (Storyblok), lock the core component list, and agree the token schema with Brian. Most important step; everything downstream depends on clean token naming.</li>
+        <li><strong>Phase 1 — Foundation.</strong> Token system + 6–10 core components on primerinc.com, fully theme-driven. Prove components render and re-theme cleanly. No CMS yet.</li>
+        <li><strong>Phase 2 — Content.</strong> Wire the CMS, model the bloks, prove the edit-content-but-can't-break-design boundary actually holds (have Brian try to break it).</li>
+        <li><strong>Phase 3 — Extract &amp; validate reuse.</strong> Pull components into <code>primer-ui</code>; build the next site as a pure theme swap. If site #2 is mostly tokens + content + assembly, the model is proven.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="internal">
+    <span class="sec-num">09 — STILL TO DECIDE</span>
+    <h2>Open decisions</h2>
+    <p>A few things to lock before or during the POC:</p>
+    <div class="flag">
+      <span class="tag">Decisions needed</span>
+      <p><strong>1. CMS — final call.</strong> Storyblok is the recommendation (best client-editing experience for our brand-control goal). Confirm, or choose Sanity / WP-headless.</p>
+      <p><strong>2. Forms &amp; CRM.</strong> No more HubSpot WP plugin — decide the approach (HubSpot embed/API, Netlify Forms, or other). This affects the contact/form component.</p>
+      <p><strong>3. Retainer model.</strong> Define the post-launch tiers — content support, maintenance, bug SLA — and pricing. This is core to the revenue goal, not an afterthought.</p>
+      <p><strong>4. Core component list sign-off.</strong> Confirm the section 05 set with Brian; that list drives Phase 1.</p>
+      <p><strong>5. Hosting &amp; domains.</strong> Netlify vs Vercel, and how client domains/DNS are managed.</p>
+    </div>
+  </section>
+
+  <footer>
+    PRIMER BUILD SYSTEM · WORKING DRAFT v0.1 · DESIGN: BRIAN · BUILD: JAMES
+  </footer>
+
+</main>
+
+<script>
+  function setView(v){
+    var internal = v === 'internal';
+    document.body.classList.toggle('show-internal', internal);
+    document.getElementById('btn-internal').classList.toggle('is-active', internal);
+    document.getElementById('btn-client').classList.toggle('is-active', !internal);
+  }
+</script>
+</body>
+</html>
