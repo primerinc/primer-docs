@@ -9,6 +9,7 @@ Pushing to main auto-deploys. No build step — pure static HTML.
 - platform-proposal.html — client proposal: WordPress → Astro + Storyblok
 - why-switch.html     — pitch comparison slide
 - build-system.html   - overview of the new build process with Astro + Storyblok
+- aeo-upgrade.html    - service offering: AEO & GEO upgrade for Lock8 portfolio sites
 
 ## Brand
 - Fonts: IBM Plex Sans + IBM Plex Serif (Google Fonts)

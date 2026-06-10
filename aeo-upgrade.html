@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEO & GEO Sitewide Upgrade — Primer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:        #0f0f0f;
+    --ink-muted:  #4a4a4a;
+    --ink-faint:  #888;
+    --surface:    #f7f5f0;
+    --white:      #ffffff;
+    --accent:     #d4500a;
+    --accent-lt:  #fdf0e8;
+    --rule:       #e0ddd6;
+    --card-bg:    #ffffff;
+    --font-head:  'IBM Plex Sans', sans-serif;
+    --font-body:  'IBM Plex Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(247,245,240,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+
+  .nav__brand { display: flex; flex-direction: column; text-decoration: none; }
+  .nav__wordmark {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 1.125rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .nav__sub {
+    font-size: 0.6875rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    margin-top: 2px;
+  }
+
+  .nav__label {
+    font-size: 0.75rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+    font-weight: 400;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    padding: clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem) clamp(3rem, 6vw, 5rem);
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 3rem;
+    align-items: end;
+  }
+
+  .hero__eyebrow {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .hero__eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 28px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  h1 {
+    font-family: var(--font-head);
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 700;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero__sub {
+    font-size: clamp(1rem, 1.5vw, 1.15rem);
+    color: var(--ink-muted);
+    max-width: 560px;
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  .hero__meta {
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+    line-height: 1.9;
+  }
+
+  .hero__meta strong {
+    color: var(--ink);
+    font-weight: 500;
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .hero__divider {
+    border: none;
+    border-top: 1px solid var(--rule);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.5rem, 5vw, 4rem);
+  }
+
+  .section + .section {
+    border-top: 1px solid var(--rule);
+  }
+
+  .section__label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-family: var(--font-head);
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+  }
+
+  .section__intro {
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+    max-width: 640px;
+    line-height: 1.65;
+    margin-bottom: 2rem;
+    font-weight: 300;
+  }
+
+  /* ─── STATS ROW ─── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 2rem;
+  }
+
+  .stat {
+    background: var(--white);
+    padding: 1.75rem 1.5rem;
+  }
+
+  .stat__number {
+    font-family: var(--font-head);
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat__desc {
+    font-size: 0.88rem;
+    color: var(--ink-muted);
+    line-height: 1.45;
+  }
+
+  /* ─── ACTION ITEMS ─── */
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .action {
+    background: var(--card-bg);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 1.5rem 1.75rem;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .action::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .action:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.07);
+    transform: translateY(-2px);
+  }
+
+  .action:hover::before {
+    opacity: 1;
+  }
+
+  .action__num {
+    font-family: var(--font-head);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+
+  .action__title {
+    font-family: var(--font-head);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .action__block {
+    margin-bottom: 0.85rem;
+  }
+
+  .action__block:last-child {
+    margin-bottom: 0;
+  }
+
+  .action__block-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.25rem;
+  }
+
+  .action__block-text {
+    font-size: 0.88rem;
+    color: var(--ink-muted);
+    line-height: 1.55;
+  }
+
+  /* ─── OUTCOMES ─── */
+  .outcomes {
+    background: var(--ink);
+    border-radius: 8px;
+    padding: 2.5rem 3rem;
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 3rem;
+  }
+
+  .outcomes__heading {
+    grid-column: 1 / -1;
+    font-family: var(--font-head);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid #2a2a2a;
+    margin-bottom: 0.25rem;
+  }
+
+  .outcome {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .outcome__check {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .outcome__text {
+    font-size: 0.9rem;
+    color: #c8c6c0;
+    line-height: 1.5;
+  }
+
+  .outcome__text strong {
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  /* ─── NOT SECTION ─── */
+  .not-section {
+    border: 1px solid var(--rule);
+    background: var(--white);
+    border-radius: 8px;
+    padding: 1.75rem 2rem;
+    margin-top: 2rem;
+  }
+
+  .not-section h3 {
+    font-family: var(--font-head);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 1rem;
+    letter-spacing: 0.01em;
+  }
+
+  .not-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem 1.5rem;
+  }
+
+  .not-list li {
+    font-size: 0.88rem;
+    color: var(--ink-muted);
+    padding-left: 1.25rem;
+    position: relative;
+    line-height: 1.45;
+  }
+
+  .not-list li::before {
+    content: '×';
+    position: absolute;
+    left: 0;
+    color: #ccc;
+    font-weight: 600;
+  }
+
+  /* ─── BOTTOM LINE ─── */
+  .bottom-line {
+    background: var(--accent-lt);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 2rem 2.5rem;
+    margin-top: 2rem;
+  }
+
+  .bottom-line__label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .bottom-line__text {
+    font-family: var(--font-head);
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 1.75rem clamp(1.5rem, 5vw, 4rem);
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+  }
+
+  /* ─── DEFINITIONS ─── */
+  .definitions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .def-card {
+    background: var(--card-bg);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 1.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .def-card__tag {
+    font-family: var(--font-head);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .def-card__acronym {
+    font-family: var(--font-head);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .def-card__name {
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+    margin-bottom: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .def-card__body {
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    line-height: 1.6;
+  }
+
+  .def-card__meta {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .def-card__row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .def-card__row-label {
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    color: var(--ink-faint);
+    flex-shrink: 0;
+    width: 52px;
+  }
+
+  .def-card__row-value {
+    color: var(--ink-muted);
+  }
+
+  .def-card--highlight {
+    border-color: var(--accent);
+    background: var(--accent-lt);
+  }
+
+  .def-card--highlight .def-card__acronym {
+    color: var(--accent);
+  }
+
+  .comparison-note {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 1.5rem 2rem;
+    margin-top: 1.25rem;
+    font-size: 0.88rem;
+    color: var(--ink-muted);
+    line-height: 1.6;
+  }
+
+  .comparison-note strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 780px) {
+    .hero {
+      grid-template-columns: 1fr;
+    }
+    .hero__meta { display: none; }
+    .stats { grid-template-columns: 1fr; }
+    .actions-grid { grid-template-columns: 1fr; }
+    .outcomes { grid-template-columns: 1fr; padding: 1.75rem; }
+    .not-list { grid-template-columns: 1fr; }
+    .definitions-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ─── FADE-IN ANIMATION ─── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    animation: fadeUp 0.55s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in:nth-child(1) { animation-delay: 0.05s; }
+  .fade-in:nth-child(2) { animation-delay: 0.12s; }
+  .fade-in:nth-child(3) { animation-delay: 0.19s; }
+  .fade-in:nth-child(4) { animation-delay: 0.26s; }
+  .fade-in:nth-child(5) { animation-delay: 0.33s; }
+  .fade-in:nth-child(6) { animation-delay: 0.40s; }
+  .fade-in:nth-child(7) { animation-delay: 0.47s; }
+  .fade-in:nth-child(8) { animation-delay: 0.54s; }
+  .fade-in:nth-child(9) { animation-delay: 0.61s; }
+  .fade-in:nth-child(10) { animation-delay: 0.68s; }
+  .fade-in:nth-child(11) { animation-delay: 0.75s; }
+  .fade-in:nth-child(12) { animation-delay: 0.82s; }
+  .fade-in:nth-child(13) { animation-delay: 0.89s; }
+  .fade-in:nth-child(14) { animation-delay: 0.96s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav__brand" href="/index.html">
+    <span class="nav__wordmark">Primer</span>
+    <span class="nav__sub">Brand Strategy &amp; Web Development</span>
+  </a>
+  <span class="nav__label">AEO &amp; GEO Upgrade — Service Offering</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero__eyebrow">Service Offering</div>
+    <h1>AEO &amp; GEO<br><em>Sitewide</em><br>Upgrade</h1>
+    <p class="hero__sub">A comprehensive optimization upgrade that makes your existing site visible and citable inside AI tools and answer engines — where your customers are increasingly making decisions.</p>
+  </div>
+  <div class="hero__meta">
+    <strong>Prepared by</strong>
+    Primer
+    <br><br>
+    <strong>Document type</strong>
+    Service Offering
+    <br><br>
+    <strong>Audience</strong>
+    Existing clients
+    <br><br>
+    <strong>Year</strong>
+    2026
+  </div>
+</div>
+
+<hr class="hero__divider">
+
+<!-- THE OPPORTUNITY -->
+<section class="section">
+  <div class="section__label">Context</div>
+  <h2>Why This Matters Now</h2>
+  <p class="section__intro">Search is no longer just about ranking on a page of blue links. Increasingly, your customers are getting answers directly from AI assistants before they ever click a website. This upgrade ensures <em>your</em> site is the one being cited.</p>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat__number">60%</div>
+      <div class="stat__desc">of Google searches now end without a click — users get their answer from AI Overviews directly</div>
+    </div>
+    <div class="stat">
+      <div class="stat__number">3×</div>
+      <div class="stat__desc">faster growth in AI-assisted research for B2B buying decisions vs. traditional search</div>
+    </div>
+    <div class="stat">
+      <div class="stat__number">Now</div>
+      <div class="stat__desc">Getting ahead while competitors haven't adapted is cheaper than catching up later</div>
+    </div>
+  </div>
+</section>
+
+<!-- DEFINITIONS -->
+<section class="section">
+  <div class="section__label">Terminology</div>
+  <h2>SEO, AEO &amp; GEO — What's the Difference?</h2>
+  <p class="section__intro">These three disciplines often get conflated. They share techniques but target fundamentally different surfaces — and understanding the distinction is key to knowing why this upgrade matters.</p>
+
+  <div class="definitions-grid">
+
+    <div class="def-card">
+      <div class="def-card__tag">The Foundation</div>
+      <div class="def-card__acronym">SEO</div>
+      <div class="def-card__name">Search Engine Optimization</div>
+      <p class="def-card__body">Optimizing a website to rank higher in traditional search engine results pages (SERPs) — primarily Google. The goal is to appear as a blue link when someone searches a relevant keyword.</p>
+      <div class="def-card__meta">
+        <div class="def-card__row">
+          <span class="def-card__row-label">Target</span>
+          <span class="def-card__row-value">Google, Bing, Yahoo results pages</span>
+        </div>
+        <div class="def-card__row">
+          <span class="def-card__row-label">Output</span>
+          <span class="def-card__row-value">A ranked link a user clicks to visit your site</span>
+        </div>
+        <div class="def-card__row">
+          <span class="def-card__row-label">Signals</span>
+          <span class="def-card__row-value">Backlinks, keywords, page authority, Core Web Vitals</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="def-card def-card--highlight">
+      <div class="def-card__tag">The New Priority</div>
+      <div class="def-card__acronym">AEO</div>
+      <div class="def-card__name">Answer Engine Optimization</div>
+      <p class="def-card__body">Optimizing content to be cited by answer engines — tools like Google AI Overviews, Bing Copilot, and voice assistants that return a direct answer rather than a list of links. You're not trying to rank; you're trying to <em>be the answer</em>.</p>
+      <div class="def-card__meta">
+        <div class="def-card__row">
+          <span class="def-card__row-label">Target</span>
+          <span class="def-card__row-value">Google AI Overviews, Bing Copilot, voice search</span>
+        </div>
+        <div class="def-card__row">
+          <span class="def-card__row-label">Output</span>
+          <span class="def-card__row-value">Your content quoted or cited as the direct answer</span>
+        </div>
+        <div class="def-card__row">
+          <span class="def-card__row-label">Signals</span>
+          <span class="def-card__row-value">Schema markup, FAQ structure, concise direct answers</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="def-card def-card--highlight">
+      <div class="def-card__tag">The New Priority</div>
+      <div class="def-card__acronym">GEO</div>
+      <div class="def-card__name">Generative Engine Optimization</div>
+      <p class="def-card__body">Optimizing content to be surfaced, recommended, or cited by generative AI tools — ChatGPT, Perplexity, Claude, Gemini, and others. The focus is on being included in AI-generated responses when users research topics in your space.</p>
+      <div class="def-card__meta">
+        <div class="def-card__row">
+          <span class="def-card__row-label">Target</span>
+          <span class="def-card__row-value">ChatGPT, Perplexity, Claude, Gemini</span>
+        </div>
+        <div class="def-card__row">
+          <span class="def-card__row-label">Output</span>
+          <span class="def-card__row-value">Your brand mentioned or linked in AI-generated responses</span>
+        </div>
+        <div class="def-card__row">
+          <span class="def-card__row-label">Signals</span>
+          <span class="def-card__row-value">Entity clarity, crawlability, cited data, llms.txt</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="comparison-note">
+    <strong>How they relate:</strong> SEO is the prerequisite — a well-structured, fast, credible site is the foundation for everything else. AEO layers on top of SEO to capture featured snippets and AI Overviews within search. GEO goes a step further, targeting the conversational AI tools people use outside of search entirely. <strong>This upgrade addresses all three simultaneously</strong> — every improvement that helps AEO and GEO also reinforces your traditional SEO.
+  </div>
+</section>
+
+<!-- ACTION ITEMS -->
+<section class="section">
+  <div class="section__label">The Work</div>
+  <h2>14 Action Items</h2>
+  <p class="section__intro">Each upgrade is a concrete deliverable with a measurable outcome. Together, they transform how AI tools and search engines find, understand, and recommend your business.</p>
+
+  <div class="actions-grid">
+
+    <div class="action fade-in">
+      <div class="action__num">01</div>
+      <div class="action__title">Schema Markup Implementation Across the Site</div>
+      <div class="action__block">
+        <div class="action__block-label">What We'll Do</div>
+        <div class="action__block-text">Add structured data — the hidden code that tells AI tools and search engines exactly what each page is about: your organization, services, articles, FAQs, reviews, and more.</div>
+      </div>
+      <div class="action__block">
+        <div class="action__block-label">Why It Matters</div>
+        <div class="action__block-text">Without schema, AI tools have to guess what your content means. With schema, they know with certainty — and confident sources get cited far more often.</div>
+      </div>
+    </div>
+
+    <div class="action fade-in">
+      <div class="action__num">02</div>
+      <div class="action__title">FAQ Sections With Structured Data on Key Pages</div>
+      <div class="action__block">
+        <div class="action__block-label">What We'll Do</div>
+        <div class="action__block-text">Add or upgrade FAQ sections on your most important pages, marked up so search engines can pull individual questions and answers directly into results and AI responses.</div>
+      </div>
+      <div class="action__block">
+        <div class="action__block-label">Why It Matters</div>
+        <div class="action__block-text">FAQ content is the single highest-leverage format for AI visibility — putting your answers in front of users at the exact moment they're asking the question.</div>
+      </div>
+    </div>
+
+    <div class="action fade-in">
+      <div class="action__num">03</div>
+      <div class="action__title">Entity &amp; Brand Clarity Audit</div>
+      <div class="action__block">
+        <div class="action__block-label">What We'll Do</div>
+        <div class="action__block-text">Standardize how your business is identified across the site — consistent name usage, complete organization data, links to all your verified profiles (LinkedIn, directories, social).</div>
+      </div>
+      <div class="action__block">
+        <div class="action__block-label">Why It Matters</div>
+        <div class="action__block-text">AI tools build their understanding of your brand from these signals. Inconsistencies make AI tools uncertain about who you are — and uncertain entities don't get recommended.</div>
+      </div>
+    </div>
+
+    <div class="action fade-in">
+      <div class="action__num">04</div>
+      <div class="action__title">Content Restructuring for AI Extraction</div>
+      <div class="action__block">
+        <div class="action__block-label">What We'll Do</div>
+        <div class="action__block-text">Restructure key pages so the most important answer appears in the first 60 words, headings are written as real questions users ask, and content uses clear, direct sentences.</div>
+      </div>
+      <div class="action__block">
+        <div class="action__block-label">Why It Matters</div>
+        <div class="action__block-text">AI tools pull content in chunks. Pages that bury the answer get ignored in favor of pages that answer directly up top. This restructuring is what gets you cited.</div>
+      </div>
+    </div>
+
+    <div class="action fade-in">
+      <div class="action__num">05</div>
+      <div class="action__title">Testimonial &amp; Review Markup</div>
+      <div class="action__block">
+        <div class="action__block-label">What We'll Do</div>
+        <div class="action__block-text">Convert your existing testimonials into structured Review data — including author names, credentials, ratings, and specific measurable outcomes.</div>
+      </div>
+      <div class="action__block">
+        <div class="action__block-label">Why It Matters</div>
+        <div class="action__block-text">AI tools heavily weight third-party validation. Properly marked-up testimonials get directly cited by AI assistants when users ask whether your service is worth it.</div>
+      </div>
+    </div>
+
+    <div class="action fade-in">
+      <div class="action__num">06</div>
+      <div class="action__title">AI Crawler Access Verification</div>
+      <div class="action__block">
+        <div class="action__block-label">What We'll Do</div>
+        <div class="action__block-text">Audit your site's crawler settings and confirm that AI tools (ChatGPT, Perplexity, Claude, Google AI) are explicitly allowed to read your content.</div>
+      </div>
+      <div class="action__block">
+        <div class="action__block-label">Why It Matters</div>
+        <div class="action__block-text">Many sites unknowingly block AI crawlers through default security settings. If they can't read your site, they can't recommend it. This is a small fix with a major impact.</div>
+      </div>
+    </div>
+
+    <div class="action fade-in">
+      <div class="action__num">07</div>
+      <div class="action__title">llms.txt File Implementation</div>
+      <div class="action__block">
+        <div class="action__block-label">What We'll Do</div>
+        <div class="action__block-text">Create an <em>llms.txt</em> file at your site's root — an emerging standard that gives AI tools a clean, structured summary of your business and which pages matter most.</div>
+      </div>
+      <div class="action__block">
+        <div class="action__block-label">Why It Matters</div>
+        <div class="action__block-text">Think of this as a direct introduction to AI assistants. Early adoption gives you an edge while most competitors don't know this standard exists yet.</div>
+      </div>
+    </div>
+
+    <div class="action fade-in">
+      <div class="action__num">08</div>
+      <div class="action__title">Semantic HTML &amp; Heading Hierarchy Cleanup</div>
+      <div class="action__block">
+        <div class="action__block-label">What We'll Do</div>
+        <div class="action__block-text">Clean up the underlying HTML structure so headings, sections, articles, and navigation are properly tagged — not just visually styled to look correct.</div>
+      </div>
+      <div class="action__block">
+        <div class="action__block-label">Why It Matters</div>
+        <div class="action__block-text">AI tools parse meaning from HTML structure. Pages that look right but are structurally messy get partial or incorrect understanding from every tool that reads them.</div>
+      </div>
+    </div>
+
+    <div class="action fade-in">
+      <div class="action__num">09</div>
+      <div class="action__title">Page Speed &amp; Core Web Vitals Optimization</div>
+      <div class="action__block">
+        <div class="action__block-label">What We'll Do</div>
+        <div class="action__block-text">Audit and improve page load speed, image optimization, and rendering performance to meet Google's Core Web Vitals thresholds across all key pages.</div>
+      </div>
+      <div class="action__block">
+        <div class="action__block-label">Why It Matters</div>
+        <div class="action__block-text">Slow pages get partially indexed. AI Overviews and AI assistants favor fast-loading content because they need to parse pages quickly during real-time queries.</div>
+      </div>
+    </div>
+
+    <div class="action fade-in">
+      <div class="action__num">10</div>
+      <div class="action__title">Statistics &amp; Data Point Highlighting</div>
+      <div class="action__block">
+        <div class="action__block-label">What We'll Do</div>
+        <div class="action__block-text">Identify the specific, quantifiable claims in your existing content — savings, results, outcomes — and structure them as clearly attributed, standout data points.</div>
+      </div>
+      <div class="action__block">
+        <div class="action__block-label">Why It Matters</div>
+        <div class="action__block-text">AI tools cite specifics, not generalities. <em>"Reduced costs by 40%"</em> gets quoted. <em>"Reduces costs significantly"</em> gets ignored. We make your real numbers visible.</div>
+      </div>
+    </div>
+
+    <div class="action fade-in">
+      <div class="action__num">11</div>
+      <div class="action__title">Schema for Services, Products &amp; Offers</div>
+      <div class="action__block">
+        <div class="action__block-label">What We'll Do</div>
+        <div class="action__block-text">Mark up your services, programs, or products with detailed structured data — what you offer, who it's for, pricing structure, and key features.</div>
+      </div>
+      <div class="action__block">
+        <div class="action__block-label">Why It Matters</div>
+        <div class="action__block-text">When someone asks an AI assistant who offers a specific service, AI tools pull from sites with clearly structured service data. Without it, you're invisible to those queries.</div>
+      </div>
+    </div>
+
+    <div class="action fade-in">
+      <div class="action__num">12</div>
+      <div class="action__title">Internal Linking &amp; Site Authority Mapping</div>
+      <div class="action__block">
+        <div class="action__block-label">What We'll Do</div>
+        <div class="action__block-text">Audit how your pages link to each other and strengthen connections between related content using descriptive, keyword-relevant anchor text.</div>
+      </div>
+      <div class="action__block">
+        <div class="action__block-label">Why It Matters</div>
+        <div class="action__block-text">AI tools and search engines understand topic authority partly through how a site references its own content. Strong internal linking signals depth of expertise on key topics.</div>
+      </div>
+    </div>
+
+    <div class="action fade-in">
+      <div class="action__num">13</div>
+      <div class="action__title">Validation &amp; Testing Across AI/Search Surfaces</div>
+      <div class="action__block">
+        <div class="action__block-label">What We'll Do</div>
+        <div class="action__block-text">Test every key page through Google's Rich Results Test and live queries against ChatGPT and Perplexity to baseline visibility and document before/after improvements.</div>
+      </div>
+      <div class="action__block">
+        <div class="action__block-label">Why It Matters</div>
+        <div class="action__block-text">Broken schema fails silently — Google and AI tools just ignore it. We confirm every implementation works and give you a documented record of what changed and why.</div>
+      </div>
+    </div>
+
+    <div class="action fade-in">
+      <div class="action__num">14</div>
+      <div class="action__title">Documentation &amp; Editor Guidelines</div>
+      <div class="action__block">
+        <div class="action__block-label">What We'll Do</div>
+        <div class="action__block-text">Provide your team with a simple content guide covering how to write and update content in a way that maintains AI-friendly structure going forward.</div>
+      </div>
+      <div class="action__block">
+        <div class="action__block-label">Why It Matters</div>
+        <div class="action__block-text">AEO/GEO isn't a one-time fix — every new page needs to follow the same principles. A clear guide keeps the gains compounding instead of slowly eroding over time.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WHAT YOU GET -->
+<section class="section">
+  <div class="section__label">Deliverables</div>
+  <h2>What You Get</h2>
+  <div class="outcomes">
+    <div class="outcomes__heading">Project Outcomes</div>
+    <div class="outcome">
+      <span class="outcome__check">✓</span>
+      <span class="outcome__text"><strong>AI assistant visibility</strong> — your site cited inside ChatGPT, Perplexity, Google AI, and others</span>
+    </div>
+    <div class="outcome">
+      <span class="outcome__check">✓</span>
+      <span class="outcome__text"><strong>Featured Snippet eligibility</strong> on your highest-value pages</span>
+    </div>
+    <div class="outcome">
+      <span class="outcome__check">✓</span>
+      <span class="outcome__text"><strong>Trust signals that get cited</strong> by AI tools when prospects research you</span>
+    </div>
+    <div class="outcome">
+      <span class="outcome__check">✓</span>
+      <span class="outcome__text"><strong>Documented baseline</strong> of current AI visibility, so results are measurable</span>
+    </div>
+    <div class="outcome">
+      <span class="outcome__check">✓</span>
+      <span class="outcome__text"><strong>Future-proofed content structure</strong> that compounds as you publish new pages</span>
+    </div>
+    <div class="outcome">
+      <span class="outcome__check">✓</span>
+      <span class="outcome__text"><strong>Improved traditional SEO</strong> as a side benefit — everything that helps AI also helps Google</span>
+    </div>
+  </div>
+
+  <div class="not-section">
+    <h3>What This Is Not</h3>
+    <ul class="not-list">
+      <li>A full content rewrite — we optimize structure, not replace your content</li>
+      <li>Ongoing SEO management — this is a one-time technical upgrade</li>
+      <li>A guarantee of #1 rankings — it's a guarantee of being structured to be found</li>
+    </ul>
+  </div>
+
+  <div class="bottom-line">
+    <div class="bottom-line__label">The Bottom Line</div>
+    <p class="bottom-line__text">The way people find businesses is changing faster than most websites are adapting. This upgrade ensures your site is positioned for how search actually works now — not how it worked five years ago.</p>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Primer. Confidential — prepared for client review.</span>
+  <span>AEO &amp; GEO Sitewide Upgrade</span>
+</footer>
+
+</body>
+</html>
