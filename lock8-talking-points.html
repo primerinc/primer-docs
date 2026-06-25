@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lock 8 Talking Points — Primer 3.0</title>
+<style>
+  :root{
+    --bg:#1b1b24;
+    --bg-soft:#212129;
+    --card:#24242e;
+    --card-hover:#292a35;
+    --border:#34343f;
+    --text:#f0edd8;
+    --text-dim:#a8a6ad;
+    --gold:#c8a020;
+    --gold-soft:rgba(200,160,32,.14);
+    --green:#8fae5b;
+    --green-soft:rgba(143,174,91,.12);
+    --blue:#6f96c9;
+    --blue-soft:rgba(111,150,201,.12);
+    --red:#c1665a;
+    --red-soft:rgba(193,102,90,.12);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    line-height:1.55;
+    padding-bottom:80px;
+  }
+  a{color:var(--gold);}
+
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(27,27,36,.97);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--border);
+    padding:14px 20px;
+  }
+  .header-inner{max-width:980px; margin:0 auto;}
+  .title-row{display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px;}
+  h1{font-size:1.15rem; margin:0; letter-spacing:.02em; color:var(--text);}
+  h1 span{color:var(--gold);}
+  .subtitle{font-size:.78rem; color:var(--text-dim); margin:2px 0 10px;}
+
+  .controls{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+  #search{
+    flex:1; min-width:160px;
+    background:var(--bg-soft); border:1px solid var(--border); color:var(--text);
+    padding:8px 12px; border-radius:8px; font-size:.85rem;
+  }
+  #search::placeholder{color:var(--text-dim);}
+  button.ctrl{
+    background:var(--bg-soft); border:1px solid var(--border); color:var(--text);
+    padding:8px 12px; border-radius:8px; font-size:.8rem; cursor:pointer; white-space:nowrap;
+  }
+  button.ctrl:hover{background:var(--card-hover); border-color:var(--gold);}
+
+  nav.jump{
+    max-width:980px; margin:10px auto 0; padding:0 20px;
+    display:flex; gap:6px; overflow-x:auto; padding-bottom:6px;
+  }
+  nav.jump a{
+    flex:0 0 auto; font-size:.72rem; text-decoration:none; color:var(--text-dim);
+    background:var(--bg-soft); border:1px solid var(--border); border-radius:999px;
+    padding:5px 11px; white-space:nowrap;
+  }
+  nav.jump a:hover{color:var(--gold); border-color:var(--gold);}
+
+  main{max-width:980px; margin:0 auto; padding:24px 20px;}
+
+  section.group{margin-bottom:34px; scroll-margin-top:140px;}
+  .group-label{
+    font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--gold); margin:0 0 10px; padding-left:2px;
+  }
+
+  details.slide{
+    background:var(--card); border:1px solid var(--border); border-radius:12px;
+    margin-bottom:8px; overflow:hidden;
+  }
+  details.slide[open]{border-color:#454552;}
+  details.slide summary{
+    list-style:none; cursor:pointer; padding:13px 16px;
+    display:flex; align-items:flex-start; gap:12px;
+  }
+  details.slide summary::-webkit-details-marker{display:none;}
+  details.slide summary:hover{background:var(--card-hover);}
+  .num{
+    flex:0 0 auto; font-size:.7rem; font-weight:700; color:var(--bg);
+    background:var(--gold); border-radius:6px; padding:3px 7px; margin-top:2px;
+    min-width:26px; text-align:center;
+  }
+  .num.divider{background:transparent; color:var(--text-dim); border:1px solid var(--border);}
+  .summary-text{flex:1; min-width:0;}
+  .slide-title{font-weight:600; font-size:.92rem; color:var(--text); margin-bottom:2px;}
+  .slide-quick{font-size:.83rem; color:var(--text-dim);}
+  .chevron{flex:0 0 auto; color:var(--text-dim); font-size:.7rem; margin-top:5px; transition:transform .15s;}
+  details.slide[open] .chevron{transform:rotate(90deg);}
+
+  .slide-body{padding:0 16px 16px 16px; font-size:.88rem;}
+  .slide-shows{
+    font-size:.8rem; color:var(--text-dim); background:var(--bg-soft);
+    border-radius:8px; padding:10px 12px; margin-bottom:12px; border-left:3px solid var(--gold);
+  }
+  .slide-shows b{color:var(--text);}
+  .say-this ul{margin:0 0 12px 0; padding-left:20px;}
+  .say-this li{margin-bottom:7px;}
+  .say-this li b{color:var(--gold);}
+
+  .box{
+    border-radius:8px; padding:10px 12px; margin:10px 0; font-size:.85rem;
+  }
+  .box-label{font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; font-weight:700; margin-bottom:4px; display:block;}
+  .box.example{background:var(--green-soft); border-left:3px solid var(--green);}
+  .box.example .box-label{color:var(--green);}
+  .box.echo{background:var(--blue-soft); border-left:3px solid var(--blue);}
+  .box.echo .box-label{color:var(--blue);}
+  .box.qa{background:var(--red-soft); border-left:3px solid var(--red);}
+  .box.qa .box-label{color:var(--red);}
+  .box p{margin:4px 0;}
+  .box ul{margin:4px 0; padding-left:18px;}
+  .box li{margin-bottom:6px;}
+
+  .tone{font-size:.78rem; color:var(--text-dim); font-style:italic; margin-top:8px;}
+
+  /* Glossary */
+  .gloss-cat{margin-bottom:18px;}
+  .gloss-cat h3{font-size:.85rem; color:var(--gold); margin:0 0 8px;}
+  .term{
+    background:var(--card); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; margin-bottom:6px; font-size:.85rem;
+  }
+  .term b{color:var(--text);}
+  .term .sub{font-size:.78rem; color:var(--text-dim); display:block; margin-top:4px; font-style:italic;}
+
+  .hidden{display:none !important;}
+
+  .closing{
+    background:var(--gold-soft); border:1px solid var(--gold);
+    border-radius:12px; padding:18px; margin-top:30px; font-style:italic; text-align:center; font-size:.95rem;
+  }
+
+  footer{
+    text-align:center; font-size:.72rem; color:var(--text-dim); padding:20px; opacity:.7;
+  }
+
+  @media (max-width:600px){
+    h1{font-size:1rem;}
+    .slide-title{font-size:.88rem;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="title-row">
+      <h1>Lock 8 Talking Points <span>· Primer 3.0</span></h1>
+    </div>
+    <div class="subtitle">Tap any slide to expand. Search filters everything below, including the glossary.</div>
+    <div class="controls">
+      <input type="text" id="search" placeholder="Search a word, slide number, or topic (e.g. GTM, NitroPack, AEO)…">
+      <button class="ctrl" id="expandAll">Expand all</button>
+      <button class="ctrl" id="collapseAll">Collapse all</button>
+    </div>
+  </div>
+  <nav class="jump">
+    <a href="#g-open">Open</a>
+    <a href="#g-timeline">Timeline</a>
+    <a href="#g-friction">Friction</a>
+    <a href="#g-responsibility">Responsibility</a>
+    <a href="#g-ai">Responsible AI</a>
+    <a href="#g-reduced">Reduced Timelines</a>
+    <a href="#g-parts">Part 1–5</a>
+    <a href="#g-pivot">The Pivot</a>
+    <a href="#g-case">Case for Change</a>
+    <a href="#g-flow">The Flow</a>
+    <a href="#g-actions">Action Plan</a>
+    <a href="#g-financial">Financial</a>
+    <a href="#g-close">Close</a>
+    <a href="#g-howitworks">Day-to-Day</a>
+    <a href="#g-glossary">Glossary</a>
+  </nav>
+</header>
+
+<main id="content">
+
+<section class="group" id="g-open">
+  <p class="group-label">Open</p>
+
+  <details class="slide">
+    <summary><span class="num divider">1</span><span class="summary-text"><span class="slide-title">Title — Primer 3.0</span><span class="slide-quick"> Opening beat. Let it land before you start talking.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body"></div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num divider">2</span><span class="summary-text"><span class="slide-title">Before We Begin</span><span class="slide-quick"> A genuine thank-you — say it like you mean it, not as throat-clearing.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <p>"We wanted to open with this because everything after it is built on the partnership, not in spite of it."</p>
+    </div>
+  </details>
+</section>
+
+<section class="group" id="g-timeline">
+  <p class="group-label">The Timeline Problem</p>
+
+  <details class="slide">
+    <summary><span class="num">3</span><span class="summary-text"><span class="slide-title">Our Objectives</span><span class="slide-quick"> Five goals everything else maps back to — if it doesn't serve one, it doesn't belong in the plan.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>Slide shows:</b> Optimize Timelines · Reduce Cost · Maintain Quality · Minimize Brand Drift · Increase Support.</div>
+      <div class="say-this"><ul>
+        <li>"These five things are the spine of the whole presentation. Everything you see for the next 30 minutes is in service of one of these five."</li>
+        <li>Name them plainly: faster without rushed, cheaper without cheaper-feeling, more locked-down brand consistency, and more of us around after launch instead of less.</li>
+        <li>"If something we propose today doesn't map to one of these, push back on it — it doesn't belong in the plan."</li>
+      </ul></div>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num divider">4</span><span class="summary-text"><span class="slide-title">Divider — "Let's Take a Closer Look"</span><span class="slide-quick"> Quick transition into the timeline problem.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body"><p>"Let's start with what's actually been happening, in plain numbers."</p></div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">5</span><span class="summary-text"><span class="slide-title">Proposed Today: Current Timeline</span><span class="slide-quick"> The clean, agreed 7-unit timeline. Don't editorialize yet — let slide 6 do the gut-punch.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>Slide shows:</b> The agreed 7-unit timeline — Brand Profile → Naming → Identity → Website → Collateral, start to launch.</div>
+      <div class="say-this"><ul>
+        <li>"This is the timeline we agree to at kickoff. On paper, it's clean — sequential, no overlap confusion, everyone knows when their phase starts."</li>
+        <li>Don't editorialize yet — this slide is the baseline.</li>
+      </ul></div>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">6</span><span class="summary-text"><span class="slide-title">The Hard Truth: Broken Timeline</span><span class="slide-quick"> Same plan, but it actually lands at 6–9 months. Point at the Naming/Identity overlap specifically.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>Slide shows:</b> The same five phases, stretched and overlapping, landing at 6–9 months instead of 7 units — with a visible conflict point between Naming and Identity.</div>
+      <div class="say-this"><ul>
+        <li>"Here's what actually happens. Same phases, same plan — but they bleed into each other, and launch slides from a clean 7-unit timeline to 6–9 months."</li>
+        <li>Point at the overlap between Naming and Identity specifically — that's a phase that couldn't close on time bleeding into the next one.</li>
+        <li>"This isn't a one-time miss. This is the pattern, and it's the reason the next several slides exist."</li>
+      </ul></div>
+      <div class="box qa"><span class="box-label">If asked</span>"Is this just one bad project, or every project?" → "It's frequent enough that we built an entire section of this deck around <i>why</i> it happens — that's coming next."</div>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num divider">7</span><span class="summary-text"><span class="slide-title">Divider — "Why is This Happening?"</span><span class="slide-quick"> Two things drive the blowout — process friction and our own friction.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body"><p>"We'll take both in order, starting with what we're seeing from the field."</p></div>
+  </details>
+</section>
+
+<section class="group" id="g-friction">
+  <p class="group-label">The Friction</p>
+
+  <details class="slide">
+    <summary><span class="num">8</span><span class="summary-text"><span class="slide-title">Main Stressors</span><span class="slide-quick"> 10 friction points, named plainly without blame — Website Breakage and Unused Assets carry real war stories.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>Slide shows:</b> Increased SOW, Slow Responses, Poor Feedback, FOMO Rounds, Scope Creep, Unused Assets, Increased Content, Website Breakage, Vendor vs. Partner, Bad Actors.</div>
+      <div class="say-this"><ul>
+        <li>"Before we talk about the fix, we want to name the friction plainly — this is a pattern we've seen across the portfolio, not a complaint about any one team."</li>
+        <li><b>Increased SOW / Scope Creep:</b> Almost every build grows after kickoff — the tool makes "just one more thing" feel free, even when it isn't.</li>
+        <li><b>Slow Responses / Poor Feedback:</b> Feedback cycles stretch out, and when it comes back it's reactive rather than directive. Both eat timeline silently.</li>
+        <li><b>Website Breakage:</b> Shows up twice — pre-launch and post-launch. Three concrete causes:
+          <ul>
+            <li><b>Global elements:</b> In Bricks, a button is often a global element — consistent everywhere, but also editable everywhere from one place. One color/padding change cascades to every instance, sitewide, instantly.</li>
+            <li><b>Staging gets skipped:</b> We walk every client through staging-to-live on WP Engine. Some still edit live directly, so the safety net never gets used.</li>
+            <li><b>Caching/optimization plugins breaking the whole site at once:</b> NitroPack and WP Rocket, brought in to <i>help</i> performance, have caused sitewide CSS-breaking bugs through their own file-optimization features — severe enough that full disablement was sometimes the only fix.</li>
+          </ul>
+        </li>
+        <li><b>Unused Assets:</b> Resource templates built and toggled off pending content that never arrives — fully built, fully paid for, never sees a visitor.</li>
+        <li><b>Increased Content:</b> Comparison pages the client wants mid-build that were never in the original sitemap or wireframe.</li>
+        <li><b>Vendor vs. Partner:</b> The one that matters most — treated as a vendor, we can't flag risk early. As a partner, we can.</li>
+      </ul></div>
+      <div class="box example"><span class="box-label">Real example</span>"We've had to rebuild entire pages after a client made what they thought was a small edit in the page builder — that's the <i>expected</i> outcome of giving full structural access to a tool that doesn't separate content from layout."</div>
+      <div class="box qa"><span class="box-label">If asked</span>"Isn't this just normal agency friction?" → "Some of it. But WordPress + Bricks actively makes several of these worse — it doesn't just fail to prevent them, it invites them. That's the part we can architect away."</div>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">9</span><span class="summary-text"><span class="slide-title">Overall SOW Increase</span><span class="slide-quick"> Slide 8 with receipts — exactly where scope grew, deliverable by deliverable. Website grew the most.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>Slide shows:</b> Per-deliverable breakdown of where scope grew — Brand Profile, Naming, Identity, Website/Collateral. <i>(Source columns ran together in extraction — double-check against the actual slide.)</i></div>
+      <div class="say-this"><ul>
+        <li>"This is slide 8 with receipts — here's exactly where the scope grew, deliverable by deliverable."</li>
+        <li><b>Brand Profile:</b> Deeper Lock 8 alignment, core attributes, voice & tone, plus deeper research and vetting.</li>
+        <li><b>Naming:</b> 15–20 name options instead of a tighter shortlist, more variety, third-party tools, specialized content.</li>
+        <li><b>Identity:</b> Secondary palettes, accessibility passes, UI/UX optimization, larger guideline documents.</li>
+        <li><b>Website:</b> The biggest grower — technical SEO, content strategy, copywriting, a11y, page speed, AEO/GEO, third-party integrations, plus post-approval changes and post-launch breakage.</li>
+        <li>"None of these individually are unreasonable — that's exactly the problem. Each one is small and justifiable, but they stack."</li>
+      </ul></div>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">10</span><span class="summary-text"><span class="slide-title">Spread Thin: The Marketing Director</span><span class="slide-quick"> The root cause under slide 8 — one person doing seven jobs. Frame with empathy, not complaint.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>Slide shows:</b> A single Marketing Director role absorbing Brand Manager, Creative Director, Graphic Designer, Developer, Copywriter, and SEO/AEO/GEO specialist duties.</div>
+      <div class="say-this"><ul>
+        <li>"This is the root cause underneath a lot of slide 8. When one person is doing the job of seven, slow responses and unclear feedback aren't a character flaw — they're a math problem."</li>
+        <li>"We're naming this because it changes how we should be supporting that person — less 'wait for direction,' more 'be prescriptive and advise.'"</li>
+        <li>Sets up the "Be Prescriptive" commitment on slide 11.</li>
+      </ul></div>
+      <p class="tone">Tone: land as empathy for the client side, not a complaint. "We see how stretched this role is, and we want to build a process that doesn't depend on it having bandwidth it doesn't have."</p>
+    </div>
+  </details>
+</section>
+
+<section class="group" id="g-responsibility">
+  <p class="group-label">Our Responsibility</p>
+
+  <details class="slide">
+    <summary><span class="num">11</span><span class="summary-text"><span class="slide-title">Needs Improvement</span><span class="slide-quick"> Our own lessons learned — own it briefly, don't relitigate, then move on.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>Slide shows:</b> Timeline Management, Scope Creep Management, Feedback Direction, Establish Partner Status, Promote Soft Skills.</div>
+      <div class="say-this"><ul>
+        <li>"We want to be upfront: some of this friction is self-inflicted, and these are the lessons we've taken from it."</li>
+        <li><b>Timeline Management:</b> Inform earlier, reinforce more often, hold the line when a deadline is at risk.</li>
+        <li><b>Scope Creep Management:</b> Engage with new requests, price them, propose a budget in the moment — not a "no choice" surprise later.</li>
+        <li><b>Feedback Direction:</b> Be more prescriptive — "here's the recommended direction and why," not three open options. Directly answers slide 10.</li>
+        <li><b>Establish Partner Status:</b> This build is itself the qualifier — proof we can be a strategic partner, not just an execution vendor.</li>
+        <li><b>Promote Soft Skills:</b> Ongoing — empathy and judgment on our PM side prevent half of these issues before they start.</li>
+      </ul></div>
+      <p class="tone">Tone: land it, then move into the case for change. Don't linger — this slide exists to earn trust, not relitigate the past.</p>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">12</span><span class="summary-text"><span class="slide-title">The Case for Change (recap)</span><span class="slide-quick"> Same five goals as slide 3 — a deliberate callback before the AI and stack sections.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="say-this"><ul>
+        <li>"Same five goals as the opener. Everything from here forward — the AI policy, the new stack, the new budget — gets measured against these."</li>
+        <li>This is a deliberate callback, not filler. It signals "we're now solving what we named."</li>
+      </ul></div>
+    </div>
+  </details>
+</section>
+
+<section class="group" id="g-ai">
+  <p class="group-label">Responsible AI</p>
+
+  <details class="slide">
+    <summary><span class="num">13</span><span class="summary-text"><span class="slide-title">Responsible AI: A Tool Not a Replacement</span><span class="slide-quick"> AI assists research/production in Design, Dev, and Content — it never makes the creative call.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>Slide shows:</b> Design / Development / Content, each paired with where AI assists.</div>
+      <div class="say-this"><ul>
+        <li>"AI is not a silver bullet, and it's not a replacement for the broader creative process."</li>
+        <li>In <b>design</b>, AI helps with research and production rollout — not the creative decision.</li>
+        <li>In <b>development</b>, this is where it does the most work — research, production code, workflow scaffolding. The Claude Code piece.</li>
+        <li>In <b>content</b>, research, outlines, and drafts — a human writes and approves the final voice.</li>
+      </ul></div>
+      <div class="box example"><span class="box-label">Real example</span>"On the development side, AI-assisted code review and documentation is something we already lean on heavily day to day — it's how we already build."</div>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">14</span><span class="summary-text"><span class="slide-title">Better Outcomes Should Be Priority</span><span class="slide-quick"> The credibility line: no AI for design/brand right now, on principle — not because it's slow.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>Slide shows:</b> "If the reason you are using AI is because it's easier and faster, you should not be using it." Primer is pausing AI for design and brand development, for now.</div>
+      <div class="say-this"><ul>
+        <li>"We want to draw a clear boundary here, because it's the opposite of what most agencies are saying right now."</li>
+        <li>"If the only reason to reach for AI is speed, that's the wrong reason. We're explicitly not using AI for design or brand development right now — full stop, for now."</li>
+        <li>"Where we do use it — development, research, drafting — it's because it makes the work better, not faster. That's the whole policy."</li>
+        <li>This directly protects Minimize Brand Drift from slide 3.</li>
+      </ul></div>
+      <div class="box qa"><span class="box-label">If asked</span>"Why not use it for design if it saves time?" → "Design and brand decisions are exactly where judgment matters most — that's the one place we won't trade for speed. The website build is an engineering problem, not a creative-judgment one, which is why AI shows up heavily there instead."</div>
+    </div>
+  </details>
+</section>
+
+<section class="group" id="g-reduced">
+  <p class="group-label">Reduced Timelines</p>
+
+  <details class="slide">
+    <summary><span class="num">15</span><span class="summary-text"><span class="slide-title">5 Weeks With Naming</span><span class="slide-quick"> AI-assisted research compresses the timeline 5 weeks, plus a 3-month retainer and 6-month audit.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="say-this"><ul>
+        <li>5 weeks saved vs. the broken timeline, from AI-assisted research in Brand Profile, Naming, and Identity — compressed research, not cut steps.</li>
+        <li>The 3-month creative-services retainer solves three slide-8 problems directly: unused assets, brand drift, scope creep.</li>
+        <li>The 6-month audit is the accountability mechanism — a scheduled checkpoint, not just a promise.</li>
+      </ul></div>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">16</span><span class="summary-text"><span class="slide-title">10 Weeks Without Naming</span><span class="slide-quick"> Same model without Naming — savings nearly double, since naming is the slowest phase historically.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <p>When naming isn't in scope, savings nearly double — 10 weeks instead of 5 — because naming is historically the phase most prone to round-trip delays. Same retainer/audit structure applies.</p>
+    </div>
+  </details>
+</section>
+
+<section class="group" id="g-parts">
+  <p class="group-label">Part One – Five: Process Breakdown</p>
+
+  <details class="slide">
+    <summary><span class="num">17</span><span class="summary-text"><span class="slide-title">Part One: Brand Profile</span><span class="slide-quick"> AI research is now embedded in this phase directly, cutting white-paper fatigue.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body"><p>Better alignment with Lock 8 session work; integrating brand promise/attributes/voice & tone earlier so it doesn't get re-litigated later — this is what's shaving weeks off downstream phases.</p></div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">18</span><span class="summary-text"><span class="slide-title">Part Two: Naming</span><span class="slide-quick"> Where AI earns its keep most — research and saturation checks. Legal vetting stays human.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body"><p>Definitions, metaphors, core value themes, namespace and domain saturation checks happen faster and deeper. Legal vetting is a distinct, human step — AI accelerates the funnel into it, doesn't replace it.</p></div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">19</span><span class="summary-text"><span class="slide-title">Part Three: Identity</span><span class="slide-quick"> AI supports brand-mark research and mockups; the creative call stays fully human.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body"><p>AI helps stress-test a mark against existing trademarks and visualize it across more contexts, faster — consistent with the Responsible AI stance from slides 13–14.</p></div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">20</span><span class="summary-text"><span class="slide-title">Part Four: Website</span><span class="slide-quick"> The completely new workflow — hold most of this for the dedicated stack slides next.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body"><p>The deliverables list is the promise: speed, SEO, AEO/GEO, third-party integration all built in by default with the new stack, not bolted on afterward.</p></div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">21</span><span class="summary-text"><span class="slide-title">Part Five: Collateral</span><span class="slide-quick"> Split into two phases — direct fix for the "unused assets" problem from slide 8.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body"><p>Phase 1 covers what's needed for launch; Phase 2 produces the rest only as it's actually needed post-launch — reduces wasted production and launch-day workload.</p></div>
+  </details>
+</section>
+
+<section class="group" id="g-pivot">
+  <p class="group-label">The Pivot</p>
+
+  <details class="slide">
+    <summary><span class="num">22</span><span class="summary-text"><span class="slide-title">Moving Away From WordPress</span><span class="slide-quick"> The thesis statement for the next 8 slides — return here if anyone asks "why are we doing this again?"</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>Slide shows:</b> Faster & better cost to build, faster page speeds, minimized brand drift, easy content editing, responsible AI usage, ongoing support.</div>
+      <p>"Every claim on this slide gets backed up individually — speed, cost, brand drift, editing, AI use, and support each get their own comparison slide next."</p>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">23</span><span class="summary-text"><span class="slide-title">The Stack</span><span class="slide-quick"> Six established, heavily-used tools — name-drop Google/Microsoft/Disney/Netflix. Cwicly is the cautionary counter-example.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>Slide shows:</b> Figma, Claude Code, Astro, Storyblok, GitHub, Netlify — notable users: Astro (Google, OpenAI, Cloudflare, Microsoft, NBC News), Storyblok (adidas, Autodesk, Disney, Netflix, Oatly, Virgin Media O2).</div>
+      <div class="say-this"><ul>
+        <li>"Before we get into the comparisons — this isn't an experimental stack, every piece is established, globally used, and fully supported."</li>
+        <li>"Astro runs production sites for Google and Microsoft. Storyblok runs Disney and Netflix's content operations. We're not betting on something unproven."</li>
+        <li>One line per tool: Figma (design), Claude Code (AI-assisted dev), Astro (framework), Storyblok (the CMS clients use), GitHub (code storage), Netlify (hosting/deployment).</li>
+      </ul></div>
+      <div class="box qa"><span class="box-label">If asked</span>"Why six tools instead of WordPress's one?" → "WordPress isn't really one tool either — add Bricks, ACF Pro, an SEO plugin, image optimization, and you're already at four or five. This is six specialized tools that each do one thing well."</div>
+      <div class="box echo"><span class="box-label">Why this matters</span>We were mid-build on a client site using the Cwicly page builder when Cwicly announced it was shutting down entirely, forcing a full rebuild in a different tool because nothing about that build was portable. Every tool on this slide was chosen specifically to avoid repeating that. More on slide 28.</div>
+    </div>
+  </details>
+</section>
+
+<section class="group" id="g-case">
+  <p class="group-label">The Case for Change</p>
+
+  <details class="slide">
+    <summary><span class="num">24</span><span class="summary-text"><span class="slide-title">Content & Editing</span><span class="slide-quick"> Clients edit content, never structure — brand integrity enforced by architecture. Fixes the global-element button problem.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>WP problem:</b> Clients editing in Bricks regularly break the site — off-brand decisions, overridden breakpoints. <b>Flip:</b> clients edit content, not structure; brand integrity enforced by architecture.</div>
+      <div class="say-this"><ul>
+        <li>Giving full builder access is a slow erosion of the work we delivered — one session, and the site looks nothing like what was approved.</li>
+        <li>Not about blaming careless editing — the tool gives too much power over structure to someone untrained on it.</li>
+        <li>The flip is architectural, not procedural: content lives in the CMS and is fully editable; layout lives in code and is locked.</li>
+        <li>The design we build on day one is the design that's still there in year two.</li>
+      </ul></div>
+      <div class="box example"><span class="box-label">Real example</span>"We've had to rebuild pages after a client 'just made a small edit' — moved a section, changed a breakpoint, and the whole layout broke. In the new system, that edit isn't possible to make by accident."</div>
+      <div class="box echo"><span class="box-label">Echoes slide 8</span>This is the global-elements problem in a nutshell — in Bricks, a button is often one global element, editable everywhere from one place. In Storyblok, a button is a component instance with its own content fields — editing one can't touch any other button anywhere on the site.</div>
+      <div class="box qa"><span class="box-label">If asked</span>"Won't clients feel restricted?" → "More useful control, not less — full control over every word, image, and button, with zero risk of accidentally breaking the page."</div>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">25</span><span class="summary-text"><span class="slide-title">Performance</span><span class="slide-quick"> GTM/HubSpot keep full functionality — they just stop blocking the page. "Blocking" explained literally, then the 3 fixes.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>WP problem:</b> HubSpot, GTM, tracking scripts slow the site; Lighthouse scores need constant re-optimization. <b>Flip:</b> Astro's island architecture sandboxes scripts; 90+ scores are structural.</div>
+      <div class="say-this"><ul>
+        <li>Every tool marketing adds competes for the same bandwidth at render time.</li>
+        <li>A Lighthouse score on WordPress is a high-water mark, not a baseline — it erodes the moment someone adds a new tag.</li>
+        <li>The flip: third-party scripts load in their own sandboxed "island." HubSpot literally cannot block the rest of the page from rendering.</li>
+      </ul></div>
+      <div class="box example"><span class="box-label">Real example</span>"GTM alone is almost always the single biggest performance bottleneck on WordPress — deferring it correctly can swing a Lighthouse score 25+ points on its own. In the new stack, that category of problem doesn't exist."</div>
+      <div class="box qa">
+        <span class="box-label">If pushed: "We still need GTM and a bunch of third-party scripts — won't that bring the slowdown back?"</span>
+        <p><b>Nothing is being removed.</b> They keep GTM, HubSpot, ad pixels, chat widgets — whatever they want. What changes is how the browser deals with those scripts, not whether they run.</p>
+        <p><b>1. What "blocking" literally means:</b> the browser reads HTML top to bottom, building the page as it goes. Hit a script tag not marked to load "later," and it stops everything, fetches the script, runs it fully, then resumes. That's a literal pause, not a metaphor for slow. Google's own default GTM snippet is written to block by default. <i>Analogy: a single-lane road — every script is a car that has to fully pass before the next one, including your page content, can move.</i></p>
+        <p><b>2. The three real fixes:</b></p>
+        <ul>
+          <li><b>Deferred loading:</b> scripts load after the visible page has already painted, not before.</li>
+          <li><b>Off-main-thread execution (the big one):</b> GTM/HubSpot run in a separate background lane (a web worker) instead of sharing the page's own processing lane. Still fires every tag — just isn't competing for the same time.</li>
+          <li><b>Astro Islands (selective loading):</b> only interactive parts ship JS, and each loads independently on its own schedule. A slow widget can only ever block itself.</li>
+        </ul>
+        <p><b>3. Close the loop:</b> every GTM tag still fires, HubSpot still tracks the same behavior into the same CRM, forms submit the same way, pixels attribute the same conversions. Only the order of operations and processing lane change.</p>
+      </div>
+      <div class="box qa"><span class="box-label">If asked</span>"What about a pixel that needs to fire immediately for ad attribution?" → "Most pixels need to fire before the visitor leaves, not before the page paints — the difference is milliseconds. If something genuinely needs to fire first, we make that one deliberate exception instead of defaulting every script to block."</div>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">26</span><span class="summary-text"><span class="slide-title">Stack Complexity</span><span class="slide-quick"> No caching plugins needed — the site is never the slow version underneath. NitroPack/WP Rocket's CSS-breaking bugs are the cautionary tale.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>WP problem:</b> Paid plugins required on every build; hours of engineering just to reach a starting point. <b>Flip:</b> two tools replace many; zero engineering overhead before client work begins.</div>
+      <div class="say-this"><ul>
+        <li>Before a developer touches anything client-facing, there's setup work that exists only to compensate for WordPress's defaults — invisible to the client, billed as hours or eroded margin.</li>
+        <li>The flip: Storyblok and Netlify replace a half-dozen specialized tools and handle deferred loading, caching, and CDN delivery by default.</li>
+      </ul></div>
+      <div class="box qa">
+        <span class="box-label">If asked: "Doesn't dropping caching plugins introduce risk?"</span>
+        <p><b>How WP/WP Engine caching actually works:</b> WordPress builds every page fresh, live, per visitor — slow at volume, so a cache layer saves a pre-built snapshot instead. WP Engine provides one layer server-side; we've added a second with plugins like <b>NitroPack</b> and <b>WP Rocket</b>.</p>
+        <p><b>The problem:</b> stacking layers gets fragile. Real, repeated issues with both — including <b>sitewide CSS-breaking bugs</b> from their file-optimization features (minifying/combining CSS), severe enough that full disablement was sometimes the only fix. Also stale snapshots showing old content, and JS-delay features breaking sliders/forms/animations tied to load order.</p>
+        <p><b>The recurring support pattern:</b> "clear your cache" is almost always step one when something looks broken or out of date — sometimes at three levels before it resolves. Confusing for a client to hear "your edit is correct, you're just looking at an old copy."</p>
+        <p><b>Why Astro doesn't have this problem:</b> the site is built into plain HTML files once, ahead of time — not per visitor, not through a plugin layered on a slower system underneath. The fast version is the only version. Storyblok triggers an automatic rebuild on publish; Netlify deploys it; there's no second cache layer to fall out of sync, so "clear your cache" stops being a step anyone needs.</p>
+      </div>
+      <div class="box qa">
+        <span class="box-label">"No loading hacks" — what that specifically means</span>
+        <p>On WordPress, deferred/optimized script loading is handled by the same plugin layer doing the caching — NitroPack/WP Rocket's "delay JavaScript execution" features are exactly where we've seen the most breakage, firing scripts out of the order a page needs them in.</p>
+        <p>In Astro, deferred/isolated loading isn't a plugin feature bolted on — it's how the framework already works, set directly in the page's own code, version-controlled in GitHub. Nothing fragile to re-verify after a plugin update, because there's no plugin layer to break it.</p>
+      </div>
+      <div class="box qa"><span class="box-label">If asked</span>"Is two tools really enough to replace all of that?" → "Storyblok handles image optimization, SEO metadata, scheduling, and CDN delivery natively. Netlify handles deployment and performance. Together they cover what used to take five separate paid plugins plus manual engineering."</div>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">27</span><span class="summary-text"><span class="slide-title">Delivery Speed</span><span class="slide-quick"> 80/20 component-based builds — an unplanned page becomes a content-fill task, not a from-scratch build.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>WP problem:</b> Bricks templates reduce build time but don't eliminate layout work. <b>Flip:</b> 80/20 sitemap/wireframe development; new pages assembled from pre-built components.</div>
+      <div class="say-this"><ul>
+        <li>Templates get you maybe 60% of the way; the remaining 40% — builder config, field setup, breakpoint testing — is still manual and billable.</li>
+        <li>The flip: layout decisions are already made at the component level. Adding a page means filling in content, not configuring a layout from scratch.</li>
+        <li>The first portco benefits; the fifth benefits more — the component library keeps growing.</li>
+      </ul></div>
+      <div class="box example"><span class="box-label">Real example</span>"We build every new component end-to-end once — fully tested — before scaling it across a site. That's why a Hero section becomes a five-minute content fill on page two, instead of a re-build."</div>
+      <div class="box echo"><span class="box-label">Echoes slide 8</span>This is exactly what solves the mid-build comparison-page problem — a client wanting "us vs. competitor" pages never in the original sitemap normally means a from-scratch build. In the new system, it's a new entry assembled from existing components — a content-fill task, not a full design-and-dev cycle.</div>
+      <div class="box qa"><span class="box-label">If asked</span>"What does '80/20' mean in practice?" → "80% of a typical site's sitemap and wireframe is predetermined from our component library. We only custom-design the 20% genuinely unique to that business."</div>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">28</span><span class="summary-text"><span class="slide-title">Security & Maintenance</span><span class="slide-quick"> No plugins, no attack surface. Cwicly's shutdown and the WP Engine/Automattic dispute are the two vendor-risk stories here.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>WP problem:</b> Plugin updates have taken entire sites offline — white screen mid-campaign, no instant recovery. <b>Flip:</b> static HTML has no PHP runtime, no database, nothing to patch.</div>
+      <div class="say-this"><ul>
+        <li>This isn't hypothetical — every WordPress agency has a war story, and we have several.</li>
+        <li>The irony: the security work itself is what causes the outages. Every patch is a small gamble against your other plugins.</li>
+        <li>Monthly security patching isn't a service — it's a tax for the privilege of not getting hacked.</li>
+        <li>The flip: static HTML has no attack surface. "No plugins" sounds like a limitation — it's actually the point.</li>
+      </ul></div>
+      <div class="box example"><span class="box-label">Real example</span>"We've seen plugin combinations break a site in ways that take hours to trace — a theme self-hosting fonts outside WordPress's pipeline can quietly defeat a caching plugin, and nothing in the logs tells you why."</div>
+      <div class="box echo"><span class="box-label">Echoes slides 8 & 26</span>NitroPack and WP Rocket, brought in to <i>help</i> performance, have caused sitewide CSS-breaking bugs — sometimes requiring full disablement. The tool installed to make the site better became the thing that took it down, sitewide, all at once.</div>
+      <div class="box echo"><span class="box-label">Echoes slide 8</span>The staging-skip pattern — clients editing the live site directly instead of staging, even after a full walkthrough, so the safety net never gets used. The new system has no separate "staging discipline" to remember — every change goes through a build-and-preview step before going live.</div>
+      <div class="box echo">
+        <span class="box-label">A different flavor of risk — losing the tool itself</span>
+        <p>We were midway through a client build on the <b>Cwicly</b> page builder when Cwicly announced it was discontinuing the product entirely — not a bug, the tool going away. Everything already built was stored in Cwicly's own proprietary format, unreadable by anything else — a full rebuild in Bricks followed. Only the idea of the design transferred, not the build.</p>
+        <p><b>Why this can't happen the same way now:</b> a page builder stores layout as proprietary data inside the WordPress database, meaningful only to that one tool. In the new stack, page structure is just code — Astro components in a GitHub repo both Primer and Lock 8 can access, in a standard, open format. If any tool ever went away, it's a rewiring job (reconnect content, redeploy host), not a from-scratch rebuild.</p>
+      </div>
+      <div class="box echo">
+        <span class="box-label">A live, ongoing example of platform-level risk</span>
+        <p>WP Engine and Automattic (the company behind WordPress.org, run by WordPress co-founder Matt Mullenweg) have been in an active legal dispute since late 2024 over trademark use and contribution to the open-source project. At one point, Automattic blocked WP Engine-hosted sites from automatically updating plugins/themes through WordPress.org's official system — affecting hundreds of thousands of sites through no fault of their own. A court ordered access restored; the lawsuit is still active as of mid-2026, with trial not expected until 2027.</p>
+        <p><b>Why it matters here:</b> it's a risk that has nothing to do with code quality — a single entity controlling critical infrastructure for an entire ecosystem, with power to cut off access over a business dispute. That sits above anything Primer or Lock 8 can control on a WordPress site.</p>
+        <p><i>Keep neutral if mentioned — still being litigated, both sides dispute the other's claims. The point isn't who's right, it's that this single-point-of-control risk doesn't exist in a stack where hosting, CMS, and codebase are all independently swappable.</i></p>
+      </div>
+      <div class="box qa"><span class="box-label">If asked</span>"What about backups/recovery time?" → "Recovery on WordPress still means restoring a database and re-testing plugin compatibility — not instant. On a static site, a bad deploy is one click to roll back. There's no database state to restore."</div>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">29</span><span class="summary-text"><span class="slide-title">Cost Benefits</span><span class="slide-quick"> Five tools/vendors/renewals collapse into one platform plus responsible AI use.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>WP stack:</b> WP Engine + Bricks + ACF Pro + image optimization + SEO plugin — five tools/licenses/renewals. <b>Flip:</b> Storyblok Growth (~$99/mo) + Netlify free tier, plus responsible AI via Claude Code.</div>
+      <div class="say-this"><ul>
+        <li>Not just dollars — coordination overhead. Five tools = five vendors, five points of failure, five renewal dates, per site.</li>
+        <li>Across six portcos, that's thirty tool relationships to manage, before counting maintenance/conflict-resolution hours.</li>
+        <li>The flip: comparable monthly spend, one unified platform — image optimization, SEO, scheduling, CDN all included.</li>
+        <li>One vendor. One bill. One thing to renew.</li>
+      </ul></div>
+      <div class="box example"><span class="box-label">Real example</span>"We're deliberate about which tools we pay for — we don't run extra paid plugins just because they exist. That discipline led us to this stack: needing fewer tools, not chasing more."</div>
+      <div class="box echo"><span class="box-label">Echoes slide 8</span>This is also the fix for resource templates that get built, toggled off, and never launched — in the component model, they're lightweight entries, not custom-coded pages sitting dormant.</div>
+      <div class="box qa"><span class="box-label">If asked</span>"What if Storyblok or Netlify raises prices later?" → "Fair question — but that's one renewal conversation instead of five."</div>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">30</span><span class="summary-text"><span class="slide-title">Statement: Full Layout Control = Brand Drift</span><span class="slide-quick"> The one-sentence summary of every comparison slide — the hard button before "here's how we build it."</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>Slide shows:</b> "Full layout control in client hands = brand drift, unused custom work & a tech support burden."</div>
+      <p>"That's the whole case for change in one sentence. Every comparison slide we just walked through traces back to this." Use as the hard button before pivoting into the Flow.</p>
+    </div>
+  </details>
+</section>
+
+<section class="group" id="g-flow">
+  <p class="group-label">The Flow</p>
+
+  <details class="slide">
+    <summary><span class="num">31</span><span class="summary-text"><span class="slide-title">The Flow (diagram)</span><span class="slide-quick"> Two parallel tracks — design/content and code — meeting at Content Migration before launch gates. Slides 32–34 are zoom-ins of this same diagram.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>Slide shows:</b> Design/Content track (Discovery → Sitemap → Wireframe → Token Studio → Components → Design Options → tokens.css) and Code track (Component Inventory → Astro → Storyblok Schema, plus Astro/Netlify scaffold → Claude.md docs → Storyblok Integration), converging at Content Migration → Client Training/Access/3rd-party → Testing → Final Review → Launch.</div>
+      <div class="say-this"><ul>
+        <li>"Two tracks running in parallel instead of one long sequential chain."</li>
+        <li>Design/content track: sitemap, wireframes, visual design system — where brand decisions live.</li>
+        <li>Code track runs at the same time, not after — components get built while design is still being finalized, AI handling repetitive scaffolding under direct review.</li>
+        <li>Both meet at "Content Migration" — written content, SEO, photography, video all come together before anything goes live.</li>
+        <li>Then training, access setup, integrations, testing, final review — nothing launches without passing all of those gates.</li>
+      </ul></div>
+      <div class="box example"><span class="box-label">Real example</span>"The design token system feeds directly into the code — update a brand color in Figma, it flows to a single exported file every component reads from. That's 'tokens.css' in practice — not a manual hand-off, a pipeline."</div>
+      <div class="box qa"><span class="box-label">If asked</span>"Does running two tracks in parallel risk things going out of sync?" → "That's exactly what the documentation step in the code track solves — a running technical reference that keeps both tracks aligned."</div>
+    </div>
+  </details>
+</section>
+
+<section class="group" id="g-actions">
+  <p class="group-label">The Action Plan</p>
+
+  <details class="slide">
+    <summary><span class="num">35</span><span class="summary-text"><span class="slide-title">Steps We Are Taking</span><span class="slide-quick"> Five actions, each tied directly back to a named slide-8 stressor.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>Slide shows:</b> New Website → New Process (AI, reduced timelines, new stack, optimized budgets) → Start Meeting Decks → Presentation Decks → Increased Support.</div>
+      <div class="say-this"><ul>
+        <li><b>New Website:</b> Inform, prequalify, reinforce — direct answer to breakage and scope creep from slide 8.</li>
+        <li><b>New Process:</b> Claude/AI integrated into our own build pipeline, exactly as scoped on slides 13–14 — a real productivity layer with every output hand-checked.</li>
+        <li><b>Start Meeting Decks:</b> Every kickoff opens with a standardized deck reinforcing timeline and expectations — fix for "Slow Responses" and "Increased SOW."</li>
+        <li><b>Presentation Decks:</b> Prescriptive reviews (the "Be Prescriptive" commitment from slide 11) with a built-in place to log exceptions, so scope changes get priced in the room.</li>
+        <li><b>Increased Support:</b> 3-month post-launch retainer, creative services optional — direct fix for "Vendor vs. Partner."</li>
+      </ul></div>
+      <div class="box example"><span class="box-label">Real example</span>"We already keep a living project document for every build — the 'New Process' step formalizes that habit across the whole team."</div>
+    </div>
+  </details>
+</section>
+
+<section class="group" id="g-financial">
+  <p class="group-label">Financial Impact</p>
+
+  <details class="slide">
+    <summary><span class="num divider">36</span><span class="summary-text"><span class="slide-title">Divider — Financial Impact</span><span class="slide-quick"> Now let's put real numbers on everything just walked through.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body"></div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num">37</span><span class="summary-text"><span class="slide-title">Adjusted Current Budget: Budget Savings</span><span class="slide-quick"> $115.5K optimized vs $153K maxed out — lead with the number, then the reasoning, never bury it.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <div class="slide-shows"><b>Slide shows:</b> Blended rate $175/hr. <b>Optimized:</b> $115,500 +/- (25% savings, $37.5K). <b>Adjusted Current:</b> $136,500 +/- (11% savings, $16.5K). <b>Maxed Out:</b> $153,000 +/-. Brand Profile $7K–$10.5K, Naming $24.5K, Identity $24.5K, Website $42K–$63K, Collateral $7K–$21K + optional 3-month retainer.</div>
+      <div class="say-this"><ul>
+        <li>"The plan we're proposing lands at roughly $115,500 — a 25% savings off where an unmanaged, scope-creeping version would land at $153,000."</li>
+        <li>"$136,500 is what it costs if we just tighten scope management without changing process or stack — 11% savings from discipline alone."</li>
+        <li>"The full 25% only shows up when the new process and the new stack are both in place — fixing symptoms vs. fixing the system."</li>
+        <li>Website is the single biggest swing ($42K optimized vs $63K maxed out) — the new stack doing the heaviest lifting.</li>
+        <li>"This isn't a discount story. Same quality bar, same deliverables — just without paying for the friction we spent the first half of this deck naming."</li>
+      </ul></div>
+      <div class="box qa"><span class="box-label">If asked</span>"Why trust $115.5K and not $136.5K?" → "$136.5K assumes the friction continues and we just manage it better. $115.5K assumes the friction gets architected out. Slides 8 through 30 are the case for why that's achievable, not just hoped for."</div>
+    </div>
+  </details>
+</section>
+
+<section class="group" id="g-close">
+  <p class="group-label">Close</p>
+
+  <details class="slide">
+    <summary><span class="num divider">38</span><span class="summary-text"><span class="slide-title">Thank You</span><span class="slide-quick"> Close warm, callback to slide 2.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body"><p>"We opened by thanking you for the partnership — everything in between was our way of showing we take that seriously enough to change how we work."</p></div>
+  </details>
+
+  <div class="closing">"None of this is about technology for technology's sake. Every piece of it — the new process, the new stack, the new budget — is a direct answer to a specific, named problem we've both lived through. We're not asking you to trust a pitch. We're asking you to trust a pattern we've already seen work, with numbers behind it."</div>
+</section>
+
+<section class="group" id="g-howitworks">
+  <p class="group-label">Appendix — How Day-to-Day Actually Works</p>
+
+  <details class="slide">
+    <summary><span class="num divider">i</span><span class="summary-text"><span class="slide-title">Staging vs. live in the new system</span><span class="slide-quick"> No separate URL to remember — content edits have a built-in draft/publish state, and code changes get an automatic preview link.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <p>Right now on WP Engine, a client gets a staging copy, makes changes there, then someone pushes those changes live once approved — and the whole thing depends on people remembering to use it, which doesn't always happen (slide 8).</p>
+      <p>The new system splits this into two layers, neither dependent on a client remembering a separate URL:</p>
+      <ul>
+        <li><b>Content edits</b> (almost everything a client touches) — Storyblok has a built-in draft and publish state. A client edits a page, previews exactly how it'll look, and nothing changes on the real site until they hit Publish. The draft <i>is</i> the staging environment.</li>
+        <li><b>Structural/code changes</b> (Primer's work, not the client's) — every change goes through GitHub, and Netlify automatically spins up a temporary preview link before anything merges into the live site. Automatic, not something anyone has to remember to use.</li>
+      </ul>
+      <p>Net effect: clients get a simpler, built-in version of what staging was supposed to do, and the riskier layer is locked into a review process they don't operate themselves.</p>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num divider">ii</span><span class="summary-text"><span class="slide-title">Creating posts & managing a resource library</span><span class="slide-quick"> Fill out a form and publish — same feel as WordPress, minus the ability to break the layout doing it.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <ul>
+        <li>A "Resource" (or "Post") content type gets set up once during the build — title, summary, body, featured image, category, publish date, all defined up front.</li>
+        <li>After that, adding a post is just filling out a form: click "New Story" inside the Resources folder in Storyblok, fill in the fields, publish — or save as a draft to review first.</li>
+        <li>The listing page that shows all resources updates on its own, pulling live from Storyblok — a newly published post just shows up, no extra step to add it anywhere.</li>
+        <li>The practical feel is close to WordPress's Posts screen. The difference: there's no layout to accidentally mess up while doing it.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="slide">
+    <summary><span class="num divider">iii</span><span class="summary-text"><span class="slide-title">Migrating content from WordPress to Storyblok</span><span class="slide-quick"> A one-time migration Primer handles as part of the build — not an ongoing client task.</span></span><span class="chevron">▶</span></summary>
+    <div class="slide-body">
+      <ul>
+        <li>Existing content (blog posts, resource pages, etc.) gets pulled from WordPress via its REST API or a direct export, then mapped into Storyblok using Storyblok's own import tooling — a WordPress post becomes a matching Storyblok story with the same title, body, and images.</li>
+        <li>Images and other media move into Storyblok's asset library as part of the same process; internal links get updated to match the new site's URLs.</li>
+        <li>This happens as part of the build itself — the "Content Migration" stage in the Flow diagram on slide 31 — not a manual task for Lock 8.</li>
+      </ul>
+      <div class="box qa"><span class="box-label">If asked</span>"Do we lose anything in the move?" → "No — anything migrated maps over directly. What doesn't carry over is anything that depended on a specific WordPress plugin's or builder's particular quirks to display correctly — the same brand-drift protection slide 24 already covers."</div>
+    </div>
+  </details>
+</section>
+
+<section class="group" id="g-glossary">
+  <p class="group-label">Appendix — Glossary for Likely Questions</p>
+
+  <div class="gloss-cat">
+    <h3>The Stack (slide 23)</h3>
+    <div class="term"><b>Astro</b> — The framework the new website runs on. Builds pages ahead of time into fast, lightweight files instead of assembling them fresh for every visitor like WordPress does.</div>
+    <div class="term"><b>Storyblok</b> — The headless CMS — the actual screen Lock 8's team logs into to edit content, swap images, update CTAs. Direct replacement for editing inside WordPress/Bricks.</div>
+    <div class="term"><b>Claude Code</b> — Anthropic's AI coding assistant. Helps write, review, and document code faster — doesn't make creative or brand decisions, every line reviewed by a human before it ships.</div>
+    <div class="term"><b>Netlify</b> — The hosting platform. Serves the built site to visitors worldwide, auto-redeploys when something changes.</div>
+    <div class="term"><b>GitHub</b> — Where the site's code lives and is version-controlled — every change ever made is tracked.</div>
+    <div class="term"><b>Figma</b> — The design tool already in use; unchanged, just now feeds directly into the build pipeline.</div>
+  </div>
+
+  <div class="gloss-cat">
+    <h3>Architecture & how the build works (slides 22, 25, 26, 28, 31–34)</h3>
+    <div class="term"><b>Headless CMS</b> — Content (words, images, buttons) stored separately from how it's displayed. "Headless" means no built-in front-end — content gets pulled into whatever renders it (Astro). This is why clients can edit content but can't break layout.</div>
+    <div class="term"><b>Static site / static HTML</b> — A site pre-built into plain files ahead of time, not assembled live per visit like WordPress. No database, no server-side code per visit — faster, nothing for a hacker to exploit.</div>
+    <div class="term"><b>Webhook / automatic rebuild</b> — A notification one system sends another the instant something happens. Storyblok sends a webhook to Netlify on publish, triggering an automatic rebuild — no manual cache refresh needed. Why there's no "stale cache" problem.</div>
+    <div class="term"><b>Island architecture</b> — Astro isolates interactive elements (a form, a widget, a tracking script) into independent "islands" that load on their own. One slow/broken island can't hold up the rest of the page.</div>
+    <div class="term"><b>CDN (Content Delivery Network)</b> — A worldwide network of servers caching copies of the site so visitors load from a nearby server. Faster everywhere, included with Netlify hosting.</div>
+    <div class="term"><b>Design tokens / "tokens.css"</b> — Brand colors/fonts/spacing in one reusable file every component reads from. Update the file, the whole site updates consistently.</div>
+    <div class="term"><b>Component library</b> — Pre-built, reusable building blocks (buttons, headers, cards) pages assemble from instead of custom layouts from scratch. The engine behind Delivery Speed (slide 27).</div>
+    <div class="term"><b>Plugin (WordPress context)</b> — An add-on for a feature (forms, SEO, page building). Also the most common source of conflicts and security holes, built by many unrelated third parties.</div>
+    <div class="term"><b>Main thread / render-blocking</b> — The single processing lane a browser uses to build a page. A script is "render-blocking" when the browser must stop building the page to fully run it first — a literal pause, not a metaphor.</div>
+    <div class="term"><b>Web worker / off-main-thread execution</b> — A separate background lane scripts can run in, away from the page-building lane. GTM/HubSpot can run here — still fully execute, just stop competing for processing time.<span class="sub">If asked for the tool name: <b>Partytown</b> is the common library for this — runs third-party scripts in a web worker without changing how those scripts work.</span></div>
+  </div>
+
+  <div class="gloss-cat">
+    <h3>SEO & marketing acronyms (slides 9, 19, 20)</h3>
+    <div class="term"><b>SEO</b> (Search Engine Optimization) — Making a site easier for search engines to find, understand, and rank well.</div>
+    <div class="term"><b>AEO</b> (Answer Engine Optimization) — Optimizing content so AI answer tools (ChatGPT, Perplexity, AI Overviews) are more likely to pull from it as a direct answer.</div>
+    <div class="term"><b>GEO</b> (Generative Engine Optimization) — Structuring content so generative AI is more likely to reference or recommend the brand by name within a longer answer.<span class="sub">If asked the difference: "AEO is about getting picked as the direct answer. GEO is about getting mentioned and recommended within a longer AI-generated response."</span></div>
+    <div class="term"><b>a11y</b> (Accessibility) — Shorthand for "accessibility" (11 letters between the first/last letter). Making a site usable by people with disabilities — screen readers, keyboard navigation, color contrast. Often a legal requirement.</div>
+    <div class="term"><b>Lighthouse score</b> — Google's automated grading tool for a webpage's performance, accessibility, and SEO health, 0–100.</div>
+    <div class="term"><b>Page speed</b> — How fast a page loads for a visitor — a major factor in both UX and SEO/AEO ranking.</div>
+  </div>
+</section>
+
+</main>
+
+<footer>Primer 3.0 · Primer × Lock 8 · Reference doc for internal use only</footer>
+
+<script>
+  document.getElementById('expandAll').addEventListener('click', () => {
+    document.querySelectorAll('details.slide').forEach(d => d.open = true);
+  });
+  document.getElementById('collapseAll').addEventListener('click', () => {
+    document.querySelectorAll('details.slide').forEach(d => d.open = false);
+  });
+
+  const searchInput = document.getElementById('search');
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    const allDetails = document.querySelectorAll('details.slide');
+    const allTerms = document.querySelectorAll('.term');
+    const groups = document.querySelectorAll('section.group');
+
+    if (!q) {
+      allDetails.forEach(d => { d.classList.remove('hidden'); });
+      allTerms.forEach(t => { t.classList.remove('hidden'); });
+      groups.forEach(g => g.classList.remove('hidden'));
+      return;
+    }
+
+    allDetails.forEach(d => {
+      const match = d.textContent.toLowerCase().includes(q);
+      d.classList.toggle('hidden', !match);
+      if (match) d.open = true;
+    });
+    allTerms.forEach(t => {
+      const match = t.textContent.toLowerCase().includes(q);
+      t.classList.toggle('hidden', !match);
+    });
+    groups.forEach(g => {
+      const anyVisible = g.querySelectorAll('details.slide:not(.hidden), .term:not(.hidden)').length > 0;
+      g.classList.toggle('hidden', !anyVisible);
+    });
+  });
+</script>
+
+</body>
+</html>
