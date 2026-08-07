@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Working in the Primer Component System — Figma Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Same token scheme as build-system.html — this repo's own local design
+     system, unrelated to the client-facing Primer UI token pipeline. */
+  :root {
+    --paper:      #f5f1e8;
+    --paper-2:    #efe9db;
+    --ink:        #1c1a16;
+    --ink-soft:   #4a463d;
+    --ink-faint:  #8a8475;
+    --accent:     #b5482b;
+    --accent-2:   #8f3a22;
+    --rule:       #d8d0bf;
+
+    --int-bg:     #1e2329;
+    --int-bg-2:   #262d35;
+    --int-text:   #d6dee6;
+    --int-faint:  #8b96a3;
+    --int-accent: #6fb1c9;
+
+    --font-display: "IBM Plex Sans", system-ui, sans-serif;
+    --font-body:    "IBM Plex Sans", system-ui, sans-serif;
+    --font-mono:    "IBM Plex Mono", ui-monospace, monospace;
+
+    --measure: 760px;
+    --radius:  4px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .bar {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem;
+    padding: 0.7rem clamp(1rem, 4vw, 3rem);
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .bar__brand { display: flex; flex-direction: column; }
+  .bar__wordmark {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.125rem; font-weight: 600;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--ink);
+  }
+  .bar__sub {
+    font-size: 0.6875rem; font-weight: 300;
+    letter-spacing: 0.1em; color: var(--ink-faint);
+    margin-top: 2px;
+  }
+  .bar__back {
+    font-family: var(--font-mono); font-size: 0.72rem;
+    color: var(--ink-soft); text-decoration: none;
+  }
+  .bar__back:hover { color: var(--accent); }
+
+  main { max-width: var(--measure); margin: 0 auto; padding: 0 clamp(1.2rem, 5vw, 2rem); }
+  .hero { padding: clamp(3rem, 8vw, 5.5rem) 0 clamp(2rem, 5vw, 3rem); }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 1.4rem;
+  }
+  h1 {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(2.2rem, 6vw, 3.4rem); line-height: 1.05;
+    letter-spacing: -0.02em; margin: 0 0 1.2rem;
+  }
+  .hero .lede { font-size: clamp(1.05rem, 2.2vw, 1.25rem); color: var(--ink-soft); max-width: 44ch; }
+
+  section { padding: clamp(2.2rem, 5vw, 3.4rem) 0; border-top: 1px solid var(--rule); }
+  .sec-num {
+    font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.16em;
+    color: var(--ink-faint); display: block; margin-bottom: 0.6rem;
+  }
+  h2 {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(1.6rem, 3.8vw, 2.2rem); line-height: 1.1;
+    letter-spacing: -0.015em; margin: 0 0 1.1rem;
+  }
+  h3 {
+    font-family: var(--font-body); font-weight: 700; font-size: 1.05rem;
+    letter-spacing: 0.01em; margin: 1.6rem 0 0.5rem;
+  }
+  p { margin: 0 0 1.1rem; }
+  strong { font-weight: 600; }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  ul.clean { margin: 0.4rem 0 1.1rem; padding-left: 1.1rem; }
+  ul.clean li { margin: 0.4rem 0; }
+
+  code {
+    font-family: var(--font-mono); font-size: 0.86em;
+    background: var(--paper-2); color: var(--accent-2);
+    padding: 0.1em 0.4em; border-radius: 3px;
+  }
+  pre {
+    font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.55;
+    background: var(--int-bg-2); color: var(--int-text);
+    padding: 1rem 1.1rem; border-radius: var(--radius); overflow-x: auto; margin: 0.9rem 0;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+
+  /* Tip / gotcha callouts */
+  .note {
+    background: var(--int-bg); color: var(--int-text);
+    border-radius: var(--radius); padding: 1.1rem 1.3rem; margin: 1.2rem 0;
+    border-left: 3px solid var(--int-accent);
+    font-size: 0.93rem; line-height: 1.6;
+  }
+  .note .tag {
+    font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--int-accent); display: block; margin-bottom: 0.6rem;
+  }
+  .note p { margin: 0 0 0.7rem; }
+  .note p:last-child { margin-bottom: 0; }
+  .note strong { color: #fff; }
+  .note a { color: var(--int-accent); text-decoration: underline; }
+  .note code { background: var(--int-bg-2); color: var(--int-accent); }
+  .note ul { margin: 0.3rem 0 0.6rem; padding-left: 1.1rem; }
+  .note li { margin: 0.3rem 0; }
+
+  /* Important callout — read this before you start */
+  .flag {
+    border: 1px solid var(--accent); border-radius: var(--radius);
+    padding: 1rem 1.2rem; margin: 1.2rem 0;
+    background: color-mix(in srgb, var(--accent) 7%, var(--paper));
+  }
+  .flag .tag {
+    font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent-2); display: block; margin-bottom: 0.5rem;
+  }
+  .flag p:last-child { margin-bottom: 0; }
+
+  /* Decision table — reuse vs. build new */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule);
+           border: 1px solid var(--rule); border-radius: var(--radius); overflow: hidden; margin: 1.4rem 0; }
+  .split > div { background: var(--paper); padding: 1.2rem 1.3rem; }
+  .split h4 { margin: 0 0 0.8rem; font-family: var(--font-mono); font-size: 0.7rem;
+              letter-spacing: 0.12em; text-transform: uppercase; }
+  .split .yes h4 { color: var(--accent); }
+  .split .no h4 { color: var(--ink); }
+  .split ul { margin: 0; padding-left: 1.1rem; font-size: 0.95rem; }
+  .split li { margin: 0.4rem 0; }
+  @media (max-width: 560px){ .split { grid-template-columns: 1fr; } }
+
+  /* Token layer diagram rows */
+  .layer-row { display: flex; gap: 1rem; padding: 0.9rem 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+  .layer-row:last-child { border-bottom: 0; }
+  .layer-row .layer-name { font-weight: 700; min-width: 150px; flex-shrink: 0; }
+  .layer-row .layer-does { color: var(--ink-soft); }
+
+  /* Step list */
+  .steps { counter-reset: step; margin: 1.2rem 0; }
+  .step { position: relative; padding: 0 0 1.1rem 2.6rem; }
+  .step::before {
+    counter-increment: step; content: counter(step);
+    position: absolute; left: 0; top: 0;
+    width: 1.8rem; height: 1.8rem; border-radius: 50%;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step p { margin: 0.15rem 0 0; }
+  .step strong { display: block; margin-bottom: 0.2rem; }
+
+  footer { border-top: 1px solid var(--rule); padding: 2.2rem 0 4rem; color: var(--ink-faint);
+           font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.05em; }
+
+  @media print {
+    .bar { position: static; backdrop-filter: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar__brand">
+    <span class="bar__wordmark">Primer</span>
+    <span class="bar__sub">Internal · Figma Workflow Guide</span>
+  </div>
+  <a class="bar__back" href="/">← All documents</a>
+</div>
+
+<main>
+
+  <header class="hero">
+    <p class="eyebrow">For Brian · Read before starting Forte</p>
+    <h1>Working in the Primer Component System</h1>
+    <p class="lede">How the token system, the component library, and the reuse-vs-build-new decision actually work — so you can move through the Forte wireframe independently.</p>
+    <div class="flag">
+      <span class="tag">Start here</span>
+      <p>Everything below applies to <strong>every</strong> client build, not just Forte — this is the general playbook. The Forte-specific starting point is: duplicate the <strong>Primer Design System</strong> Figma file, then follow Section 03 to reskin it. Two new components (Resource Header + Case Study Layout) were just added and are covered in Section 05 — you'll want those for Forte's blog/resource pages.</p>
+    </div>
+  </header>
+
+  <section>
+    <span class="sec-num">01 — THE TOKEN SYSTEM</span>
+    <h2>Three layers, in order</h2>
+    <p>Every value in the design system — every color, spacing amount, font size, radius — comes from one of three layers. Understanding which layer you're touching is the single most important thing to get right, because it determines whether a change is safe (isolated to one client) or dangerous (ripples across every future project built from this file).</p>
+
+    <div class="layer-row">
+      <span class="layer-name">1. Primitives</span>
+      <span class="layer-does">Raw values — <code>brand/500 = #bf8b3c</code>, <code>space/8 = 32px</code>. Never client-specific. Never reference these directly from a component.</span>
+    </div>
+    <div class="layer-row">
+      <span class="layer-name">2. Semantic</span>
+      <span class="layer-does">Purpose-based aliases that point at a primitive — <code>color/accent/default</code>, <code>color/text/primary</code>, <code>color/bg/secondary</code>. Components are bound to <strong>these</strong>, never to a primitive or a raw hex value.</span>
+    </div>
+    <div class="layer-row">
+      <span class="layer-name">3. Components</span>
+      <span class="layer-does">Every fill, stroke, spacing, radius, and font property on every component is bound to a semantic variable. Nothing is ever a hardcoded number or color.</span>
+    </div>
+
+    <p>The reason this matters for Forte specifically: <strong>reskinning a client is a semantic-layer edit, full stop.</strong> You change what <code>color/accent/default</code> points to — every button, link, badge, and accent-colored element across all 20+ components updates automatically, because they were all bound to that same semantic variable rather than a hardcoded color.</p>
+
+    <div class="note">
+      <span class="tag">Internal · Wireframe mode</span>
+      <p>The semantic collection has a second mode called <strong>Wireframe</strong> — strips all brand color so a review reads as pure structure. Toggle it from the Variables panel, applied per-frame. It's fully greyscale (true neutrals, near-black CTAs) — useful for early Forte reviews before color is locked, so stakeholders react to layout instead of getting distracted by color choices that aren't final yet.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="sec-num">02 — REUSE VS. BUILD NEW</span>
+    <h2>The question to ask before building anything</h2>
+    <p>When a page needs something that doesn't obviously map to an existing component, don't default to building a new one — and don't default to hacking it into an existing one either. Ask one question:</p>
+    <p style="font-size:1.15rem; font-weight:600; font-family:var(--font-display);">Will this exact pattern repeat — across pages on this build, or across future clients?</p>
+
+    <div class="split">
+      <div class="yes">
+        <h4>Repeats → build a component</h4>
+        <ul>
+          <li>Every article needs the same byline shape (just different author/date)</li>
+          <li>A grid item that appears N times (card, feature tile, FAQ row)</li>
+          <li>Bind every property to a variable, give it proper variant states, treat it exactly like the other 20+ components</li>
+        </ul>
+      </div>
+      <div class="no">
+        <h4>One-off → just compose the page</h4>
+        <ul>
+          <li>A page-level arrangement of sections that already exist</li>
+          <li>Example: a blog listing page is just Hero + Card Grid — no new component needed</li>
+          <li>Still bind any values to variables, but there's no reusable master to build</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note">
+      <span class="tag">Internal · worked example from this week</span>
+      <p>A carrot.io-style blog came up as a reference. The <strong>listing page</strong> (grid of post cards) is the one-off case — pure composition of Hero + Card Grid, nothing new to build. The <strong>individual article page</strong> needed a byline header with author/date/share icons — that pattern repeats on every single article, so it became a real component (<code>Resource Header</code>, see Section 05) rather than one-off content on a hero.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="sec-num">03 — REBRANDING FOR FORTE</span>
+    <h2>Turning the master file into Forte's file</h2>
+    <div class="steps">
+      <div class="step">
+        <strong>Duplicate the Primer Design System file.</strong>
+        <p>Don't design directly in the master file — it's the reusable base every future client starts from. Work in the duplicate.</p>
+      </div>
+      <div class="step">
+        <strong>Edit the semantic color variables, not the primitives.</strong>
+        <p>Forte's brand colors go into the semantic layer (<code>color/accent/default</code>, <code>color/bg/*</code>, <code>color/text/*</code>, etc.). Every component updates instantly because they're all bound to semantic, never to a primitive.</p>
+      </div>
+      <div class="step">
+        <strong>Leave spacing, type scale, and radius alone unless Forte's brand genuinely calls for different values.</strong>
+        <p>These are primitives and structural — changing them isn't a "reskin," it's a design-system change, and should be a deliberate decision, not something that happens as a side effect of chasing a brand look.</p>
+      </div>
+      <div class="step">
+        <strong>Flag anything that doesn't fit the existing component set.</strong>
+        <p>If Forte's design genuinely needs something the library doesn't have, that's a Section 02 decision — is it a new reusable component, or a one-off composition? Don't guess; note it and we'll decide together.</p>
+      </div>
+    </div>
+
+    <div class="flag">
+      <span class="tag">Don't touch</span>
+      <p><code>radius/full</code> is the one primitive that's known to corrupt if re-derived from a Figma round-trip (it's supposed to be <code>9999px</code> for pill/circle shapes but comes back as a nonsense value like <code>624.938rem</code> under certain sync conditions). If you ever see a pill button or avatar suddenly become a giant misshapen blob, that's this — don't try to "fix" it by hand, flag it for James.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="sec-num">04 — HOW THE LIBRARY IS ORGANIZED</span>
+    <h2>Finding your way around the file</h2>
+    <p>One Figma page per component (Hero, Card Grid, Feature Grid, and so on) — nested pieces that only ever appear inside a parent component live on that parent's page rather than getting their own. Example: the individual <code>Card</code> master lives on the <strong>Card Grid</strong> page, not a separate "Card" page, because it's never used outside a Card Grid.</p>
+    <p>Variants follow a consistent naming pattern: <code>Property=Value, Property=Value</code> — e.g. <code>Style=Primary, State=Hover</code> on the Button component. If you're building a new variant, match this exact format or the component set won't recognize it correctly.</p>
+    <p>Not every component has variants. A component only gets a variant axis when the states are genuinely visual alternates (Button's Style × State, Hero's Layout). A <code>background</code> field that just swaps between primary/secondary/accent-subtle is <strong>not</strong> modeled as a Figma variant anywhere in this file — that one's a code-side option only. Follow that precedent rather than introducing a new pattern.</p>
+  </section>
+
+  <section>
+    <span class="sec-num">05 — NEW: RESOURCE HEADER + CASE STUDY LAYOUT</span>
+    <h2>What just got added, and when to use it</h2>
+    <p>Two new Figma pages, right after Video in the page list — built this week specifically because Forte's blog/case-study pages need them and they didn't exist yet:</p>
+
+    <ul class="clean">
+      <li><strong>Resource Header</strong> — the article byline block: category tag, headline, dek, author name + avatar + date, and social share icons. Use this at the top of any long-form article page.</li>
+      <li><strong>Case Study Layout</strong> — the two-column article body: a key-takeaways callout, the main content column, and a sticky sidebar (auto-generated table of contents + a CTA card). Its three sub-pieces — Key Takeaway Item, Table of Contents, Sidebar CTA — live on this same page.</li>
+    </ul>
+
+    <p>For an article page like the carrot.io example: stack <strong>Resource Header</strong> directly on top of <strong>Case Study Layout</strong>. That's the whole page.</p>
+
+    <div class="note">
+      <span class="tag">Internal · these already exist in code</span>
+      <p>Case Study Layout, Key Takeaway Item, Table of Contents, and Sidebar CTA were live in the actual Astro/Storyblok build since last month — they just never had a matching Figma component until now, so what you're looking at was built directly off the real rendered output, not guessed. Resource Header is genuinely new on both sides (Figma <em>and</em> code/Storyblok schema), built this week.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="sec-num">06 — HOUSE RULES</span>
+    <h2>The rules that keep the system working</h2>
+    <ul class="clean">
+      <li><strong>Everything binds to a variable.</strong> No hardcoded fill, stroke, spacing, radius, or font value anywhere on a component — that's what makes reskinning a token swap instead of a manual pass through every screen.</li>
+      <li><strong>Match existing naming conventions</strong> before inventing new ones — variant names, layer names, page names. Check what's already there first.</li>
+      <li><strong>When something's ambiguous, flag it — don't silently guess.</strong> Same rule that applies to the code side applies here: a wrong guess compounds across every future client that starts from this file.</li>
+    </ul>
+
+    <div class="note">
+      <span class="tag">Internal · a real gotcha from this week, in case it recurs</span>
+      <p>Setting <strong>paint-level opacity</strong> on a fill or stroke that's bound to a color variable didn't reliably propagate from a master component to its instances — even direct instance edits and Figma's own "reset to main component" didn't fix it. Switching to <strong>node-level opacity</strong> (the whole layer's opacity, not the paint's) resolved it immediately. If a component's color looks right on the master but wrong/flat on instances, this is the first thing to check.</p>
+    </div>
+  </section>
+
+  <footer>
+    PRIMER FIGMA WORKFLOW GUIDE · WRITTEN FOR THE FORTE BUILD · AUG 2026
+  </footer>
+
+</main>
+
+</body>
+</html>

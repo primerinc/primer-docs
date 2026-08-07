@@ -10,6 +10,7 @@ Pushing to main auto-deploys. No build step — pure static HTML.
 - why-switch.html     — pitch comparison slide
 - build-system.html   - overview of the new build process with Astro + Storyblok
 - aeo-upgrade.html    - service offering: AEO & GEO upgrade for Lock8 portfolio sites
+- figma-workflow-guide.html - token system, reuse-vs-build-new rules, and reskinning steps for Figma — written for Brian ahead of the Forte build
 
 ## Brand
 - Fonts: IBM Plex Sans + IBM Plex Serif (Google Fonts)
