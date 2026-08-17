@@ -18,6 +18,7 @@ Internal document hub for Primer — client proposals, pitch materials, and inte
 | `why-not-prompt-a-site.html` | `/why-not-prompt-a-site` | Pitch | Condensed comparison slide: AI prompt-to-site tools (Lovable, v0) vs our Figma → Astro + Storyblok process |
 | `build-system.html` | `/build-system` | Internal | Overview of the new build process — stack, workflow, component library, roles, and POC plan |
 | `figma-workflow-guide.html` | `/figma-workflow-guide` | Internal | Token system, reuse-vs-build-new rules, and client reskinning steps for Figma — written for Brian ahead of the Forte build |
+| `lock8-rsvp-system.html` | `/lock8-rsvp-system` | Client | Proposal for a custom-built, on-brand save-the-date, RSVP, and reminder email flow for Lock8's new office celebration |
 
 ---
 
