@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why Not Prompt-to-Site — Primer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primer-dark:   #1F2023;
+      --primer-gold:   #C8A020;
+
+      --bg:            #1F2023;
+      --surface:       #272838;
+      --border:        rgba(255,255,255,0.08);
+      --border-item:   rgba(255,255,255,0.05);
+      --text:          #F0EDD8;
+      --text-muted:    #72728A;
+      --text-secondary:#A8A6BC;
+      --amber:         var(--primer-gold);
+      --old-color:     #B83030;
+      --old-subtle:    rgba(184,48,48,0.10);
+      --new-color:     #3DAA6A;
+      --new-subtle:    rgba(61,170,106,0.10);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', system-ui, sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .slide {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 3.25rem 3.5rem 3rem;
+    }
+
+    .slide-header { margin-bottom: 2.25rem; }
+
+    .eyebrow {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.625rem;
+    }
+
+    .headline {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: clamp(2rem, 3.6vw, 2.9rem);
+      font-weight: 600;
+      line-height: 1.12;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+
+    .subhead {
+      font-size: 0.9375rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+      max-width: 700px;
+      line-height: 1.6;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .card-shell {
+      border-radius: 16px;
+      padding: 2px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .card-shell::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .card-shell.card-old::before { background: linear-gradient(160deg, rgba(184,48,48,0.08) 0%, transparent 40%); }
+    .card-shell.card-new::before { background: linear-gradient(160deg, rgba(61,170,106,0.07) 0%, transparent 40%); }
+
+    .card-inner {
+      background: var(--surface);
+      border-radius: 14px;
+      padding: 1.625rem 1.75rem 1.875rem;
+      position: relative;
+      z-index: 1;
+      height: 100%;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 1.375rem;
+      padding-bottom: 1.125rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .badge {
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+    .badge-old { background: var(--old-subtle);  color: var(--old-color); }
+    .badge-new { background: var(--new-subtle);  color: var(--new-color); }
+    .card-title { font-size: 1.0625rem; font-weight: 500; color: var(--text); line-height: 1.3; }
+    .card-sub { font-size: 0.75rem; font-weight: 300; color: var(--text-muted); margin-top: 0.15rem; }
+
+    .item-list { list-style: none; }
+
+    .item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border-item);
+    }
+    .item:last-child { border-bottom: none; }
+
+    .item.cat {
+      padding: 1rem 0 0.3125rem;
+      border-bottom: none;
+      gap: 0;
+      align-items: center;
+    }
+    .item.cat:first-child { padding-top: 0; }
+    .cat-label {
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .ico {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .ico svg { display: block; }
+    .ico-x   { background: var(--old-subtle); }
+    .ico-x   svg path { stroke: var(--old-color); }
+    .ico-chk { background: var(--new-subtle); }
+    .ico-chk svg path { stroke: var(--new-color); }
+
+    .txt {
+      font-size: 0.8125rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .txt strong { color: var(--text); font-weight: 500; }
+
+    .callout {
+      margin-top: 1.375rem;
+      padding: 0.875rem 1rem;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.625rem;
+    }
+    .callout.callout-old  { background: rgba(184,48,48,0.04); border-color: rgba(184,48,48,0.15); }
+    .callout.callout-new  { background: rgba(61,170,106,0.04); border-color: rgba(61,170,106,0.15); }
+    .callout-label {
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .callout-old .callout-label  { color: var(--old-color); }
+    .callout-new .callout-label  { color: var(--new-color); }
+    .callout-text {
+      font-size: 0.8125rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .callout-text strong { color: var(--text); font-weight: 500; }
+
+    .slide-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 2rem;
+      padding-top: 1.125rem;
+      border-top: 1px solid var(--border);
+    }
+    .primer-wordmark {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 1.125rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+    }
+    .primer-tagline {
+      font-size: 0.6875rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.3);
+      margin-top: 4px;
+    }
+    .footer-note { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.04em; }
+
+    @media print {
+      html, body { background: #101010 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .slide { padding: 2rem; }
+    }
+
+    @media (max-width: 860px) {
+      .compare-grid { grid-template-columns: 1fr; }
+      .slide { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="slide">
+
+  <header class="slide-header">
+    <p class="eyebrow">Two ways to build a site with AI</p>
+    <h1 class="headline">Speed to launch vs. speed to change</h1>
+    <p class="subhead">Prompt-to-site tools and our process both use AI to write code. The difference is what that AI is working <em>inside</em> — a one-off prompt, or a real design system it can't accidentally break.</p>
+  </header>
+
+  <div class="compare-grid">
+
+    <!-- ══ Prompt-to-site ══ -->
+    <div class="card-shell card-old">
+      <div class="card-inner">
+        <div class="card-header">
+          <span class="badge badge-old">Prompt-to-site</span>
+          <div>
+            <span class="card-title">AI Site Builders</span>
+            <div class="card-sub">e.g. Lovable, v0, and similar tools</div>
+          </div>
+        </div>
+
+        <ul class="item-list">
+
+          <li class="item cat"><span class="cat-label">Design system</span></li>
+          <li class="item">
+            <span class="ico ico-x"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="txt"><strong>No governed tokens</strong> — colors, spacing, and type are whatever the model generated in that session, not a defined brand standard</span>
+          </li>
+          <li class="item">
+            <span class="ico ico-x"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="txt"><strong>Every future change is a fresh prompt</strong> — no memory of what was built or why, so small asks can quietly break unrelated parts of the page</span>
+          </li>
+
+          <li class="item cat"><span class="cat-label">Content &amp; editing</span></li>
+          <li class="item">
+            <span class="ico ico-x"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="txt"><strong>Content is baked into the code</strong> — no CMS, so changing a headline or swapping a photo means going back to whoever ran the prompts</span>
+          </li>
+
+          <li class="item cat"><span class="cat-label">AI approach</span></li>
+          <li class="item">
+            <span class="ico ico-x"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="txt"><strong>Nothing constrains the output</strong> — the AI generates a full page from scratch each time, with no component library or standard to build inside</span>
+          </li>
+
+          <li class="item cat"><span class="cat-label">Brand &amp; craft</span></li>
+          <li class="item">
+            <span class="ico ico-x"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="txt"><strong>No dedicated design phase</strong> — the visual identity is whatever the model produced, not a considered expression of the brand</span>
+          </li>
+
+          <li class="item cat"><span class="cat-label">Performance &amp; SEO</span></li>
+          <li class="item">
+            <span class="ico ico-x"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="txt"><strong>Optimized for "does it load"</strong> — not Lighthouse scores, structured data, or the technical SEO groundwork search visibility depends on</span>
+          </li>
+
+        </ul>
+
+        <div class="callout callout-old">
+          <span class="callout-label">Good for</span>
+          <span class="callout-text"><strong>A weekend proof-of-concept</strong> — genuinely fast to get something live and see an idea take shape</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ Primer process ══ -->
+    <div class="card-shell card-new">
+      <div class="card-inner">
+        <div class="card-header">
+          <span class="badge badge-new">Our process</span>
+          <div>
+            <span class="card-title">Figma &rarr; Astro + Storyblok</span>
+            <div class="card-sub">AI-assisted, built on a real design system</div>
+          </div>
+        </div>
+
+        <ul class="item-list">
+
+          <li class="item cat"><span class="cat-label">Design system</span></li>
+          <li class="item">
+            <span class="ico ico-chk"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="txt"><strong>Tokens defined once in Figma, used everywhere</strong> — colors, spacing, and type flow directly into code; a brand update propagates automatically</span>
+          </li>
+          <li class="item">
+            <span class="ico ico-chk"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="txt"><strong>Every change is scoped and reviewable</strong> — Claude Code builds inside a documented component library, not from a blank page each time</span>
+          </li>
+
+          <li class="item cat"><span class="cat-label">Content &amp; editing</span></li>
+          <li class="item">
+            <span class="ico ico-chk"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="txt"><strong>Content and layout are separate</strong> — your team edits text and images directly in Storyblok, with zero risk of breaking the design</span>
+          </li>
+
+          <li class="item cat"><span class="cat-label">AI approach</span></li>
+          <li class="item">
+            <span class="ico ico-chk"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="txt"><strong>Same AI-assisted approach, real guardrails</strong> — constrained by a design system, a component library, and human review at every step</span>
+          </li>
+
+          <li class="item cat"><span class="cat-label">Brand &amp; craft</span></li>
+          <li class="item">
+            <span class="ico ico-chk"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="txt"><strong>Every build starts with real design work in Figma</strong> — brand-specific decisions made by a designer, not generated by a prompt</span>
+          </li>
+
+          <li class="item cat"><span class="cat-label">Performance &amp; SEO</span></li>
+          <li class="item">
+            <span class="ico ico-chk"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="txt"><strong>90+ Lighthouse scores and SEO structure by default</strong> — built into the architecture, not bolted on after the fact</span>
+          </li>
+
+        </ul>
+
+        <div class="callout callout-new">
+          <span class="callout-label">Good for</span>
+          <span class="callout-text"><strong>A site that still looks right in year two</strong> — built to be extended, rebranded, and maintained without starting over</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="slide-footer">
+    <div>
+      <div class="primer-wordmark">Primer</div>
+      <div class="primer-tagline">Brand Strategy &amp; Web Development</div>
+    </div>
+    <span class="footer-note">primerinc.com &nbsp;·&nbsp; Lambertville, NJ</span>
+  </footer>
+
+</div>
+</body>
+</html>
