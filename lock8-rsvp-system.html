@@ -109,14 +109,6 @@
 
   a { color: var(--gold-strong); }
 
-  /* Logo lettermark: the shield stays gold everywhere, but the letter
-     shapes need to flip light/dark to stay legible depending on what's
-     actually behind them. Only used where the background follows the
-     viewer's theme (mock-email card, footer) — the hero and mock-rsvp
-     logos are deliberately fixed-white because those sections force a
-     permanent dark background regardless of theme. */
-  .logo-letter { fill: var(--ink); }
-
   /* ---------- Hero (deliberately fixed dark, independent of viewer theme) ---------- */
   .hero {
     background: #141310;
@@ -408,12 +400,12 @@
 <header class="hero">
   <div class="hero__inner">
     <svg class="hero__logo" width="150" height="73" viewBox="0 0 150 73" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M74.9857 0L150 14.4121V58.2192L74.9715 72.6313L0 58.2192V14.4121L74.9857 0Z" fill="#B19853"/>
-<path d="M23 26.399H28.4937V41.4105H38.097V46.2335H23V26.399Z" fill="white"/>
-<path d="M39.7681 36.3739V36.3168C39.7681 30.6233 44.3628 26 50.4701 26C56.5774 26 61.1151 30.5662 61.1151 36.2597V36.3168C61.1151 42.0103 56.5204 46.6336 50.413 46.6336C44.3057 46.6336 39.7681 42.0674 39.7681 36.3739ZM55.493 36.3739V36.3168C55.493 33.4201 53.4524 30.9657 50.4273 30.9657C47.4022 30.9657 45.3902 33.4058 45.3902 36.2597V36.3168C45.3902 39.1707 47.4593 41.6678 50.4844 41.6678C53.5095 41.6678 55.493 39.2277 55.493 36.3739Z" fill="white"/>
-<path d="M63.5 36.3739V36.3168C63.5 30.5377 67.9235 26 73.9309 26C77.9834 26 80.5947 27.6981 82.3499 30.1096L78.2118 33.3059C77.0845 31.9218 75.7717 30.98 73.8739 30.98C71.0913 30.98 69.1364 33.363 69.1364 36.2454V36.3025C69.1364 39.2706 71.0913 41.5965 73.8739 41.5965C75.9429 41.5965 77.1558 40.6404 78.3544 39.1849L82.4926 42.1387C80.6233 44.7215 78.0976 46.6193 73.7454 46.6193C68.0805 46.6193 63.5143 42.2814 63.5143 36.3596L63.5 36.3739Z" fill="white"/>
-<path d="M85.0005 26.399H90.4942V34.447L97.315 26.399H103.836L96.3304 34.9036L104.093 46.2335H97.5148L92.5062 38.8705L90.4942 41.0823V46.2335H85.0005V26.399Z" fill="white"/>
-<path d="M110.69 40.7545V40.6974C110.69 38.2859 111.932 36.8447 114.058 35.9457C112.559 35.0895 111.361 33.7625 111.361 31.6078V31.5507C111.361 28.4115 114.357 26.057 118.809 26.057C123.262 26.057 126.287 28.4115 126.287 31.5507V31.6078C126.287 33.7625 125.102 35.0895 123.561 35.9457C125.573 36.8732 126.957 38.2145 126.957 40.6403V40.6974C126.957 44.2648 123.561 46.5621 118.795 46.5621C114.029 46.5621 110.662 44.2077 110.662 40.7545H110.69ZM121.692 40.2265V40.1695C121.692 38.8709 120.536 37.9862 118.838 37.9862C117.14 37.9862 115.97 38.8709 115.97 40.1695V40.2265C115.97 41.4109 116.983 42.4668 118.838 42.4668C120.693 42.4668 121.692 41.4252 121.692 40.2265ZM121.292 32.2642V32.2071C121.292 31.1084 120.351 30.1095 118.824 30.1095C117.297 30.1095 116.384 31.1084 116.384 32.2071V32.2642C116.384 33.5056 117.354 34.4474 118.824 34.4474C120.293 34.4474 121.292 33.5056 121.292 32.2642Z" fill="white"/>
+<path d="M74.9857 0L150 14.4121V58.2192L74.9715 72.6313L0 58.2192V14.4121L74.9857 0Z" fill="#B19853"></path>
+<path d="M23 26.399H28.4937V41.4105H38.097V46.2335H23V26.399Z" fill="var(--ink)"></path>
+<path d="M39.7681 36.3739V36.3168C39.7681 30.6233 44.3628 26 50.4701 26C56.5774 26 61.1151 30.5662 61.1151 36.2597V36.3168C61.1151 42.0103 56.5204 46.6336 50.413 46.6336C44.3057 46.6336 39.7681 42.0674 39.7681 36.3739ZM55.493 36.3739V36.3168C55.493 33.4201 53.4524 30.9657 50.4273 30.9657C47.4022 30.9657 45.3902 33.4058 45.3902 36.2597V36.3168C45.3902 39.1707 47.4593 41.6678 50.4844 41.6678C53.5095 41.6678 55.493 39.2277 55.493 36.3739Z" fill="var(--ink)"></path>
+<path d="M63.5 36.3739V36.3168C63.5 30.5377 67.9235 26 73.9309 26C77.9834 26 80.5947 27.6981 82.3499 30.1096L78.2118 33.3059C77.0845 31.9218 75.7717 30.98 73.8739 30.98C71.0913 30.98 69.1364 33.363 69.1364 36.2454V36.3025C69.1364 39.2706 71.0913 41.5965 73.8739 41.5965C75.9429 41.5965 77.1558 40.6404 78.3544 39.1849L82.4926 42.1387C80.6233 44.7215 78.0976 46.6193 73.7454 46.6193C68.0805 46.6193 63.5143 42.2814 63.5143 36.3596L63.5 36.3739Z" fill="var(--ink)"></path>
+<path d="M85.0005 26.399H90.4942V34.447L97.315 26.399H103.836L96.3304 34.9036L104.093 46.2335H97.5148L92.5062 38.8705L90.4942 41.0823V46.2335H85.0005V26.399Z" fill="var(--ink)"></path>
+<path d="M110.69 40.7545V40.6974C110.69 38.2859 111.932 36.8447 114.058 35.9457C112.559 35.0895 111.361 33.7625 111.361 31.6078V31.5507C111.361 28.4115 114.357 26.057 118.809 26.057C123.262 26.057 126.287 28.4115 126.287 31.5507V31.6078C126.287 33.7625 125.102 35.0895 123.561 35.9457C125.573 36.8732 126.957 38.2145 126.957 40.6403V40.6974C126.957 44.2648 123.561 46.5621 118.795 46.5621C114.029 46.5621 110.662 44.2077 110.662 40.7545H110.69ZM121.692 40.2265V40.1695C121.692 38.8709 120.536 37.9862 118.838 37.9862C117.14 37.9862 115.97 38.8709 115.97 40.1695V40.2265C115.97 41.4109 116.983 42.4668 118.838 42.4668C120.693 42.4668 121.692 41.4252 121.692 40.2265ZM121.292 32.2642V32.2071C121.292 31.1084 120.351 30.1095 118.824 30.1095C117.297 30.1095 116.384 31.1084 116.384 32.2071V32.2642C116.384 33.5056 117.354 34.4474 118.824 34.4474C120.293 34.4474 121.292 33.5056 121.292 32.2642Z" fill="var(--ink)"></path>
 </svg>
     <p class="hero__eyebrow">Prepared by Primer for Lock 8</p>
     <h1 class="hero__headline">The Office Party RSVP System</h1>
@@ -425,11 +417,11 @@
       </div>
       <div class="hero__meta-item">
         <div class="k">Expected guests</div>
-        <div class="v">60&ndash;70</div>
+        <div class="v">60–70</div>
       </div>
       <div class="hero__meta-item">
         <div class="k">Build time</div>
-        <div class="v">~10&ndash;14 hours</div>
+        <div class="v">~10–14 hours</div>
       </div>
       <div class="hero__meta-item">
         <div class="k">Ongoing cost</div>
@@ -444,14 +436,14 @@
     <div class="wrap">
       <p class="eyebrow">The plan</p>
       <h2 class="section-title">Three touchpoints, in order</h2>
-      <p class="section-lede">Each email leads directly into the next step, and every RSVP link is personalized to the guest &mdash; no logins, no generic form.</p>
+      <p class="section-lede">Each email leads directly into the next step, and every RSVP link is personalized to the guest — no logins, no generic form.</p>
 
       <div class="touchpoints">
         <div class="touchpoint">
           <div class="touchpoint__num">01</div>
           <div>
             <div class="touchpoint__title">Save the Date</div>
-            <div class="touchpoint__desc">A short, branded announcement to everyone on the list &mdash; just the date and the promise of details to come.</div>
+            <div class="touchpoint__desc">A short, branded announcement to everyone on the list — just the date and the promise of details to come.</div>
             <span class="touchpoint__when">Target: ASAP</span>
           </div>
         </div>
@@ -459,16 +451,16 @@
           <div class="touchpoint__num">02</div>
           <div>
             <div class="touchpoint__title">RSVP &amp; Details</div>
-            <div class="touchpoint__desc">Full event details &mdash; address, time, dress code &mdash; plus a personalized RSVP form: attending, guest count, food preference, and a few questions from the Lock 8 team.</div>
-            <span class="touchpoint__when">Target: early&ndash;mid September</span>
+            <div class="touchpoint__desc">Full event details — address, time, dress code — plus a personalized RSVP form: attending, guest count, food preference, and a few questions from the Lock 8 team.</div>
+            <span class="touchpoint__when">Target: early–mid September</span>
           </div>
         </div>
         <div class="touchpoint">
           <div class="touchpoint__num">03</div>
           <div>
             <div class="touchpoint__title">Reminder</div>
-            <div class="touchpoint__desc">A friendly nudge to confirmed &mdash; and not-yet-responded &mdash; guests as the event approaches.</div>
-            <span class="touchpoint__when">Target: October 10&ndash;12</span>
+            <div class="touchpoint__desc">A friendly nudge to confirmed — and not-yet-responded — guests as the event approaches.</div>
+            <span class="touchpoint__when">Target: October 10–12</span>
           </div>
         </div>
       </div>
@@ -479,7 +471,7 @@
     <div class="wrap-wide">
       <p class="eyebrow">What it looks like</p>
       <h2 class="section-title">Built in Lock 8's actual brand</h2>
-      <p class="section-lede">Gotham, the gold accent, the real logo mark &mdash; not a stock invitation template with a logo dropped on top.</p>
+      <p class="section-lede">Gotham, the gold accent, the real logo mark — not a stock invitation template with a logo dropped on top.</p>
 
       <div class="preview-grid">
         <div>
@@ -490,16 +482,16 @@
             </div>
             <div class="mock-rsvp">
               <svg class="mock-rsvp__logo" width="150" height="73" viewBox="0 0 150 73" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M74.9857 0L150 14.4121V58.2192L74.9715 72.6313L0 58.2192V14.4121L74.9857 0Z" fill="#B19853"/>
-<path d="M23 26.399H28.4937V41.4105H38.097V46.2335H23V26.399Z" fill="white"/>
-<path d="M39.7681 36.3739V36.3168C39.7681 30.6233 44.3628 26 50.4701 26C56.5774 26 61.1151 30.5662 61.1151 36.2597V36.3168C61.1151 42.0103 56.5204 46.6336 50.413 46.6336C44.3057 46.6336 39.7681 42.0674 39.7681 36.3739ZM55.493 36.3739V36.3168C55.493 33.4201 53.4524 30.9657 50.4273 30.9657C47.4022 30.9657 45.3902 33.4058 45.3902 36.2597V36.3168C45.3902 39.1707 47.4593 41.6678 50.4844 41.6678C53.5095 41.6678 55.493 39.2277 55.493 36.3739Z" fill="white"/>
-<path d="M63.5 36.3739V36.3168C63.5 30.5377 67.9235 26 73.9309 26C77.9834 26 80.5947 27.6981 82.3499 30.1096L78.2118 33.3059C77.0845 31.9218 75.7717 30.98 73.8739 30.98C71.0913 30.98 69.1364 33.363 69.1364 36.2454V36.3025C69.1364 39.2706 71.0913 41.5965 73.8739 41.5965C75.9429 41.5965 77.1558 40.6404 78.3544 39.1849L82.4926 42.1387C80.6233 44.7215 78.0976 46.6193 73.7454 46.6193C68.0805 46.6193 63.5143 42.2814 63.5143 36.3596L63.5 36.3739Z" fill="white"/>
-<path d="M85.0005 26.399H90.4942V34.447L97.315 26.399H103.836L96.3304 34.9036L104.093 46.2335H97.5148L92.5062 38.8705L90.4942 41.0823V46.2335H85.0005V26.399Z" fill="white"/>
-<path d="M110.69 40.7545V40.6974C110.69 38.2859 111.932 36.8447 114.058 35.9457C112.559 35.0895 111.361 33.7625 111.361 31.6078V31.5507C111.361 28.4115 114.357 26.057 118.809 26.057C123.262 26.057 126.287 28.4115 126.287 31.5507V31.6078C126.287 33.7625 125.102 35.0895 123.561 35.9457C125.573 36.8732 126.957 38.2145 126.957 40.6403V40.6974C126.957 44.2648 123.561 46.5621 118.795 46.5621C114.029 46.5621 110.662 44.2077 110.662 40.7545H110.69ZM121.692 40.2265V40.1695C121.692 38.8709 120.536 37.9862 118.838 37.9862C117.14 37.9862 115.97 38.8709 115.97 40.1695V40.2265C115.97 41.4109 116.983 42.4668 118.838 42.4668C120.693 42.4668 121.692 41.4252 121.692 40.2265ZM121.292 32.2642V32.2071C121.292 31.1084 120.351 30.1095 118.824 30.1095C117.297 30.1095 116.384 31.1084 116.384 32.2071V32.2642C116.384 33.5056 117.354 34.4474 118.824 34.4474C120.293 34.4474 121.292 33.5056 121.292 32.2642Z" fill="white"/>
+<path d="M74.9857 0L150 14.4121V58.2192L74.9715 72.6313L0 58.2192V14.4121L74.9857 0Z" fill="#B19853"></path>
+<path d="M23 26.399H28.4937V41.4105H38.097V46.2335H23V26.399Z" fill="var(--ink)"></path>
+<path d="M39.7681 36.3739V36.3168C39.7681 30.6233 44.3628 26 50.4701 26C56.5774 26 61.1151 30.5662 61.1151 36.2597V36.3168C61.1151 42.0103 56.5204 46.6336 50.413 46.6336C44.3057 46.6336 39.7681 42.0674 39.7681 36.3739ZM55.493 36.3739V36.3168C55.493 33.4201 53.4524 30.9657 50.4273 30.9657C47.4022 30.9657 45.3902 33.4058 45.3902 36.2597V36.3168C45.3902 39.1707 47.4593 41.6678 50.4844 41.6678C53.5095 41.6678 55.493 39.2277 55.493 36.3739Z" fill="var(--ink)"></path>
+<path d="M63.5 36.3739V36.3168C63.5 30.5377 67.9235 26 73.9309 26C77.9834 26 80.5947 27.6981 82.3499 30.1096L78.2118 33.3059C77.0845 31.9218 75.7717 30.98 73.8739 30.98C71.0913 30.98 69.1364 33.363 69.1364 36.2454V36.3025C69.1364 39.2706 71.0913 41.5965 73.8739 41.5965C75.9429 41.5965 77.1558 40.6404 78.3544 39.1849L82.4926 42.1387C80.6233 44.7215 78.0976 46.6193 73.7454 46.6193C68.0805 46.6193 63.5143 42.2814 63.5143 36.3596L63.5 36.3739Z" fill="var(--ink)"></path>
+<path d="M85.0005 26.399H90.4942V34.447L97.315 26.399H103.836L96.3304 34.9036L104.093 46.2335H97.5148L92.5062 38.8705L90.4942 41.0823V46.2335H85.0005V26.399Z" fill="var(--ink)"></path>
+<path d="M110.69 40.7545V40.6974C110.69 38.2859 111.932 36.8447 114.058 35.9457C112.559 35.0895 111.361 33.7625 111.361 31.6078V31.5507C111.361 28.4115 114.357 26.057 118.809 26.057C123.262 26.057 126.287 28.4115 126.287 31.5507V31.6078C126.287 33.7625 125.102 35.0895 123.561 35.9457C125.573 36.8732 126.957 38.2145 126.957 40.6403V40.6974C126.957 44.2648 123.561 46.5621 118.795 46.5621C114.029 46.5621 110.662 44.2077 110.662 40.7545H110.69ZM121.692 40.2265V40.1695C121.692 38.8709 120.536 37.9862 118.838 37.9862C117.14 37.9862 115.97 38.8709 115.97 40.1695V40.2265C115.97 41.4109 116.983 42.4668 118.838 42.4668C120.693 42.4668 121.692 41.4252 121.692 40.2265ZM121.292 32.2642V32.2071C121.292 31.1084 120.351 30.1095 118.824 30.1095C117.297 30.1095 116.384 31.1084 116.384 32.2071V32.2642C116.384 33.5056 117.354 34.4474 118.824 34.4474C120.293 34.4474 121.292 33.5056 121.292 32.2642Z" fill="var(--ink)"></path>
 </svg>
               <p class="mock-rsvp__eyebrow">You're invited</p>
               <div class="mock-rsvp__title">Lock 8 Office Party</div>
-              <p class="mock-rsvp__sub">Thursday, October 15 &middot; New office</p>
+              <p class="mock-rsvp__sub">Thursday, October 15 · New office</p>
               <div class="mock-rsvp__form">
                 <div class="mock-field">
                   <label>Will you be attending?</label>
@@ -510,44 +502,44 @@
                 </div>
                 <div class="mock-field">
                   <label>Food preference</label>
-                  <div class="box">Select an option &darr;</div>
+                  <div class="box">Select an option ↓</div>
                 </div>
                 <div class="mock-field">
                   <label>Dietary restrictions</label>
-                  <div class="box">Optional&hellip;</div>
+                  <div class="box">Optional…</div>
                 </div>
                 <button class="mock-submit">Send RSVP</button>
               </div>
             </div>
           </div>
-          <p class="preview-caption">RSVP page &mdash; personalized per guest</p>
+          <p class="preview-caption">RSVP page — personalized per guest</p>
         </div>
 
         <div>
           <div class="frame">
             <div class="frame__meta-row">
               <span class="from">Lock 8 &lt;events@lock8partners.com&gt;</span>
-              <span class="subj">Save the date &mdash; we're celebrating the new office</span>
+              <span class="subj">Save the date — we're celebrating the new office</span>
             </div>
             <div class="mock-email">
               <svg class="mock-email__logo" width="150" height="74" viewBox="0 0 150 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M74.9857 0.919434L150 15.3315V59.1386L74.9715 73.5507L0 59.1386V15.3315L74.9857 0.919434Z" fill="#B19853"/>
-<path d="M23 27.3184H28.4937V42.3298H38.097V47.1528H23V27.3184Z" class="logo-letter"/>
-<path d="M39.7686 37.2933V37.2362C39.7686 31.5427 44.3633 26.9194 50.4706 26.9194C56.5779 26.9194 61.1156 31.4856 61.1156 37.1791V37.2362C61.1156 42.9297 56.5208 47.553 50.4135 47.553C44.3062 47.553 39.7686 42.9868 39.7686 37.2933ZM55.4934 37.2933V37.2362C55.4934 34.3395 53.4529 31.8852 50.4278 31.8852C47.4027 31.8852 45.3907 34.3252 45.3907 37.1791V37.2362C45.3907 40.0901 47.4598 42.5872 50.4849 42.5872C53.51 42.5872 55.4934 40.1472 55.4934 37.2933Z" class="logo-letter"/>
-<path d="M63.5 37.2933V37.2362C63.5 31.4571 67.9235 26.9194 73.9309 26.9194C77.9834 26.9194 80.5947 28.6175 82.3499 31.029L78.2118 34.2254C77.0845 32.8412 75.7717 31.8995 73.8739 31.8995C71.0913 31.8995 69.1364 34.2824 69.1364 37.1649V37.2219C69.1364 40.19 71.0913 42.5159 73.8739 42.5159C75.9429 42.5159 77.1558 41.5598 78.3544 40.1044L82.4926 43.0581C80.6233 45.6409 78.0976 47.5387 73.7454 47.5387C68.0805 47.5387 63.5143 43.2008 63.5143 37.279L63.5 37.2933Z" class="logo-letter"/>
-<path d="M85 27.3184H90.4937V35.3663L97.3145 27.3184H103.836L96.3299 35.8229L104.092 47.1528H97.5143L92.5057 39.7898L90.4937 42.0016V47.1528H85V27.3184Z" class="logo-letter"/>
-<path d="M110.691 41.674V41.617C110.691 39.2054 111.932 37.7642 114.058 36.8653C112.56 36.0091 111.361 34.682 111.361 32.5274V32.4703C111.361 29.331 114.358 26.9766 118.81 26.9766C123.262 26.9766 126.287 29.331 126.287 32.4703V32.5274C126.287 34.682 125.103 36.0091 123.562 36.8653C125.574 37.7928 126.958 39.1341 126.958 41.5599V41.617C126.958 45.1843 123.562 47.4817 118.796 47.4817C114.03 47.4817 110.662 45.1272 110.662 41.674H110.691ZM121.692 41.1461V41.089C121.692 39.7905 120.537 38.9058 118.838 38.9058C117.14 38.9058 115.97 39.7905 115.97 41.089V41.1461C115.97 42.3304 116.983 43.3864 118.838 43.3864C120.694 43.3864 121.692 42.3447 121.692 41.1461ZM121.293 33.1838V33.1267C121.293 32.0279 120.351 31.0291 118.824 31.0291C117.297 31.0291 116.384 32.0279 116.384 33.1267V33.1838C116.384 34.4252 117.354 35.367 118.824 35.367C120.294 35.367 121.293 34.4252 121.293 33.1838Z" class="logo-letter"/>
+<path d="M74.9857 0.919434L150 15.3315V59.1386L74.9715 73.5507L0 59.1386V15.3315L74.9857 0.919434Z" fill="#B19853"></path>
+<path d="M23 27.3184H28.4937V42.3298H38.097V47.1528H23V27.3184Z" fill="white"></path>
+<path d="M39.7686 37.2933V37.2362C39.7686 31.5427 44.3633 26.9194 50.4706 26.9194C56.5779 26.9194 61.1156 31.4856 61.1156 37.1791V37.2362C61.1156 42.9297 56.5208 47.553 50.4135 47.553C44.3062 47.553 39.7686 42.9868 39.7686 37.2933ZM55.4934 37.2933V37.2362C55.4934 34.3395 53.4529 31.8852 50.4278 31.8852C47.4027 31.8852 45.3907 34.3252 45.3907 37.1791V37.2362C45.3907 40.0901 47.4598 42.5872 50.4849 42.5872C53.51 42.5872 55.4934 40.1472 55.4934 37.2933Z" fill="white"></path>
+<path d="M63.5 37.2933V37.2362C63.5 31.4571 67.9235 26.9194 73.9309 26.9194C77.9834 26.9194 80.5947 28.6175 82.3499 31.029L78.2118 34.2254C77.0845 32.8412 75.7717 31.8995 73.8739 31.8995C71.0913 31.8995 69.1364 34.2824 69.1364 37.1649V37.2219C69.1364 40.19 71.0913 42.5159 73.8739 42.5159C75.9429 42.5159 77.1558 41.5598 78.3544 40.1044L82.4926 43.0581C80.6233 45.6409 78.0976 47.5387 73.7454 47.5387C68.0805 47.5387 63.5143 43.2008 63.5143 37.279L63.5 37.2933Z" fill="white"></path>
+<path d="M85 27.3184H90.4937V35.3663L97.3145 27.3184H103.836L96.3299 35.8229L104.092 47.1528H97.5143L92.5057 39.7898L90.4937 42.0016V47.1528H85V27.3184Z" fill="white"></path>
+<path d="M110.691 41.674V41.617C110.691 39.2054 111.932 37.7642 114.058 36.8653C112.56 36.0091 111.361 34.682 111.361 32.5274V32.4703C111.361 29.331 114.358 26.9766 118.81 26.9766C123.262 26.9766 126.287 29.331 126.287 32.4703V32.5274C126.287 34.682 125.103 36.0091 123.562 36.8653C125.574 37.7928 126.958 39.1341 126.958 41.5599V41.617C126.958 45.1843 123.562 47.4817 118.796 47.4817C114.03 47.4817 110.662 45.1272 110.662 41.674H110.691ZM121.692 41.1461V41.089C121.692 39.7905 120.537 38.9058 118.838 38.9058C117.14 38.9058 115.97 39.7905 115.97 41.089V41.1461C115.97 42.3304 116.983 43.3864 118.838 43.3864C120.694 43.3864 121.692 42.3447 121.692 41.1461ZM121.293 33.1838V33.1267C121.293 32.0279 120.351 31.0291 118.824 31.0291C117.297 31.0291 116.384 32.0279 116.384 33.1267V33.1838C116.384 34.4252 117.354 35.367 118.824 35.367C120.294 35.367 121.293 34.4252 121.293 33.1838Z" fill="#fff"></path>
 </svg>
               <p class="mock-email__eyebrow">Save the date</p>
-              <div class="mock-email__title">We're celebrating our new office &mdash; and you're invited.</div>
-              <p class="mock-email__body">Mark your calendar. Details, directions, and an RSVP link are coming your way soon &mdash; for now, just save the date.</p>
+              <div class="mock-email__title">We're celebrating our new office — and you're invited.</div>
+              <p class="mock-email__body">Mark your calendar. Details, directions, and an RSVP link are coming your way soon — for now, just save the date.</p>
               <div class="mock-email__divider"></div>
               <div class="mock-email__detail"><span class="k">Date</span><span class="v">Thursday, October 15, 2026</span></div>
               <div class="mock-email__detail"><span class="k">Where</span><span class="v">Lock 8's new office</span></div>
               <a class="mock-email__cta">More details soon</a>
             </div>
           </div>
-          <p class="preview-caption">Save-the-date email &mdash; sent from Lock 8's own domain</p>
+          <p class="preview-caption">Save-the-date email — sent from Lock 8's own domain</p>
         </div>
       </div>
     </div>
@@ -557,16 +549,16 @@
     <div class="wrap">
       <p class="eyebrow">Timeline</p>
       <h2 class="section-title">From kickoff to party</h2>
-      <p class="section-lede">~10&ndash;14 hours of build time on Primer's side, spread across six weeks &mdash; paced by how quickly a few key items come back from Lock 8.</p>
+      <p class="section-lede">~10–14 hours of build time on Primer's side, spread across six weeks — paced by how quickly a few key items come back from Lock 8.</p>
 
       <div class="timeline">
         <div class="tl-item tl-item--milestone">
-          <div class="when">Week 1 &middot; ASAP</div>
+          <div class="when">Week 1 · ASAP</div>
           <div class="what">Kickoff</div>
           <div class="detail">Guest list, sending mailbox, and brand confirmed. Repo and guest sheet set up.</div>
         </div>
         <div class="tl-item">
-          <div class="when">Weeks 2&ndash;3</div>
+          <div class="when">Weeks 2–3</div>
           <div class="what">Core build</div>
           <div class="detail">RSVP form and save-the-date template built and test-sent.</div>
         </div>
@@ -576,7 +568,7 @@
           <div class="detail">Goes out to the full list.</div>
         </div>
         <div class="tl-item">
-          <div class="when">Weeks 4&ndash;5</div>
+          <div class="when">Weeks 4–5</div>
           <div class="what">Details locked, remaining templates built</div>
           <div class="detail">Venue, menu, and the RSVP questions finalized with Lock 8.</div>
         </div>
@@ -586,7 +578,7 @@
           <div class="detail">Guests respond; headcount and dietary needs tracked live.</div>
         </div>
         <div class="tl-item">
-          <div class="when">Oct 10&ndash;12</div>
+          <div class="when">Oct 10–12</div>
           <div class="what">Reminder sent</div>
           <div class="detail">To confirmed and not-yet-responded guests.</div>
         </div>
@@ -603,7 +595,7 @@
     <div class="wrap">
       <p class="eyebrow">How this works</p>
       <h2 class="section-title">Who does what</h2>
-      <p class="section-lede">The build is Primer's. A handful of items only Lock 8 can provide &mdash; those are the pace-setters.</p>
+      <p class="section-lede">The build is Primer's. A handful of items only Lock 8 can provide — those are the pace-setters.</p>
 
       <div class="resp-table">
         <div class="resp-row head">
@@ -617,17 +609,17 @@
           <div class="lock8">Send guest list, name a sending mailbox, confirm brand.</div>
         </div>
         <div class="resp-row">
-          <div class="phase">Core build<span class="win">Weeks 2&ndash;3</span></div>
+          <div class="phase">Core build<span class="win">Weeks 2–3</span></div>
           <div class="primer">Build the RSVP form and save-the-date email; test.</div>
           <div class="lock8">One-time click to authorize email sending.</div>
         </div>
         <div class="resp-row">
-          <div class="phase">Details &amp; remaining emails<span class="win">Weeks 4&ndash;5</span></div>
+          <div class="phase">Details &amp; remaining emails<span class="win">Weeks 4–5</span></div>
           <div class="primer">Build the RSVP-details and reminder emails.</div>
           <div class="lock8">Confirm venue, menu, and the questions to ask guests.</div>
         </div>
         <div class="resp-row">
-          <div class="phase">Monitor &amp; reminder<span class="win">Sept &ndash; Oct 12</span></div>
+          <div class="phase">Monitor &amp; reminder<span class="win">Sept – Oct 12</span></div>
           <div class="primer">Watch responses; send the reminder.</div>
           <div class="lock8">Flag any late guest-list changes.</div>
         </div>
@@ -642,42 +634,42 @@
 
       <div class="checklist">
         <div class="check-item">
-          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"/></svg></div>
+          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
           <div>
             <div class="check-item__title">Guest list</div>
-            <div class="check-item__desc">Names and emails for the ~60&ndash;70 invitees, and whether each invite includes a +1.</div>
+            <div class="check-item__desc">Names and emails for the ~60–70 invitees, and whether each invite includes a +1.</div>
           </div>
         </div>
         <div class="check-item">
-          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"/></svg></div>
+          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
           <div>
             <div class="check-item__title">A sending mailbox</div>
-            <div class="check-item__desc">Which Lock 8 address should the emails come from &mdash; and one click to authorize it.</div>
+            <div class="check-item__desc">Which Lock 8 address should the emails come from — and one click to authorize it.</div>
           </div>
         </div>
         <div class="check-item">
-          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"/></svg></div>
+          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
           <div>
             <div class="check-item__title">Event details</div>
             <div class="check-item__desc">Exact address, start time, dress code, and parking info.</div>
           </div>
         </div>
         <div class="check-item">
-          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"/></svg></div>
+          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
           <div>
             <div class="check-item__title">The RSVP questions</div>
             <div class="check-item__desc">What, beyond food preference, should the form ask?</div>
           </div>
         </div>
         <div class="check-item">
-          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"/></svg></div>
+          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
           <div>
             <div class="check-item__title">Catering choices</div>
             <div class="check-item__desc">Real menu options for the food-preference field, or free-text only.</div>
           </div>
         </div>
         <div class="check-item">
-          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"/></svg></div>
+          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
           <div>
             <div class="check-item__title">Sheet access</div>
             <div class="check-item__desc">Who at Lock 8 should see live RSVP and dietary responses.</div>
@@ -691,15 +683,16 @@
 <footer class="footer">
   <div class="wrap footer__inner">
     <svg class="footer__logo" width="150" height="74" viewBox="0 0 150 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M74.9857 0.919434L150 15.3315V59.1386L74.9715 73.5507L0 59.1386V15.3315L74.9857 0.919434Z" fill="#B19853"/>
-<path d="M23 27.3184H28.4937V42.3298H38.097V47.1528H23V27.3184Z" class="logo-letter"/>
-<path d="M39.7686 37.2933V37.2362C39.7686 31.5427 44.3633 26.9194 50.4706 26.9194C56.5779 26.9194 61.1156 31.4856 61.1156 37.1791V37.2362C61.1156 42.9297 56.5208 47.553 50.4135 47.553C44.3062 47.553 39.7686 42.9868 39.7686 37.2933ZM55.4934 37.2933V37.2362C55.4934 34.3395 53.4529 31.8852 50.4278 31.8852C47.4027 31.8852 45.3907 34.3252 45.3907 37.1791V37.2362C45.3907 40.0901 47.4598 42.5872 50.4849 42.5872C53.51 42.5872 55.4934 40.1472 55.4934 37.2933Z" class="logo-letter"/>
-<path d="M63.5 37.2933V37.2362C63.5 31.4571 67.9235 26.9194 73.9309 26.9194C77.9834 26.9194 80.5947 28.6175 82.3499 31.029L78.2118 34.2254C77.0845 32.8412 75.7717 31.8995 73.8739 31.8995C71.0913 31.8995 69.1364 34.2824 69.1364 37.1649V37.2219C69.1364 40.19 71.0913 42.5159 73.8739 42.5159C75.9429 42.5159 77.1558 41.5598 78.3544 40.1044L82.4926 43.0581C80.6233 45.6409 78.0976 47.5387 73.7454 47.5387C68.0805 47.5387 63.5143 43.2008 63.5143 37.279L63.5 37.2933Z" class="logo-letter"/>
-<path d="M85 27.3184H90.4937V35.3663L97.3145 27.3184H103.836L96.3299 35.8229L104.092 47.1528H97.5143L92.5057 39.7898L90.4937 42.0016V47.1528H85V27.3184Z" class="logo-letter"/>
-<path d="M110.691 41.674V41.617C110.691 39.2054 111.932 37.7642 114.058 36.8653C112.56 36.0091 111.361 34.682 111.361 32.5274V32.4703C111.361 29.331 114.358 26.9766 118.81 26.9766C123.262 26.9766 126.287 29.331 126.287 32.4703V32.5274C126.287 34.682 125.103 36.0091 123.562 36.8653C125.574 37.7928 126.958 39.1341 126.958 41.5599V41.617C126.958 45.1843 123.562 47.4817 118.796 47.4817C114.03 47.4817 110.662 45.1272 110.662 41.674H110.691ZM121.692 41.1461V41.089C121.692 39.7905 120.537 38.9058 118.838 38.9058C117.14 38.9058 115.97 39.7905 115.97 41.089V41.1461C115.97 42.3304 116.983 43.3864 118.838 43.3864C120.694 43.3864 121.692 42.3447 121.692 41.1461ZM121.293 33.1838V33.1267C121.293 32.0279 120.351 31.0291 118.824 31.0291C117.297 31.0291 116.384 32.0279 116.384 33.1267V33.1838C116.384 34.4252 117.354 35.367 118.824 35.367C120.294 35.367 121.293 34.4252 121.293 33.1838Z" class="logo-letter"/>
+<path d="M74.9857 0.919434L150 15.3315V59.1386L74.9715 73.5507L0 59.1386V15.3315L74.9857 0.919434Z" fill="#B19853"></path>
+<path d="M23 27.3184H28.4937V42.3298H38.097V47.1528H23V27.3184Z" fill="white"></path>
+<path d="M39.7686 37.2933V37.2362C39.7686 31.5427 44.3633 26.9194 50.4706 26.9194C56.5779 26.9194 61.1156 31.4856 61.1156 37.1791V37.2362C61.1156 42.9297 56.5208 47.553 50.4135 47.553C44.3062 47.553 39.7686 42.9868 39.7686 37.2933ZM55.4934 37.2933V37.2362C55.4934 34.3395 53.4529 31.8852 50.4278 31.8852C47.4027 31.8852 45.3907 34.3252 45.3907 37.1791V37.2362C45.3907 40.0901 47.4598 42.5872 50.4849 42.5872C53.51 42.5872 55.4934 40.1472 55.4934 37.2933Z" fill="white"></path>
+<path d="M63.5 37.2933V37.2362C63.5 31.4571 67.9235 26.9194 73.9309 26.9194C77.9834 26.9194 80.5947 28.6175 82.3499 31.029L78.2118 34.2254C77.0845 32.8412 75.7717 31.8995 73.8739 31.8995C71.0913 31.8995 69.1364 34.2824 69.1364 37.1649V37.2219C69.1364 40.19 71.0913 42.5159 73.8739 42.5159C75.9429 42.5159 77.1558 41.5598 78.3544 40.1044L82.4926 43.0581C80.6233 45.6409 78.0976 47.5387 73.7454 47.5387C68.0805 47.5387 63.5143 43.2008 63.5143 37.279L63.5 37.2933Z" fill="white"></path>
+<path d="M85 27.3184H90.4937V35.3663L97.3145 27.3184H103.836L96.3299 35.8229L104.092 47.1528H97.5143L92.5057 39.7898L90.4937 42.0016V47.1528H85V27.3184Z" fill="white"></path>
+<path d="M110.691 41.674V41.617C110.691 39.2054 111.932 37.7642 114.058 36.8653C112.56 36.0091 111.361 34.682 111.361 32.5274V32.4703C111.361 29.331 114.358 26.9766 118.81 26.9766C123.262 26.9766 126.287 29.331 126.287 32.4703V32.5274C126.287 34.682 125.103 36.0091 123.562 36.8653C125.574 37.7928 126.958 39.1341 126.958 41.5599V41.617C126.958 45.1843 123.562 47.4817 118.796 47.4817C114.03 47.4817 110.662 45.1272 110.662 41.674H110.691ZM121.692 41.1461V41.089C121.692 39.7905 120.537 38.9058 118.838 38.9058C117.14 38.9058 115.97 39.7905 115.97 41.089V41.1461C115.97 42.3304 116.983 43.3864 118.838 43.3864C120.694 43.3864 121.692 42.3447 121.692 41.1461ZM121.293 33.1838V33.1267C121.293 32.0279 120.351 31.0291 118.824 31.0291C117.297 31.0291 116.384 32.0279 116.384 33.1267V33.1838C116.384 34.4252 117.354 35.367 118.824 35.367C120.294 35.367 121.293 34.4252 121.293 33.1838Z" fill="white"></path>
 </svg>
-    <p class="footer__text">Prepared by Primer &middot; August 2026</p>
+    <p class="footer__text">Prepared by Primer · August 2026</p>
   </div>
 </footer>
 </body>
 </html>
+
