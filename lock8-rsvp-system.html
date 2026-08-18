@@ -340,8 +340,21 @@
   }
 
   /* ---------- Checklist ---------- */
-  .checklist { margin-top: 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem 2rem; }
+  .needed-group { margin-top: 2.75rem; }
+  .needed-group:first-of-type { margin-top: 3rem; }
+  .needed-group__title {
+    font-weight: 700;
+    font-size: 0.9375rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--gold-strong);
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .checklist { margin-top: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem 2rem; }
   @media (max-width: 700px) { .checklist { grid-template-columns: 1fr; } }
+  .check-item__sublist { margin-top: 0.4rem; padding-left: 1.1rem; }
+  .check-item__sublist li { font-weight: 400; font-size: 0.8438rem; color: var(--ink-secondary); line-height: 1.5; }
   .check-item {
     display: flex; gap: 0.85rem; padding: 1.1rem 1.25rem; background: var(--surface);
     border: 1px solid var(--border); border-radius: 10px;
@@ -375,7 +388,7 @@
 </svg>
     <p class="hero__eyebrow">Prepared by Primer for Lock 8</p>
     <h1 class="hero__headline">The Office Party RSVP System</h1>
-    <p class="hero__sub">A custom-built, on-brand save-the-date, RSVP, and reminder flow for the new office celebration — no WordPress, no third-party invite template.</p>
+    <p class="hero__sub">A custom-built, on-brand save-the-date, RSVP, and reminder flow for the new office celebration.</p>
     <div class="hero__meta">
       <div class="hero__meta-item">
         <div class="k">Event date</div>
@@ -389,10 +402,6 @@
         <div class="k">Build time</div>
         <div class="v">~10–14 hours</div>
       </div>
-      <div class="hero__meta-item">
-        <div class="k">Ongoing cost</div>
-        <div class="v">$0</div>
-      </div>
     </div>
   </div>
 </header>
@@ -402,7 +411,7 @@
     <div class="wrap">
       <p class="eyebrow">The plan</p>
       <h2 class="section-title">Three touchpoints, in order</h2>
-      <p class="section-lede">Each email leads directly into the next step, and every RSVP link is personalized to the guest — no logins, no generic form.</p>
+      <p class="section-lede">Each email leads directly into the next step, and every RSVP is captured.</p>
 
       <div class="touchpoints">
         <div class="touchpoint">
@@ -436,8 +445,7 @@
   <section class="preview">
     <div class="wrap-wide">
       <p class="eyebrow">What it looks like</p>
-      <h2 class="section-title">Built in Lock 8's actual brand</h2>
-      <p class="section-lede">Gotham, the gold accent, the real logo mark — not a stock invitation template with a logo dropped on top.</p>
+      <h2 class="section-title">Lock 8 branded</h2>
 
       <div class="preview-grid">
         <div>
@@ -478,7 +486,7 @@
               </div>
             </div>
           </div>
-          <p class="preview-caption">RSVP page — personalized per guest</p>
+          <p class="preview-caption">RSVP page — personalized per guest (Sample)</p>
         </div>
 
         <div>
@@ -505,140 +513,90 @@
               <a class="mock-email__cta">More details soon</a>
             </div>
           </div>
-          <p class="preview-caption">Save-the-date email — sent from Lock 8's own domain</p>
+          <p class="preview-caption">Save-the-date email — sent from Lock 8's own domain (Sample)</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="timeline-section">
-    <div class="wrap">
-      <p class="eyebrow">Timeline</p>
-      <h2 class="section-title">From kickoff to party</h2>
-      <p class="section-lede">~10–14 hours of build time on Primer's side, spread across six weeks — paced by how quickly a few key items come back from Lock 8.</p>
-
-      <div class="timeline">
-        <div class="tl-item tl-item--milestone">
-          <div class="when">Week 1 · ASAP</div>
-          <div class="what">Kickoff</div>
-          <div class="detail">Guest list, sending mailbox, and brand confirmed. Repo and guest sheet set up.</div>
-        </div>
-        <div class="tl-item">
-          <div class="when">Weeks 2–3</div>
-          <div class="what">Core build</div>
-          <div class="detail">RSVP form and save-the-date template built and test-sent.</div>
-        </div>
-        <div class="tl-item tl-item--milestone">
-          <div class="when">End of week 3</div>
-          <div class="what">Save the date sent</div>
-          <div class="detail">Goes out to the full list.</div>
-        </div>
-        <div class="tl-item">
-          <div class="when">Weeks 4–5</div>
-          <div class="what">Details locked, remaining templates built</div>
-          <div class="detail">Venue, menu, and the RSVP questions finalized with Lock 8.</div>
-        </div>
-        <div class="tl-item tl-item--milestone">
-          <div class="when">Mid-September</div>
-          <div class="what">RSVP &amp; details email sent</div>
-          <div class="detail">Guests respond; headcount and dietary needs tracked live.</div>
-        </div>
-        <div class="tl-item">
-          <div class="when">Oct 10–12</div>
-          <div class="what">Reminder sent</div>
-          <div class="detail">To confirmed and not-yet-responded guests.</div>
-        </div>
-        <div class="tl-item tl-item--milestone">
-          <div class="when">October 15</div>
-          <div class="what">The party</div>
-          <div class="detail">&nbsp;</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="responsibilities">
-    <div class="wrap">
-      <p class="eyebrow">How this works</p>
-      <h2 class="section-title">Who does what</h2>
-      <p class="section-lede">The build is Primer's. A handful of items only Lock 8 can provide — those are the pace-setters.</p>
-
-      <div class="resp-table">
-        <div class="resp-row head">
-          <div>Phase</div>
-          <div>Primer</div>
-          <div>Lock 8</div>
-        </div>
-        <div class="resp-row">
-          <div class="phase">Kickoff<span class="win">Week 1</span></div>
-          <div class="primer">Set up the project, guest sheet, and brand.</div>
-          <div class="lock8">Send guest list, name a sending mailbox, confirm brand.</div>
-        </div>
-        <div class="resp-row">
-          <div class="phase">Core build<span class="win">Weeks 2–3</span></div>
-          <div class="primer">Build the RSVP form and save-the-date email; test.</div>
-          <div class="lock8">One-time click to authorize email sending.</div>
-        </div>
-        <div class="resp-row">
-          <div class="phase">Details &amp; remaining emails<span class="win">Weeks 4–5</span></div>
-          <div class="primer">Build the RSVP-details and reminder emails.</div>
-          <div class="lock8">Confirm venue, menu, and the questions to ask guests.</div>
-        </div>
-        <div class="resp-row">
-          <div class="phase">Monitor &amp; reminder<span class="win">Sept – Oct 12</span></div>
-          <div class="primer">Watch responses; send the reminder.</div>
-          <div class="lock8">Flag any late guest-list changes.</div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <section class="needed">
     <div class="wrap">
       <p class="eyebrow">Before we start</p>
       <h2 class="section-title">What we need from Lock 8</h2>
 
-      <div class="checklist">
-        <div class="check-item">
-          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
-          <div>
-            <div class="check-item__title">Guest list</div>
-            <div class="check-item__desc">Names and emails for the ~60–70 invitees, and whether each invite includes a +1.</div>
+      <div class="needed-group">
+        <p class="needed-group__title">Technical needs</p>
+        <div class="checklist">
+          <div class="check-item">
+            <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
+            <div>
+              <div class="check-item__title">Guest list</div>
+              <div class="check-item__desc">Names and emails for the ~60–70 invitees, and whether each invite includes a +1.</div>
+            </div>
+          </div>
+          <div class="check-item">
+            <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
+            <div>
+              <div class="check-item__title">Sheet access</div>
+              <div class="check-item__desc">Who at Lock 8 should see live RSVP and dietary responses.</div>
+            </div>
+          </div>
+          <div class="check-item">
+            <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
+            <div>
+              <div class="check-item__title">Sending mailbox</div>
+              <div class="check-item__desc">Which Lock 8 address should the emails come from — and one click to authorize it.</div>
+            </div>
+          </div>
+          <div class="check-item">
+            <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
+            <div>
+              <div class="check-item__title">Sending dates</div>
+              <div class="check-item__desc">When each of the three emails should go out.</div>
+            </div>
           </div>
         </div>
-        <div class="check-item">
-          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
-          <div>
-            <div class="check-item__title">A sending mailbox</div>
-            <div class="check-item__desc">Which Lock 8 address should the emails come from — and one click to authorize it.</div>
+      </div>
+
+      <div class="needed-group">
+        <p class="needed-group__title">Content needs</p>
+        <div class="checklist">
+          <div class="check-item">
+            <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
+            <div>
+              <div class="check-item__title">Email copy for each</div>
+              <div class="check-item__desc">Headline, intro copy, and call to action for:</div>
+              <ul class="check-item__sublist">
+                <li>Save the Date</li>
+                <li>RSVP &amp; Details</li>
+                <li>Reminder</li>
+              </ul>
+            </div>
           </div>
-        </div>
-        <div class="check-item">
-          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
-          <div>
-            <div class="check-item__title">Event details</div>
-            <div class="check-item__desc">Exact address, start time, dress code, and parking info.</div>
+          <div class="check-item">
+            <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
+            <div>
+              <div class="check-item__title">RSVP form questions</div>
+              <div class="check-item__desc">The RSVP email links to a page with the form. Beyond catering, what else should it ask?</div>
+              <ul class="check-item__sublist">
+                <li>Catering choices</li>
+              </ul>
+            </div>
           </div>
-        </div>
-        <div class="check-item">
-          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
-          <div>
-            <div class="check-item__title">The RSVP questions</div>
-            <div class="check-item__desc">What, beyond food preference, should the form ask?</div>
+          <div class="check-item">
+            <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
+            <div>
+              <div class="check-item__title">Event details</div>
+              <div class="check-item__desc">Exact address, start time, dress code, and parking info.</div>
+            </div>
           </div>
-        </div>
-        <div class="check-item">
-          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
-          <div>
-            <div class="check-item__title">Catering choices</div>
-            <div class="check-item__desc">Real menu options for the food-preference field, or free-text only.</div>
-          </div>
-        </div>
-        <div class="check-item">
-          <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
-          <div>
-            <div class="check-item__title">Sheet access</div>
-            <div class="check-item__desc">Who at Lock 8 should see live RSVP and dietary responses.</div>
+          <div class="check-item">
+            <div class="check-item__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12l6 6L20 6"></path></svg></div>
+            <div>
+              <div class="check-item__title">Photo of the new office</div>
+              <div class="check-item__desc">Horizontal format, please.</div>
+            </div>
           </div>
         </div>
       </div>
