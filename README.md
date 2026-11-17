@@ -19,7 +19,7 @@ Internal document hub for Primer — client proposals, pitch materials, and inte
 | `build-system.html` | `/build-system` | Internal | Overview of the new build process — stack, workflow, component library, roles, and POC plan |
 | `figma-workflow-guide.html` | `/figma-workflow-guide` | Internal | Token system, reuse-vs-build-new rules, and client reskinning steps for Figma — written for Brian ahead of the Forte build |
 | `lock8-rsvp-system.html` | `/lock8-rsvp-system` | Client | Proposal for a custom-built, on-brand save-the-date, RSVP, and reminder email flow for Lock8's new office celebration |
-| `storyblok-resources-guide.html` | `/storyblok-resources-guide` | Client | One-sheet for client teams on adding, editing, unpublishing and rolling back resource posts in Storyblok, with links to Storyblok's manuals |
+| `guides/storyblok-resources-guide.html` | `/guides/storyblok-resources-guide` | Client | One-sheet for client teams on adding, editing, unpublishing and rolling back resource posts in Storyblok, with links to Storyblok's manuals |
 
 ---
 
@@ -38,7 +38,7 @@ Internal document hub for Primer — client proposals, pitch materials, and inte
 
 ## Adding a new document
 
-1. Create the `.html` file in the root of this repo, styled to match the existing pages
+1. Create the `.html` file in the root of this repo, styled to match the existing pages. A guide meant for clients goes in `guides/`, which stays public once Cloudflare Access is on (see `docs/cloudflare-access-setup.md`). Every page needs `<meta name="robots" content="noindex, nofollow">`
 2. Add a card to the `index.html` doc-list following the existing pattern (icon, name, description, tag)
 3. Deploy (see below) — Cloudflare handles the rest
 
