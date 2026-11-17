@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Editing Resources in Storyblok — Client Guide</title>
+<meta name="description" content="A one-page guide for adding, editing and removing resource posts (success stories, white papers, blog posts and more) in Storyblok.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Same token scheme as build-system.html and figma-workflow-guide.html */
+  :root {
+    --paper:      #f5f1e8;
+    --paper-2:    #efe9db;
+    --card:       #fbf9f4;
+    --ink:        #1c1a16;
+    --ink-soft:   #4a463d;
+    --ink-faint:  #8a8475;
+    --accent:     #b5482b;
+    --accent-2:   #8f3a22;
+    --rule:       #d8d0bf;
+
+    --font-body:  "IBM Plex Sans", system-ui, sans-serif;
+    --font-mono:  "IBM Plex Mono", ui-monospace, monospace;
+
+    --measure: 920px;
+    --radius:  6px;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .bar {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    padding: 0.7rem clamp(1rem, 4vw, 3rem);
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .bar__brand { display: flex; flex-direction: column; }
+  .bar__wordmark { font-size: 1.125rem; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; }
+  .bar__sub { font-size: 0.6875rem; font-weight: 300; letter-spacing: 0.1em; color: var(--ink-faint); margin-top: 2px; }
+  .bar__actions { display: flex; gap: 1.2rem; align-items: center; }
+  .bar__link, .bar__print {
+    font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-soft);
+    text-decoration: none; background: none; border: 0; padding: 0; cursor: pointer;
+  }
+  .bar__link:hover, .bar__print:hover { color: var(--accent); }
+
+  main { max-width: var(--measure); margin: 0 auto; padding: 0 clamp(1rem, 5vw, 2rem) 3rem; }
+
+  .hero { padding: clamp(2.5rem, 7vw, 4.5rem) 0 2rem; }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 1rem;
+  }
+  h1 {
+    font-weight: 600; font-size: clamp(2rem, 5.5vw, 3rem); line-height: 1.05;
+    letter-spacing: -0.02em; margin: 0 0 1rem; text-wrap: balance;
+  }
+  .lede { font-size: clamp(1.02rem, 2vw, 1.18rem); color: var(--ink-soft); max-width: 58ch; margin: 0; }
+
+  /* What a resource is: three facts in a row */
+  .facts {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px;
+    background: var(--rule); border: 1px solid var(--rule); border-radius: var(--radius);
+    overflow: hidden; margin: 0 0 2.6rem;
+  }
+  .facts > div { background: var(--card); padding: 1.1rem 1.2rem; }
+  .facts b { display: block; font-weight: 600; margin-bottom: 0.25rem; }
+  .facts p { margin: 0; color: var(--ink-soft); font-size: 0.93rem; }
+
+  section { border-top: 1px solid var(--rule); padding: 2rem 0; }
+  .sec-head { display: flex; align-items: baseline; gap: 0.9rem; margin-bottom: 1rem; }
+  .sec-num { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.16em; color: var(--accent); }
+  h2 { font-weight: 600; font-size: clamp(1.35rem, 3vw, 1.7rem); line-height: 1.15; letter-spacing: -0.01em; margin: 0; }
+  p { margin: 0 0 0.9rem; }
+  strong { font-weight: 600; }
+  a { color: var(--accent); text-underline-offset: 3px; }
+
+  /* Two tasks side by side */
+  .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; }
+  .task { background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); padding: 1.3rem 1.4rem; }
+  .task h3 { margin: 0 0 0.9rem; font-size: 1.05rem; font-weight: 600; }
+
+  ol.steps { list-style: none; counter-reset: step; margin: 0; padding: 0; }
+  ol.steps li { counter-increment: step; position: relative; padding: 0 0 0.75rem 2.1rem; font-size: 0.95rem; }
+  ol.steps li:last-child { padding-bottom: 0; }
+  ol.steps li::before {
+    content: counter(step);
+    position: absolute; left: 0; top: 0.1rem;
+    width: 1.45rem; height: 1.45rem; border-radius: 50%;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
+    display: grid; place-items: center;
+  }
+
+  .ui {
+    font-family: var(--font-mono); font-size: 0.82em; white-space: nowrap;
+    background: var(--paper-2); border: 1px solid var(--rule); border-radius: 4px;
+    padding: 0.05em 0.4em; color: var(--ink);
+  }
+
+  /* Field reference */
+  table { width: 100%; border-collapse: collapse; font-size: 0.93rem; }
+  th, td { text-align: left; vertical-align: top; padding: 0.7rem 0.8rem 0.7rem 0; border-bottom: 1px solid var(--rule); }
+  th { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); font-weight: 500; }
+  td:first-child { font-weight: 600; white-space: nowrap; width: 11rem; }
+  td:last-child { color: var(--ink-soft); }
+  tr:last-child td { border-bottom: 0; }
+
+  /* Remove / roll back: three options */
+  .options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; }
+  .option { border-top: 2px solid var(--ink); padding-top: 0.8rem; }
+  .option--warn { border-top-color: var(--accent); }
+  .option h3 { margin: 0 0 0.35rem; font-size: 1rem; font-weight: 600; }
+  .option p { margin: 0; font-size: 0.93rem; color: var(--ink-soft); }
+
+  ul.tips { margin: 0; padding: 0; list-style: none; columns: 2; column-gap: 2rem; }
+  ul.tips li { break-inside: avoid; padding: 0 0 0.7rem 1.1rem; position: relative; font-size: 0.93rem; color: var(--ink-soft); }
+  ul.tips li::before { content: ""; position: absolute; left: 0; top: 0.6em; width: 0.4rem; height: 0.4rem; background: var(--accent); }
+  ul.tips strong { color: var(--ink); }
+
+  /* Learn more: link + one line each, two columns */
+  ul.links {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2rem;
+  }
+  ul.links li { padding: 0.55rem 0; border-bottom: 1px solid var(--rule); break-inside: avoid; }
+  ul.links a { font-weight: 600; text-decoration: none; }
+  ul.links a::after { content: " ↗"; font-weight: 400; }
+  ul.links a:hover { text-decoration: underline; }
+  ul.links span { display: block; font-size: 0.9rem; color: var(--ink-soft); }
+
+  .note {
+    margin-top: 1.2rem; padding: 0.9rem 1.1rem; border-radius: var(--radius);
+    border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--paper));
+    font-size: 0.93rem;
+  }
+  .note p { margin: 0; }
+
+  footer {
+    border-top: 1px solid var(--rule); padding: 1.6rem 0 0; color: var(--ink-faint);
+    font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em;
+    display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  }
+
+  @media (max-width: 720px) {
+    .facts, .pair, .options { grid-template-columns: minmax(0, 1fr); }
+    ul.tips { columns: 1; }
+    ul.links { grid-template-columns: minmax(0, 1fr); }
+    td:first-child { white-space: normal; width: 8rem; }
+  }
+
+  /* Prints as a two-sided letter/A4 sheet */
+  @media print {
+    @page { margin: 11mm 13mm; }
+    body { background: #fff; font-size: 9pt; line-height: 1.45; }
+    .bar { position: static; backdrop-filter: none; background: none; padding: 0 0 5pt; }
+    .bar__actions { display: none; }
+    main { max-width: none; padding: 0; }
+    .hero { padding: 10pt 0 9pt; }
+    .eyebrow { margin-bottom: 6pt; }
+    h1 { font-size: 21pt; margin-bottom: 6pt; }
+    .lede { font-size: 10.5pt; }
+    .facts { margin-bottom: 10pt; }
+    .facts > div { padding: 8pt 10pt; }
+    .facts p, ol.steps li, table, .option p, ul.tips li, .note { font-size: 9pt; }
+    section { padding: 9pt 0; }
+    .sec-head { margin-bottom: 7pt; }
+    h2 { font-size: 13.5pt; }
+    .task { padding: 10pt 12pt; }
+    .task h3 { margin-bottom: 7pt; }
+    ol.steps li { padding-bottom: 5pt; }
+    th, td { padding: 4.5pt 8pt 4.5pt 0; }
+    .task, .option, tr, ul.tips li, .note { break-inside: avoid; }
+    .sec-head { break-after: avoid; }
+    .task, .facts > div { background: #fff; }
+    a { color: inherit; text-decoration: none; }
+    /* Printed links show their address */
+    ul.links li { padding: 3pt 0; }
+    ul.links { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 14pt; }
+    ul.links a::after { content: attr(data-url); display: block; font-weight: 400; font-family: var(--font-mono); font-size: 6.5pt; color: var(--ink-faint); overflow-wrap: anywhere; }
+    ul.links span { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar__brand">
+    <span class="bar__wordmark">Primer</span>
+    <span class="bar__sub">Client guide · Storyblok resources</span>
+  </div>
+  <div class="bar__actions">
+    <button class="bar__print" type="button" onclick="window.print()">Print or save as PDF</button>
+    <a class="bar__link" href="/">← All documents</a>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <p class="eyebrow">Storyblok · One-sheet</p>
+    <h1>Adding and editing resources</h1>
+    <p class="lede">Resources are the posts on your site: success stories, white papers, blog posts, partner pages, job listings and the like. This sheet covers the everyday jobs: add a new one, change an existing one, and take one down.</p>
+  </div>
+
+  <div class="facts">
+    <div>
+      <b>One story = one page</b>
+      <p>Each resource is a story in Storyblok's <span class="ui">Content</span> tab, kept in your resources folder (for example <span class="ui">posts</span>).</p>
+    </div>
+    <div>
+      <b>Listings update themselves</b>
+      <p>Archive pages pick posts up by their <strong>Resource type</strong>, so publishing a post adds it to its list. No list to edit by hand.</p>
+    </div>
+    <div>
+      <b>Save is a draft, Publish is live</b>
+      <p>Nothing reaches visitors until you press <span class="ui">Publish</span>. Changes show on the site within a minute or two.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>Add or edit a resource</h2></div>
+    <div class="pair">
+      <div class="task">
+        <h3>Add a new resource</h3>
+        <ol class="steps">
+          <li>In <span class="ui">Content</span>, open your resources folder and find a post of the <strong>same type</strong> as the new one.</li>
+          <li>Select it and choose <span class="ui">Duplicate</span> from the toolbar. Starting from a copy keeps the layout and sections the design expects.</li>
+          <li>Open the copy, and in <span class="ui">Config</span> on the right give it a name and a <strong>slug</strong>, the last part of the web address: lowercase, words joined by hyphens.</li>
+          <li>Open it and replace the text, images and card fields (see below).</li>
+          <li>Press <span class="ui">Save</span> to check it in the preview, then <span class="ui">Publish</span>.</li>
+        </ol>
+      </div>
+      <div class="task">
+        <h3>Edit an existing resource</h3>
+        <ol class="steps">
+          <li>Open the post from the resources folder, or search for it by name.</li>
+          <li>Click any section in the preview. Its fields open in the panel on the right.</li>
+          <li>Change the text, swap an image, or drag sections up and down to reorder them. Use <span class="ui">+</span> between sections to add one.</li>
+          <li>Press <span class="ui">Save</span>, check the preview, then <span class="ui">Publish</span>. To publish later, choose <span class="ui">Schedule publishing</span> from <span class="ui">More options</span> next to Publish.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>The fields that matter</h2></div>
+    <table>
+      <thead><tr><th>Field</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td>Title</td><td>The name shown on cards and in listings. The headline on the page itself comes from the first section.</td></tr>
+        <tr><td>Resource type</td><td>Which listing the post appears in (Success Stories, White Papers, Blog…). Change it to move a post to another section.</td></tr>
+        <tr><td>Featured</td><td>Tick it to show the post as the large card at the top of its listing. The newest featured post wins.</td></tr>
+        <tr><td>Card image</td><td>The photo on the post's card. Use a landscape image at least 1200px wide. If you leave it empty, the first image on the page is used.</td></tr>
+        <tr><td>Card excerpt</td><td>One or two sentences for the card. If you leave it empty, the first text on the page is used.</td></tr>
+        <tr><td>Body</td><td>The sections that make up the page: the header, then the article, then extras like a call to action. The article section has its own rich-text editor for headings, lists, quotes, images and tables.</td></tr>
+        <tr><td>SEO</td><td>The search-result title and description, and the image shown when the link is shared. Optional: sensible defaults are filled in from the page.</td></tr>
+        <tr><td>Content gate</td><td>Asks for a name and email before the rest of the post shows (white papers, for example). Tick it on, and choose how many sections stay readable above the form.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>Take down or roll back</h2></div>
+    <div class="options">
+      <div class="option">
+        <h3>Unpublish</h3>
+        <p>Takes the post off the site and out of every listing, but keeps it in Storyblok so you can publish it again later. It's under <span class="ui">More options</span> next to <span class="ui">Publish</span>.</p>
+      </div>
+      <div class="option">
+        <h3>Restore an earlier version</h3>
+        <p>Open the post's <strong>History</strong> to see every saved and published version. Select one, choose <span class="ui">Restore</span>, then publish.</p>
+      </div>
+      <div class="option option--warn">
+        <h3>Delete</h3>
+        <p>Removes the story, and links to it stop working. It's permanent unless your space has Storyblok's Trash bin app. Unpublish first, and delete only when you're sure.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2>Good habits</h2></div>
+    <ul class="tips">
+      <li><strong>Duplicate rather than start blank.</strong> A copy of a post of the same type already has the right sections in the right order.</li>
+      <li><strong>Keep the slug once it's live.</strong> Changing it changes the web address, so old links and search results break. Ask us to add a redirect if you must.</li>
+      <li><strong>Add alt text to every image.</strong> One plain sentence saying what the image shows, for screen readers and search.</li>
+      <li><strong>Posts list newest first,</strong> by the date they were first published. Republishing an old post doesn't move it to the top.</li>
+      <li><strong>Leave the folder as it is.</strong> Moving a post into another folder changes its address. Keep every resource in the resources folder.</li>
+      <li><strong>Check the preview before you publish.</strong> Look at it on phones too: switch the preview to <span class="ui">Mobile</span> in the top toolbar.</li>
+    </ul>
+    <div class="note">
+      <p><strong>Before launch:</strong> while a site is still being built, its preview address may show saved drafts as well as published posts. From launch day on, visitors only ever see what's published.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">05</span><h2>Learn more</h2></div>
+    <ul class="links">
+      <li><a href="https://www.storyblok.com/docs/manuals/visual-editor" data-url="storyblok.com/docs/manuals/visual-editor">Visual Editor</a><span>Editing, saving, publishing, scheduling and previewing at phone size</span></li>
+      <li><a href="https://www.storyblok.com/docs/manuals/stories" data-url="storyblok.com/docs/manuals/stories">Stories</a><span>Creating, duplicating, searching and organising posts in folders</span></li>
+      <li><a href="https://www.storyblok.com/docs/manuals/history" data-url="storyblok.com/docs/manuals/history">History</a><span>Comparing versions and restoring an earlier one</span></li>
+      <li><a href="https://www.storyblok.com/docs/manuals/assets" data-url="storyblok.com/docs/manuals/assets">Assets</a><span>Uploading and organising images and files, and adding alt text</span></li>
+      <li><a href="https://www.storyblok.com/docs/manuals/image-editor" data-url="storyblok.com/docs/manuals/image-editor">Image Editor</a><span>Cropping and setting the focal point of an image</span></li>
+      <li><a href="https://www.storyblok.com/docs/manuals/accessibility-checker" data-url="storyblok.com/docs/manuals/accessibility-checker">Accessibility checker</a><span>Finding and fixing accessibility problems in a post</span></li>
+      <li><a href="https://www.storyblok.com/apps/trashcan" data-url="storyblok.com/apps/trashcan">Trash bin app</a><span>Lets deleted posts be restored. Ask us to add it to your space</span></li>
+      <li><a href="https://www.w3.org/WAI/tutorials/images/decision-tree/" data-url="w3.org/WAI/tutorials/images/decision-tree">W3C alt text decision tree</a><span>How to write useful alt text, or when to leave it empty</span></li>
+      <li><a href="https://status.storyblok.com" data-url="status.storyblok.com">Storyblok status</a><span>Check here first if the editor is slow or won't load</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    <span>Primer · docs.primerinc.com</span>
+    <span>Questions or something looks off? Contact your Primer team.</span>
+  </footer>
+</main>
+
+</body>
+</html>
